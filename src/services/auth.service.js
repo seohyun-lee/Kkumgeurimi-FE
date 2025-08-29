@@ -5,6 +5,18 @@ export const authService = {
   // 회원가입
   async signup(userData) {
     const response = await http.post('/auth/signup', userData);
+    
+    // 헤더에서 토큰 추출
+    const authHeader = response.headers['authorization'] || response.headers['Authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const accessToken = authHeader.substring(7); // 'Bearer ' 제거
+      localStorage.setItem(AUTH_TOKEN_KEY, accessToken);
+    }
+    // 또는 response.data에서 토큰이 올 경우 대비
+    else if (response.data.accessToken) {
+      localStorage.setItem(AUTH_TOKEN_KEY, response.data.accessToken);
+    }
+    
     return response.data;
   },
 

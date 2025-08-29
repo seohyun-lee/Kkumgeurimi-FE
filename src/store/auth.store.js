@@ -46,7 +46,20 @@ export const useAuthStore = create((set, get) => ({
     
     try {
       const response = await authService.signup(userData);
-      set({ isLoading: false, error: null });
+      
+      // 회원가입 성공 시 토큰이 저장되었다면 사용자 상태 업데이트
+      const token = authService.getCurrentToken();
+      if (token) {
+        set({ 
+          user: { email: userData.email, name: userData.name },
+          isAuthenticated: true,
+          isLoading: false,
+          error: null 
+        });
+      } else {
+        set({ isLoading: false, error: null });
+      }
+      
       return response;
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || '회원가입에 실패했습니다.';
