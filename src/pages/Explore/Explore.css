@@ -196,6 +196,38 @@ body.no-scroll { overflow: hidden; touch-action: none; overscroll-behavior: none
   font-size: 14px;
   min-width: 12ch;            /* ✅ 'YYYY-MM-DD' 10자 + 여유 */
   flex: 0 0 auto;             /* ✅ 축소 금지 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  color: #374151;
+}
+
+/* Date input 스타일링 */
+.date__input[type="date"]::-webkit-calendar-picker-indicator {
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px;
+}
+
+.date__input[type="date"]::-webkit-inner-spin-button,
+.date__input[type="date"]::-webkit-clear-button {
+  display: none;
+}
+
+.date__input[type="date"]::-webkit-datetime-edit {
+  color: #374151;
+  font-size: 14px;
+}
+
+.date__input[type="date"]::-webkit-datetime-edit-text {
+  color: #6b7280;
+  padding: 0 1px;
+}
+
+.date__input[type="date"]::-webkit-datetime-edit-month-field,
+.date__input[type="date"]::-webkit-datetime-edit-day-field,
+.date__input[type="date"]::-webkit-datetime-edit-year-field {
+  color: #374151;
+  font-weight: 500;
 }
 
 /* 데스크톱/태블릿에선 날짜 블록에 더 넓은 칸을 부여 */

@@ -11,7 +11,8 @@ const SignUp = () => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: '',
+    passwordConfirm: '',
+    birth: '',
   });
   const [errors, setErrors] = useState({});
 
@@ -30,11 +31,11 @@ const SignUp = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
 
     // 비밀번호 확인 실시간 체크 (선택)
-    if ((name === 'password' || name === 'confirmPassword') && formData.confirmPassword) {
-      if ((name === 'password' ? value : formData.password) !== (name === 'confirmPassword' ? value : formData.confirmPassword)) {
-        setErrors((prev) => ({ ...prev, confirmPassword: '비밀번호가 일치하지 않습니다.' }));
+    if ((name === 'password' || name === 'passwordConfirm') && formData.passwordConfirm) {
+      if ((name === 'password' ? value : formData.password) !== (name === 'passwordConfirm' ? value : formData.passwordConfirm)) {
+        setErrors((prev) => ({ ...prev, passwordConfirm: '비밀번호가 일치하지 않습니다.' }));
       } else {
-        setErrors((prev) => ({ ...prev, confirmPassword: '' }));
+        setErrors((prev) => ({ ...prev, passwordConfirm: '' }));
       }
     }
   };
@@ -60,10 +61,14 @@ const SignUp = () => {
       newErrors.password = '비밀번호는 6자 이상이어야 합니다.';
     }
 
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = '비밀번호 확인을 입력해주세요.';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = '비밀번호가 일치하지 않습니다.';
+    if (!formData.birth) {
+      newErrors.birth = '생년월일을 입력해주세요.';
+    }
+
+    if (!formData.passwordConfirm) {
+      newErrors.passwordConfirm = '비밀번호 확인을 입력해주세요.';
+    } else if (formData.password !== formData.passwordConfirm) {
+      newErrors.passwordConfirm = '비밀번호가 일치하지 않습니다.';
     }
 
     setErrors(newErrors);
@@ -82,7 +87,9 @@ const SignUp = () => {
       await performSignUp({
         name: formData.name.trim(),
         email: formData.email,
+        birth: formData.birth,
         password: formData.password,
+        
       });
       // TODO: 토큰 처리
 
@@ -122,6 +129,23 @@ const SignUp = () => {
           </div>
 
           <div className="signup__field">
+            <label htmlFor="birth" className="signup__label">생일</label>
+            <input
+              id="birth"
+              name="birth"
+              type="date"
+              className={`signup__input ${errors.birth ? 'error' : ''}`}
+              placeholder="생년월일을 선택하세요"
+              value={formData.birth}
+              onChange={handleChange}
+              disabled={isLoading}
+              autoComplete="bday"
+              max={new Date().toISOString().split('T')[0]}
+            />
+            {errors.birth && <span className="signup__field-error">{errors.birth}</span>}
+          </div>
+
+          <div className="signup__field">
             <label htmlFor="email" className="signup__label">이메일</label>
             <input
               id="email"
@@ -155,19 +179,19 @@ const SignUp = () => {
           </div>
 
           <div className="signup__field">
-            <label htmlFor="confirmPassword" className="signup__label">비밀번호 확인</label>
+            <label htmlFor="passwordConfirm" className="signup__label">비밀번호 확인</label>
             <input
-              id="confirmPassword"
-              name="confirmPassword"
+              id="passwordConfirm"
+              name="passwordConfirm"
               type="password"
-              className={`signup__input ${errors.confirmPassword ? 'error' : ''}`}
+              className={`signup__input ${errors.passwordConfirm ? 'error' : ''}`}
               placeholder="비밀번호 확인"
-              value={formData.confirmPassword}
+              value={formData.passwordConfirm}
               onChange={handleChange}
               disabled={isLoading}
               autoComplete="new-password"
             />
-            {errors.confirmPassword && <span className="signup__field-error">{errors.confirmPassword}</span>}
+            {errors.passwordConfirm && <span className="signup__field-error">{errors.passwordConfirm}</span>}
           </div>
 
           <Button
