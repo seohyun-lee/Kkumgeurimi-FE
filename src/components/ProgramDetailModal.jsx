@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaRegStar, FaStar, FaFileAlt, FaTimes } from 'react-icons/fa';
+import { getLabelByCode } from '../config/constants';
 import './ProgramDetailModal.css';
 
 export default function ProgramDetailModal({ program, isOpen, onClose, isLiked, onLike, onApply }) {
@@ -20,6 +21,7 @@ export default function ProgramDetailModal({ program, isOpen, onClose, isLiked, 
   const eligibleRegion = program.eligibleRegion || program.venue_region;
   const venueRegion = program.venueRegion || program.venue;
   const operateCycle = program.operateCycle || program.operate_cycle;
+  const interestCategoryId = program.interestCategoryId;
   const interestText = program.interestText || program.field_category;
   const likeCount = program.likeCount || 0;
   const registrationCount = program.registrationCount || 0;
@@ -115,7 +117,9 @@ export default function ProgramDetailModal({ program, isOpen, onClose, isLiked, 
             </div>
             <div className="info-item">
               <span className="info-label">분야</span>
-              <span className="info-value">{interestText || "미정"}</span>
+              <span className="info-value">
+                {interestCategoryId ? getLabelByCode(interestCategoryId) : (interestText || "미정")}
+              </span>
             </div>
             {requiredHours && (
               <div className="info-item">
