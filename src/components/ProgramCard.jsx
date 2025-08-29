@@ -9,7 +9,7 @@ export default function ProgramCard({ program, isLiked, onLike, onClick }) {
   const provider = program.provider;
   const startDate = program.startDate || program.start_date;
   const endDate = program.endDate || program.end_date;
-  const venueRegion = program.venueRegion || program.venue_region;
+  const venueRegion = program.venueRegion || program.eligibleRegion || program.venue_region;
   const targetAudience = program.targetAudience || program.target_audience;
   const price = program.price;
   const imageUrl = program.imageUrl;

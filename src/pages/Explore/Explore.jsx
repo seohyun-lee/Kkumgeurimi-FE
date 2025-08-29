@@ -5,6 +5,7 @@ import { INTEREST_LABELS } from '../../config/constants';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCard from "../../components/ProgramCard.jsx";
+import ProgramDetailModal from "../../components/ProgramDetailModal.jsx";
 import './Explore.css';
 
 const EXPERIENCE_TYPE_CHIPS = [
@@ -34,14 +35,7 @@ const DEFAULT_FILTERS = {
 };
 
 
-function InfoItem({ k, v }) {
-  return (
-    <>
-      <dt className="info-grid__key">{k}</dt>
-      <dd className="info-grid__val">{v}</dd>
-    </>
-  );
-}
+
 function SelectFilter({ label, value, onChange, options }) {
   return (
     <label className="selectfilter">
@@ -374,67 +368,18 @@ export default function Explore() {
         )}
       </section>
 
-      {modal.open && modal.program && (
-        <div
-          className="modal"
-          role="dialog"
-          aria-modal="true"
-          onClick={(e) =>
-            e.target.classList.contains("modal") &&
-            setModal({ open: false, program: null })
-          }
-        >
-          <div className="modal__panel">
-            <div className="modal__header">
-              <button
-                className="modal__close"
-                aria-label="닫기"
-                onClick={() => setModal({ open: false, program: null })}
-              >
-                ×
-              </button>
-              <h2 className="modal__title">{modal.program.title}</h2>
-              <div className="modal__provider">{modal.program.provider}</div>
-            </div>
-
-            {/* ✅ 여기만 스크롤 */}
-            <div className="modal__content">
-              {/* 1) 소개 먼저 */}
-              <section className="section section--desc">
-                <h3 className="section__title">프로그램 소개</h3>
-                <p className="section__text">
-                  {modal.program.description}
-                </p>
-              </section>
-
-              {/* 태그/라벨 */}
-              <section className="section section--tags">
-                <div className="tags">
-                  <span className="tag">{modal.program.field_category}</span>
-                  {/*추후 태그로 등록할 것 추가*/}
-                </div>
-              </section>
-
-              {/* 핵심 정보: 2열 그리드 (모바일 1→2열) */}
-              <section className="section">
-                <h3 className="section__title">핵심 정보</h3>
-                <dl className="info-grid">
-                  <InfoItem k="프로그램 유형" v={modal.program.program_type} />
-                  <InfoItem k="대상" v={modal.program.target_audience} />
-                  <InfoItem k="지역" v={modal.program.venue_region} />
-                  <InfoItem k="참가비" v={modal.program.price} />
-                  <InfoItem k="모집인원" v={`${modal.program.capacity}명`} />
-                  <InfoItem k="운영시간" v={modal.program.avail_hours} />
-                  <InfoItem k="장소" v={modal.program.venue} />
-                  <InfoItem k="관련직무" v={modal.program.job_field} />
-                  <InfoItem k="기간" v={`${modal.program.start_date} ~ ${modal.program.end_date}`} />
-                  <InfoItem k="분야" v={modal.program.field_category} />
-                </dl>
-              </section>
-            </div>
-          </div>
-        </div>
-      )}
+      <ProgramDetailModal
+        program={modal.program}
+        isOpen={modal.open}
+        onClose={() => setModal({ open: false, program: null })}
+        isLiked={modal.program ? liked.has(modal.program.programId || modal.program.program_id) : false}
+        onLike={toggleLike}
+        onApply={(programId) => {
+          // TODO: 프로그램 신청 로직 구현
+          console.log('프로그램 신청:', programId);
+          alert('프로그램 신청 기능은 준비 중입니다.');
+        }}
+      />
     </div>
   );
 }
