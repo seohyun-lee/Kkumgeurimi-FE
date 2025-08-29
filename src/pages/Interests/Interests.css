@@ -1,0 +1,184 @@
+/* 최상위: 풀스크린 + 배경 */
+.interests-page {
+  min-height: 100dvh;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: transparent;
+  padding: 32px 24px;
+}
+
+/* 반짝이는 별/입자 레이어 */
+.interests-bg {
+  position: absolute;
+  inset: -10% -10% -10% -10%;
+  pointer-events: none;
+  z-index: 0;
+  /* 작은 점들을 여러 레이어로 깔고, 서로 다른 속도로 twinkle */
+  background:
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.35), transparent 60%),
+    radial-gradient(2.5px 2.5px at 70% 20%, rgba(255,255,255,.25), transparent 60%),
+    radial-gradient(1.8px 1.8px at 40% 80%, rgba(255,255,255,.3), transparent 60%),
+    radial-gradient(1.5px 1.5px at 85% 65%, rgba(255,255,255,.28), transparent 60%),
+    radial-gradient(2.2px 2.2px at 10% 70%, rgba(255,255,255,.25), transparent 60%);
+  animation: twinkleA 6s ease-in-out infinite alternate;
+  filter: blur(.2px);
+}
+.interests-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  animation: twinkleB 7.5s ease-in-out infinite alternate;
+  mix-blend-mode: screen;
+}
+@keyframes twinkleA {
+  0%   { opacity: .55; transform: translateY(0px) scale(1); }
+  100% { opacity: .85; transform: translateY(-6px) scale(1.02); }
+}
+@keyframes twinkleB {
+  0%   { opacity: .35; transform: translateY(0px) scale(1); }
+  100% { opacity: .75; transform: translateY(8px) scale(0.98); }
+}
+
+/* 콘텐츠 카드(실제 폼 영역) */
+.interests {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0 4px 24px;
+}
+
+.interests__header { text-align: center; margin-bottom: 16px; }
+.interests__title {
+  margin: 0 0 6px 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--gray-900);
+}
+.interests__subtitle {
+  margin: 0;
+  color: var(--gray-600);
+  font-size: 14px;
+}
+
+/* 카테고리 그리드 */
+.interests__grid {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* 칩 버튼 (중복 선택) */
+.interest-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--gray-300);
+  background: var(--bg-primary);
+  color: var(--gray-800);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease, transform .02s ease;
+}
+.interest-chip:hover {
+  border-color: var(--brand-blue-500);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-blue-500) 12%, transparent);
+}
+.interest-chip:active { transform: translateY(1px); }
+.interest-chip:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--brand-blue-700) 60%, white);
+  outline-offset: 2px;
+}
+
+/* 활성 상태 */
+.interest-chip.active {
+  border-color: var(--brand-blue-500);
+  background: var(--brand-blue-100);
+  color: var(--brand-blue-700);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-blue-500) 12%, transparent);
+}
+.chip__label { flex: 1; }
+.chip__check {
+  width: 22px; height: 22px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: var(--brand-blue-700);
+  opacity: 0;
+  transform: scale(.7);
+}
+.interest-chip.active .chip__check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 액션 */
+.interests__actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+.interests__skip {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--gray-600);
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+  justify-self: center;
+}
+
+/* 컨테이너를 플랫 유지 (보더/카드 제거) */
+.interests.interests--flat {
+  background: transparent;
+  backdrop-filter: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0 4px 24px;
+}
+
+/* 그룹 래퍼 */
+.ig { display: grid; gap: 12px; margin-top: 12px; }
+
+/* 그룹 헤더 (체크박스 + 라벨 + 카운트 + 화살표) */
+.ig__group { border-radius: 12px; background: transparent; }
+.ig__header {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  padding: 12px 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.ig__header:hover { background: color-mix(in oklab, var(--brand-blue-100) 50%, transparent); }
+
+.ig__left {
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.ig__label { font-weight: 700; color: var(--gray-900); }
+.ig__right { display: inline-flex; align-items: center; gap: 10px; color: var(--gray-600); }
+.ig__count { font-size: 12px; color: var(--gray-600); }
+
+.ig__chev { transition: transform .15s ease; }
+.ig__chev.open { transform: rotate(180deg); }
+
+/* 하위 칩 그리드 */
+.ig__grid {
+  display: grid;
+  gap: 10px;
+  margin: 8px 0 4px 34px; /* 체크박스만큼 인덴트 */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}

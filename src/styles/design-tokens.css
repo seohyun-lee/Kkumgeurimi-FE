@@ -1,0 +1,82 @@
+/* 꿈그리미 디자인 시스템 */
+/* 브랜드 컬러 */
+:root {
+  /* Brand (축소 3단계) */
+  --brand-blue-100: #E7F1FF;   /* 배경용 */
+  --brand-blue-300: #7CCBFF;   /* 추가: 밝은 파랑 (tint, bg용) */
+  --brand-blue-500: #278EFF;   /* 메인 브랜드 (링크/포인트) */
+  --brand-blue-700: #0071ED;   /* 대비 확보용) */
+
+  --brand-orange-100: #FFF0D9;
+  --brand-orange-500: #FFB562;
+  --brand-orange-700: #E8A04B; /* 텍스트는 검정 권장 */
+
+  /* Secondary */
+  --brand-navy-100: #E6EEFD;
+  --brand-navy-600: #2066D1;   /* 버튼/배지에 white 텍스트 AA 통과(5.41:1) */
+  --brand-navy-800: #003BA3;   /* 더 강한 대비 */
+
+  --brand-yellow-100: #FFF6D6;
+  --brand-yellow-400: #FFD66F;
+  --brand-yellow-600: #E7BC3D; /* 텍스트는 검정 권장 */
+}
+:root {
+  --gray-50: #F8FAFC;
+  --gray-100: #F1F5F9; /* 밝은 배경 */
+  --gray-200: #E2E8F0; /* 카드 배경, 구분선 */
+  --gray-400: #94A3B8; /* placeholder, 비활성 텍스트 */
+  --gray-500: #64748B;
+  --gray-600: #475569; /* 본문 텍스트 */
+  --gray-900: #0F172A; /* 헤드라인 */
+
+  /* Semantic */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error:   #EF4444;
+  --info:    var(--brand-blue-500);
+
+  /* Surfaces */
+  --bg-primary:   #FFFFFF;
+  --bg-secondary: var(--gray-50);
+  --bg-tertiary:  var(--gray-100);
+
+  /* On-colors (역상 텍스트) */
+  --on-brand-blue-700: #FFFFFF;
+  --on-brand-navy-600:  #FFFFFF;
+  --on-brand-orange:    #000000;
+  --on-brand-yellow:    #000000;
+
+  /* Shadow */
+  /* sm/md/lg/xl/hover*/
+  --shadow-sm: 0 2px 8px rgba(39, 142, 255, 0.1);
+  --shadow-md: 0 4px 16px rgba(39, 142, 255, 0.15);
+  --shadow-lg: 0 8px 32px rgba(39, 142, 255, 0.2);
+  --shadow-xl: 0 12px 40px rgba(39, 142, 255, 0.28);
+  --shadow-hover: 0 6px 24px rgba(39, 142, 255, 0.25);
+}
+/* ===== Utilities added ===== */
+
+/* Radii */
+:root {
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-24: 24px;
+}
+
+/* Gradients */
+:root {
+  /* 메인 히어로/카드용 그라데이션 */
+  --grad-primary: linear-gradient(
+    135deg,
+    var(--brand-blue-700) 0%,
+    var(--brand-orange-500) 100%
+  );
+
+  /* 보조(아이콘/배지/버튼)용 그라데이션 */
+  --grad-accent: linear-gradient(
+    135deg,
+    var(--brand-blue-500) 0%,
+    #764ba2 100%
+  );
+}

@@ -1,0 +1,147 @@
+html, body, #root { height: 100%; }
+body { margin: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 헤더 */
+.app-shell__header {
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: block
+}
+.app-shell__bottomnav { display: none; }
+
+:root {
+  --tabbar-h: 64px;
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+
+
+.app-shell__header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+
+/* 데스크톱 네비게이션 */
+.app-shell__nav {
+  display: flex;
+  gap: 8px;
+}
+
+.app-shell__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+}
+
+.app-shell__nav-item:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.app-shell__nav-item.active {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.app-shell__nav-icon {
+  font-size: 16px;
+}
+
+.app-shell__nav-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 액션 버튼 */
+.app-shell__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.app-shell__signin-btn,
+.app-shell__logout-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.app-shell__signin-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.app-shell__signin-btn:hover {
+  background-color: #2563eb;
+}
+
+.app-shell__logout-btn {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.app-shell__logout-btn:hover {
+  background-color: #e5e7eb;
+}
+
+/* 메인 콘텐츠 */
+.app-shell__main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  width: 100%;
+}
+
+.app-shell__main--flush{
+  padding:0;
+  background:transparent;
+  border-radius:0;
+  box-shadow:none;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .app-shell__header { display: none; }
+  .app-shell__bottomnav {
+    display: block;
+    z-index: 50;
+  }
+
+  /* 하단 탭에 가리지 않도록 메인에 패딩 추가 */
+  .app-shell__main {
+    padding-bottom: calc(var(--tabbar-h) + var(--safe-bottom));
+  }
+}
+
+/* 데스크톱에선 메인 패딩 평소대로 */
+@media (min-width: 768px) {
+  .app-shell__main { padding-bottom: 0; }
+  .app-shell__bottomnav { display: none; }
+}

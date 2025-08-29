@@ -1,0 +1,19 @@
+.onbd.hero {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  /* 3겹 그라데이션 배경 */
+  background:
+    radial-gradient(60% 60% at 20% 10%, color-mix(in oklab, var(--brand-blue-300) 35%, transparent), transparent 60%),
+    radial-gradient(70% 70% at 100% 0%, color-mix(in oklab, var(--brand-blue-100) 70%, transparent), transparent 65%),
+    linear-gradient(180deg, var(--bg-primary), var(--brand-blue-100));
+  padding: 16px;
+}
+
+.onbd__header { padding: 8px 16px 0px; }
+.onbd__brand {
+  display: inline-flex; gap: 10px; align-items: center;
+  text-decoration: none; color: var(--gray-800); font-weight: 800;
+}
+.onbd__main { display: grid; place-items: center; }
+.onbd__footer { text-align: center; font-size: 12px; color: var(--gray-500); padding-top: 12px; }

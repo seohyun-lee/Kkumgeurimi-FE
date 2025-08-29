@@ -1,0 +1,285 @@
+* { box-sizing: border-box; }
+
+.explore { max-width: 1200px; margin: 0 auto; background: #f5f5f5; color: #333; line-height: 1.5; }
+
+/* Header */
+.explore__header { background: #fff; border-bottom: 1px solid #eee; padding: 20px; }
+.header__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.header__title { font-size: 1.4rem; font-weight: 700; }
+.header__icon { color: #666; font-size: 1.2rem; }
+
+.date { display: flex; align-items: center; gap: 12px; }
+.date__input { padding: 6px 10px; border: 1px solid #ddd; border-radius: 8px; font-size: .8rem; background: #fff; }
+
+.filters__actions { display: flex; gap: 8px; margin-top: 16px; }
+.btn { padding: 10px; border-radius: 8px; font-size: .9rem; cursor: pointer; }
+.btn--reset { flex: 1; background: #fff; border: 1px solid #ddd; }
+.btn--search { flex: 2; background: var(--brand-blue-500); color: #fff; border: none; font-weight: 600; }
+
+/* Content */
+.explore__content { padding: 20px; }
+.content__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 0 4px; }
+.results { font-size: .9rem; color: #666; }
+.results__count { color: #FF6B35; font-weight: 700; }
+.sort { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: .8rem; background: #fff; }
+
+/* Grid & Card */
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
+.card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.08); cursor: pointer; transition: .2s; position: relative; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.12); }
+
+.card__img { height: 120px; background: linear-gradient(135deg, #FF6B35, #FFA726); display: flex; align-items: center; justify-content: center; position: relative; color: #fff; }
+.card__emoji { font-size: 2rem; }
+
+
+/* Pagination */
+.pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 30px; }
+.page { width: 36px; height: 36px; border: 1px solid #ddd; background: #fff; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: .85rem; color: #666; }
+.page.active { background: var(--brand-blue-500); color: #fff; border-color: var(--brand-blue-700); }
+.page:disabled { opacity: .5; cursor: not-allowed; }
+.page:not(.active):hover { background: #f5f5f5; }
+
+/* 배경 스크롤 잠금 */
+body.no-scroll { overflow: hidden; touch-action: none; overscroll-behavior: none; }
+
+/* 오버레이 */
+.modal {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: saturate(110%) blur(2px);
+}
+
+/* ⬇️ 라운드는 panel이 갖고, overflow는 숨겨서 ‘각짐’ 방지 */
+.modal__panel {
+  width: min(720px, 92vw);
+  max-height: min(90dvh, 760px);
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;            /* 🔴 중요: 스크롤바가 모서리를 깎지 못하게 */
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 헤더는 고정 높이/위쪽 고정(optional sticky) */
+.modal__header {
+  padding: 18px 20px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  flex-shrink: 0;
+  position: sticky; top: 0; z-index: 1; /* 원치 않으면 이 줄 제거 */
+}
+.modal__close {
+  position: absolute; right: 12px; top: 12px;
+  background: none; border: 0; font-size: 22px; cursor: pointer; color: #999;
+}
+
+/* ✅ 여기만 스크롤되는 영역 */
+.modal__content {
+  flex: 1;                /* 패널의 남은 높이 전부 차지 */
+  min-height: 0;          /* flex 스크롤 필수 */
+  overflow: auto;         /* 스크롤 소유자 */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 16px;
+
+  /* 스크롤바 때문에 우측 모서리 ‘각짐’ 방지 보정 */
+  scrollbar-gutter: stable;           /* 크로뮴/파폭 OK, 사파리는 무시해도 문제 없음 */
+  /* 필요시 약간의 우측 패딩 추가해서 시각적 여백 확보 */
+  padding-right: 18px;
+}
+
+/* (선택) 스크롤바 미려하게 */
+.modal__content::-webkit-scrollbar { width: 8px; }
+.modal__content::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2); border-radius: 8px;
+}
+.modal__content::-webkit-scrollbar-track { background: transparent; }
+
+
+.modal__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+.modal__provider { color: #FF6B35; font-weight: 600; font-size: .9rem; }
+
+.desc h3 { font-size: 1rem; margin-bottom: 10px; color: #333; }
+.desc p { color: #666; line-height: 1.6; font-size: .9rem; }
+
+
+/* 공통 섹션 */
+.section { margin: 10px 0 14px; }
+.section__title {
+  font-size: 14px; font-weight: 800; color: #666; margin: 0 0 8px;
+}
+.section--desc .section__text {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 15px;
+  color: #222;
+}
+
+/* ✅ 콤팩트 2열 그리드 (작은 폰에서는 1열) */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  column-gap: 10px;
+  row-gap: 8px;
+  align-items: start;
+  padding: 10px 12px;
+  background: #f7f8f9;
+  border: 1px solid #eee;
+  border-radius: 12px;
+}
+.info-grid__key {
+  margin: 0; color: #6b7280; font-size: 12px; font-weight: 700;
+}
+.info-grid__val {
+  margin: 0; color: #111827; font-size: 14px; font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* 반응형: 작은 화면은 1열 정의 리스트 */
+@media (max-width: 420px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+    row-gap: 4px;
+    padding: 10px;
+  }
+  .info-grid__key { font-size: 12px; }
+  .info-grid__val { font-size: 14px; margin-bottom: 8px; }
+}
+@media (max-width: 480px) {
+  .explore__header { padding: 16px; }
+  .explore__content { padding: 16px; }
+  .grid { gap: 8px; }
+}
+
+/* ====== 필터 바 기본 (데스크톱) ====== */
+.filters--compact {
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+.filters__row{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* 최소 160px 유지 */
+  gap:12px;
+  align-items:start;
+}
+
+/* 라벨/셀렉트 */
+.selectfilter { display: grid; gap: 6px; min-width: 0; }
+.selectfilter__label { font-size: 12px; color: #667085; font-weight: 700; white-space: nowrap; }
+.selectfilter__select {
+  height: 36px;
+  border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 0 10px; background: #fff; font-size: 14px;
+  min-width: 0; width: 100%;
+}
+
+/* 날짜 */
+/* 날짜 래퍼: 한 줄 유지, 축소 금지 */
+.selectfilter--date .date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;          /* ✅ 줄바꿈 방지 */
+  min-width: 0;
+}
+
+/* 입력칸은 줄어들지 않게, 내용(yyyy-mm-dd)이 충분히 보이도록 */
+.date__input {
+  height: 36px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0 8px;
+  font-size: 14px;
+  min-width: 12ch;            /* ✅ 'YYYY-MM-DD' 10자 + 여유 */
+  flex: 0 0 auto;             /* ✅ 축소 금지 */
+}
+
+/* 데스크톱/태블릿에선 날짜 블록에 더 넓은 칸을 부여 */
+.filters__row .selectfilter--date {
+  grid-column: span 2;        /* ✅ 두 칸 차지 */
+}
+
+/* 모바일에선 세로 스택 */
+@media (max-width: 720px) {
+  .selectfilter--date .date {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filters__row .selectfilter--date {
+    grid-column: auto;        /* 모바일에선 기본 1칸 */
+  }
+}
+
+
+/* 검색 버튼 */
+.filters__actions { display:flex; justify-content:flex-end; }
+.filters__actions .btn--search {
+  height: 36px; padding: 0 14px; border-radius: 10px;
+  border: none; color:#fff; font-weight:700; cursor:pointer;
+}
+
+/* 선택된 필터 배지 */
+.selectedfilters {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+}
+.sf-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #f1f5f9; border: 1px solid #e5e7eb; color: #334155;
+  padding: 6px 10px; border-radius: 999px; font-size: 12px; max-width: 100%;
+}
+.sf-badge b { font-weight: 800; color:#475569; }
+.sf-badge__x { background: none; border: 0; cursor: pointer; color: #64748b; font-size: 14px; line-height: 1; }
+.sf-clearall { background: none; border: 0; color: #7c8899; font-weight: 400; cursor: pointer; font-size: 12px; margin-left: 4px; }
+
+/* ====== 브레이크포인트: <= 1280px 살짝 타이트 ====== */
+@media (max-width: 1280px) {
+  .filters__row {
+    grid-template-columns: repeat(5, minmax(140px, 1fr)) auto;
+    gap: 8px;
+  }
+}
+
+@media (min-width: 1024px){
+  .filters__row {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    grid-auto-rows: auto;
+  }
+  .filters__actions { grid-column: 1 / -1; justify-content: flex-end; }
+}
+
+@media (max-width: 1024px) {
+  .filters__row {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    grid-auto-rows: auto;
+  }
+  .filters__actions { grid-column: 1 / -1; justify-content: flex-end; }
+}
+
+/* ====== 브레이크포인트: <= 720px (모바일) → 2열 ====== */
+@media (max-width: 720px) {
+  .filters--compact { padding: 8px 10px; }
+  .filters__row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .selectfilter__label { font-size: 11px; }
+}
+
+/* ====== 브레이크포인트: <= 480px (초소형) → 1열 ====== */
+@media (max-width: 480px) {
+  .filters__row { grid-template-columns: 1fr; }
+  .filters__actions { justify-content: flex-end; }
+}
+
+/* ====== 접근성/줄바꿈 품질 ====== */
+.selectfilter, .selectedfilters, .sf-badge { min-width: 0; }
+.sf-badge { overflow: hidden; text-overflow: ellipsis; }
+.sf-badge > b { white-space: nowrap; }
+
+.pagination .page.nav {
+  min-width: 72px;            /* 터치 대상 확대 */
+  height: 36px;
+  font-weight: 600;
+}
+.nav__arrow { font-size: 18px; }

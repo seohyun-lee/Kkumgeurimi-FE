@@ -1,0 +1,125 @@
+.signup {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.signup__card {
+  width: 100%;
+  background: transparent; /* 카드/보더/그림자 없음 (AuthLayout 배경 위 플랫) */
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.signup__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.signup__title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.signup__subtitle {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.signup__error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.signup__form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: stretch; /* 자식 폭 100% 보장 */
+}
+
+.signup__field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%; /* 부모와 폭 맞춤 */
+}
+
+.signup__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.signup__input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+.signup__input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.signup__input.error {
+  border-color: #ef4444;
+}
+
+.signup__input.error:focus {
+  border-color: #ef4444;
+}
+
+.signup__input:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.signup__field-error {
+  font-size: 14px;
+  color: #ef4444;
+  margin-top: 4px;
+}
+
+.signup__submit-btn {
+  margin-top: 8px;
+}
+
+.signup__footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.signup__footer-text {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.signup__footer-link {
+  color: #3b82f6;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.signup__footer-link:hover {
+  text-decoration: underline;
+}
