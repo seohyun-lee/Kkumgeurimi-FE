@@ -11,6 +11,7 @@ import Home from '../pages/Home/Home.jsx';
 import Assistant from '../pages/Assistant/Assistant.jsx';
 import Explore from '../pages/Explore/Explore.jsx';
 import Career from '../pages/Career/Career.jsx';
+import MyPage from '../pages/MyPage/MyPage.jsx';
 import NotFound from "../pages/NotFound/NotFound.jsx";
 
 // 페이지 컴포넌트들 (임시)
@@ -45,6 +46,7 @@ export const router = createBrowserRouter([
       { path: "career", element: <Career /> },
       { path: "programs/:programId", element: <ProgramDetail /> },
       { path: "assistant", element: <Assistant /> },
+      { path: "me", element: <MyPage /> },
       // 보호 구역
       {
         element: <ProtectedLayout />,
