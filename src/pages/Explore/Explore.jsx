@@ -5,7 +5,6 @@ import { INTEREST_LABELS } from '../../config/constants';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCard from "../../components/ProgramCard.jsx";
-import ProgramDetailModal from "../../components/ProgramDetailModal.jsx";
 import './Explore.css';
 
 const EXPERIENCE_TYPE_CHIPS = [
@@ -368,18 +367,214 @@ export default function Explore() {
         )}
       </section>
 
-      <ProgramDetailModal
-        program={modal.program}
-        isOpen={modal.open}
-        onClose={() => setModal({ open: false, program: null })}
-        isLiked={modal.program ? liked.has(modal.program.programId || modal.program.program_id) : false}
-        onLike={toggleLike}
-        onApply={(programId) => {
-          // TODO: 프로그램 신청 로직 구현
-          console.log('프로그램 신청:', programId);
-          alert('프로그램 신청 기능은 준비 중입니다.');
-        }}
-      />
+      {/* Program Detail Modal */}
+      {modal.open && modal.program && (
+        <div className="program-detail-modal" onClick={() => setModal({ open: false, program: null })}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            {/* 헤더 */}
+            <div className="modal-header">
+              <button className="close-button" onClick={() => setModal({ open: false, program: null })}>
+                ×
+              </button>
+            </div>
+
+            {/* 메인 콘텐츠 */}
+            <div className="modal-body">
+              {/* 프로그램 제목 및 제공자 */}
+              <div className="program-header">
+                <h2 className="program-title">{modal.program.programTitle || modal.program.title}</h2>
+                <div className="program-provider">{modal.program.provider}</div>
+            </div>
+
+              {/* 프로그램 설명 */}
+              {modal.program.description && (
+                <div className="program-description">
+                  {modal.program.description}
+                </div>
+              )}
+
+              {/* 프로그램 정보 그리드 */}
+              <div className="program-info-grid">
+                <div className="info-item">
+                  <span className="info-label">프로그램 유형</span>
+                  <span className="info-value">{modal.program.programType || modal.program.program_type || "미정"}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">대상</span>
+                  <span className="info-value">{modal.program.targetAudience || modal.program.target_audience || "미정"}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">지역</span>
+                  <span className="info-value">{modal.program.eligibleRegion || modal.program.venue_region || "전국"}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">참가비</span>
+                  <span className="info-value">
+                    {(modal.program.price === "0" || modal.program.price === 0) ? "무료" : `${Number(modal.program.price).toLocaleString()}원`}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">모집인원</span>
+                  <span className="info-value">{modal.program.capacity ? `${modal.program.capacity}명` : "미정"}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">운영시간</span>
+                  <span className="info-value">
+                    {modal.program.operateCycle && modal.program.availHours 
+                      ? `${modal.program.operateCycle} ${modal.program.availHours}`
+                      : (modal.program.availHours || modal.program.operateCycle || "미정")}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">장소</span>
+                  <span className="info-value">{modal.program.venueRegion || modal.program.venue || "미정"}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">관련직종</span>
+                  <span className="info-value">{modal.program.relatedMajor || modal.program.job_field || "미정"}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">기간</span>
+                  <span className="info-value">
+                    {modal.program.startDate && modal.program.endDate 
+                      ? `${modal.program.startDate} ~ ${modal.program.endDate}`
+                      : (modal.program.startDate || "미정")}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">분야</span>
+                  <span className="info-value">
+                    {modal.program.interestCategoryId 
+                      ? INTEREST_LABELS[modal.program.interestCategoryId] || String(modal.program.interestCategoryId)
+                      : (modal.program.interestText || modal.program.field_category || "미정")}
+                  </span>
+                </div>
+                {modal.program.requiredHours && (
+                  <div className="info-item">
+                    <span className="info-label">필요시간</span>
+                    <span className="info-value">{modal.program.requiredHours}</span>
+                  </div>
+                )}
+                {modal.program.targetSchoolType && (
+                  <div className="info-item">
+                    <span className="info-label">대상학교</span>
+                    <span className="info-value">{modal.program.targetSchoolType}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* 액션 버튼 */}
+              <div className="action-buttons">
+                <button className="btn-apply" onClick={() => {
+                  console.log('프로그램 신청:', modal.program.programId || modal.program.program_id);
+                  alert('프로그램 신청 기능은 준비 중입니다.');
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16.6667 5.83333H15.8333V5C15.8333 3.61917 14.7142 2.5 13.3333 2.5H6.66667C5.28583 2.5 4.16667 3.61917 4.16667 5V5.83333H3.33333C2.9525 5.83333 2.66667 6.11917 2.66667 6.5V17.5C2.66667 17.8808 2.9525 18.1667 3.33333 18.1667H16.6667C17.0475 18.1667 17.3333 17.8808 17.3333 17.5V6.5C17.3333 6.11917 17.0475 5.83333 16.6667 5.83333ZM13.3333 5.83333H6.66667V5C6.66667 4.54167 7.04167 4.16667 7.5 4.16667H12.5C12.9583 4.16667 13.3333 4.54167 13.3333 5V5.83333Z" fill="currentColor"/>
+                  </svg>
+                  <span>신청하기</span>
+                </button>
+                <button 
+                  className={`btn-like ${liked.has(modal.program.programId || modal.program.program_id) ? 'liked' : ''}`} 
+                  onClick={() => toggleLike(modal.program.programId || modal.program.program_id)}
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 16.5C10 16.5 2 11 2 6C2 3.79086 3.79086 2 6 2C7.5 2 9 3 10 4C11 3 12.5 2 14 2C16.2091 2 18 3.79086 18 6C18 11 10 16.5 10 16.5Z" stroke="currentColor" strokeWidth="1.5" fill={liked.has(modal.program.programId || modal.program.program_id) ? "currentColor" : "none"}/>
+                  </svg>
+                  <span>찜하기</span>
+                </button>
+                </div>
+
+              {/* 커뮤니티 섹션 */}
+              <div className="community-section">
+                <div className="community-header">
+                  <span className="community-title">💬 댓글 목록 </span>
+                </div>
+                <div className="community-preview">
+                  <div className="chat-message">
+                    <div className="user-avatar">
+                      <img src="/mock_image_url/korean_woman_1.jpeg" alt="김서연" />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <span className="user-name">김서연</span>
+                        <span className="user-badge 관심있음">관심있음</span>
+                        <span className="time-ago">2시간 전</span>
+                      </div>
+                      <div className="message-text">
+                        혹시 수성구 사시는 분들 중에 이 체험 같이 가실 분 계실까요.. 🤔
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="chat-message">
+                    <div className="user-avatar">
+                      <img src="/mock_image_url/korean_man_1.jpeg" alt="박민수" />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <span className="user-name">박민수</span>
+                        <span className="user-badge">신청완료</span>
+                        <span className="time-ago">1시간 전</span>
+                      </div>
+                      <div className="message-text">
+                        @김서연 저요!! 오픈채팅 링크: https://open.kakao.com/o/biotechlab2025 여기로 들어와주세요~~~~
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="chat-message">
+                    <div className="user-avatar">
+                      <img src="/mock_image_url/korean_woman_2.jpeg" alt="이지은" />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <span className="user-name">이지은</span>
+                        <span className="user-badge 관심있음">관심있음</span>
+                        <span className="time-ago">30분 전</span>
+                      </div>
+                      <div className="message-text">
+                        @박민수 저도 관심 있는데 연락드려도 될까요?
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="chat-message">
+                    <div className="user-avatar">
+                      <img src="/mock_image_url/korean_man_2.jpeg" alt="최준호" />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <span className="user-name">최준호</span>
+                        <span className="time-ago">15분 전</span>
+                      </div>
+                      <div className="message-text">
+                      아 이런거 서울에는 없나..ㅠㅠ
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="chat-message">
+                    <div className="user-avatar">
+                      <img src="/mock_image_url/korean_woman_1.jpeg" alt="정다은" />
+                    </div>
+                    <div className="message-content">
+                      <div className="message-header">
+                        <span className="user-name">정다은</span>
+                        <span className="user-badge 관심있음">관심있음</span>
+                        <span className="time-ago">5분 전</span>
+                      </div>
+                      <div className="message-text">
+                        헉 신청 마감됐네요..ㅠㅠ 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
