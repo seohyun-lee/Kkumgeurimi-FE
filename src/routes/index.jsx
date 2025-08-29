@@ -20,9 +20,8 @@ const MeRegistrations = () => <div>내 신청 페이지</div>;
 const MeLikes = () => <div>내 찜 페이지</div>;
 
 export const ProtectedLayout = () => {
-  const { isAuthenticated, isLoading } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const location = useLocation();
-  if (isLoading) return <div>로딩 중...</div>;
   if (!isAuthenticated) {
     // 로그인 후 원래 가려던 경로로 돌아가도록 state에 from 저장
     return <Navigate to="/auth/signin" replace state={{ from: location }} />;
@@ -31,8 +30,7 @@ export const ProtectedLayout = () => {
 };
 
 const GuestLayout = () => {
-  const { isAuthenticated, isLoading } = useAuthStore();
-  if (isLoading) return <div>로딩 중...</div>;
+  const { isAuthenticated } = useAuthStore();
   if (isAuthenticated) return <Navigate to="/" replace />;
   return <Outlet />;
 };

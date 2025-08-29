@@ -4,7 +4,6 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
-  background: #f8fafc;
   transition: all 0.3s ease;
   padding-top: 24px;
   padding-bottom: 100px; /* BottomNavigation + 여유공간 */

@@ -25,7 +25,7 @@ const SignIn = () => {
     if (!formData.email) newErrors.email = '이메일을 입력해주세요.';
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = '올바른 이메일 형식을 입력해주세요.';
     if (!formData.password) newErrors.password = '비밀번호를 입력해주세요.';
-    else if (formData.password.length < 6) newErrors.password = '비밀번호는 6자 이상이어야 합니다.';
+    else if (formData.password.length < 8) newErrors.password = '비밀번호는 8자 이상이어야 합니다.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
