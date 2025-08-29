@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getMentorsForCareer } from '../../data/mentors.js';
+import { careerService } from '../../services/career.service.js';
+import { authService } from '../../services/auth.service.js';
+import { getLabelByCode } from '../../config/constants.js';
+import { useAuthStore } from '../../store/auth.store.js';
 import './Career.css';
 
 // 멘토와 관심사 매핑
@@ -18,64 +22,124 @@ const mapMentorToInterest = (mentorId) => {
 const Career = () => {
   const [currentState, setCurrentState] = useState('default');
   const [selectedInterest, setSelectedInterest] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
     interests: [],
     programs: [],
     mentors: []
   });
+  
+  const { isAuthenticated } = useAuthStore();
 
-  // TODO: Replace with actual API call
+  // API 데이터로 버블 생성
   useEffect(() => {
-    // Mock data - replace with actual server data
-    const mockData = {
-      interests: [
-        { 
-          id: 'planning', 
-          name: '기획', 
-          size: 'large', 
-          color: '#ff7675', 
-          x: 0, 
-          y: 0, 
-          weight: 85,
-          title: '콘텐츠 기획자',
-          description: `
-            <h3>주요 업무</h3>
-            <p>콘텐츠 기획자는 다양한 미디어 플랫폼에서 사용자에게 전달할 콘텐츠를 기획하고 제작하는 업무를 담당합니다.</p>
-            <h3>필요 역량</h3>
-            <p>창의적 사고력, 트렌드 감각, 기획력, 커뮤니케이션 능력, 데이터 분석 능력이 필요합니다.</p>
-          `,
-          background: 'bg-planning'
-        },
-        { 
-          id: 'marketing', 
-          name: '마케팅', 
-          size: 'large', 
-          color: '#fd79a8', 
-          x: 200, 
-          y: -50, 
-          weight: 75,
-          title: '마케팅 전문가',
-          description: `
-            <h3>주요 업무</h3>
-            <p>마케팅 전문가는 제품이나 서비스의 시장 진입 전략을 수립하고 실행합니다.</p>
-            <h3>필요 역량</h3>
-            <p>시장 분석 능력, 창의적 사고, 데이터 분석 능력, 커뮤니케이션 스킬이 중요합니다.</p>
-          `,
-          background: 'bg-marketing'
-        }
-      ],
-      programs: [
-        { id: 'pm-mentoring', name: 'PM 직무\n멘토링', parentId: 'planning', size: 'small', color: '#fdcb6e', x: -120, y: -80, weight: 40 },
-        { id: 'cj-career', name: 'CJ 진로\n직업탐색', parentId: 'planning', size: 'small', color: '#e17055', x: -50, y: -120, weight: 35 },
-        { id: 'consumer-research', name: '소비자 인\n사이트 리서\n치 컨...', parentId: 'marketing', size: 'small', color: '#fab1a0', x: 80, y: -150, weight: 30 }
-      ],
-      mentors: getMentorsForCareer().map(mentor => ({
-        ...mentor,
-        interestId: mapMentorToInterest(mentor.id)
-      }))
+    const loadCareerData = async () => {
+      try {
+        setLoading(true);
+        
+        // 토큰을 authService에서 직접 가져오기
+        const token = authService.getCurrentToken();
+        
+        console.log("🔐 Career 컴포넌트에서 토큰 확인:", {
+          token: token ? `토큰 있음: ${token.substring(0, 10)}...` : "토큰 없음",
+          tokenType: typeof token,
+          tokenLength: token ? token.length : 0,
+          isAuthenticated
+        });
+        
+        // API에서 버블 데이터 생성 (토큰 전달)
+        const bubbleData = await careerService.generateBubbleData(token);
+        console.log("🎯 생성된 버블 데이터:", bubbleData);
+        
+        // 멘토 데이터 추가
+        const mentors = getMentorsForCareer().map(mentor => ({
+          ...mentor,
+          interestId: mapMentorToInterest(mentor.id)
+        }));
+        
+        setData({
+          interests: bubbleData.interests.map(interest => ({
+            ...interest,
+            title: generateJobTitle(interest.categoryId),
+            description: generateJobDescription(interest.categoryId),
+            background: `bg-category-${interest.categoryId}`
+          })),
+          programs: bubbleData.programs,
+          mentors
+        });
+        
+      } catch (error) {
+        console.error("Career 데이터 로딩 실패:", error);
+        // 에러 시 빈 데이터로 설정
+        setData({ interests: [], programs: [], mentors: [] });
+      } finally {
+        setLoading(false);
+      }
     };
-    setData(mockData);
-  }, []);
+
+    loadCareerData();
+  }, [isAuthenticated]);
+
+  // 카테고리 ID를 기반으로 직업 제목 생성
+  const generateJobTitle = (categoryId) => {
+    const jobTitles = {
+      1: '과학기술 연구원',
+      2: 'IT 개발자', 
+      11: '예술 디자이너',
+      12: '체육 지도사',
+      18: '서비스업 전문가',
+      29: '환경에너지 전문가'
+    };
+    return jobTitles[categoryId] || `분야 ${categoryId} 전문가`;
+  };
+
+  // 카테고리 ID를 기반으로 직업 설명 생성
+  const generateJobDescription = (categoryId) => {
+    const descriptions = {
+      1: `
+        <h3>주요 업무</h3>
+        <p>과학기술 분야의 연구개발을 통해 새로운 기술과 지식을 창출합니다.</p>
+        <h3>필요 역량</h3>
+        <p>논리적 사고력, 분석능력, 창의성, 끈기, 전문지식이 필요합니다.</p>
+      `,
+      2: `
+        <h3>주요 업무</h3>
+        <p>소프트웨어 개발, 시스템 구축, 디지털 솔루션 제공 업무를 담당합니다.</p>
+        <h3>필요 역량</h3>
+        <p>프로그래밍 능력, 논리적 사고, 문제해결능력, 새로운 기술 학습능력이 중요합니다.</p>
+      `,
+      11: `
+        <h3>주요 업무</h3>
+        <p>창의적인 디자인과 예술 작품을 통해 사람들에게 감동과 영감을 전달합니다.</p>
+        <h3>필요 역량</h3>
+        <p>창의성, 미적 감각, 표현력, 커뮤니케이션 능력, 트렌드 감각이 필요합니다.</p>
+      `,
+      12: `
+        <h3>주요 업무</h3>
+        <p>체육 활동 지도와 건강 증진을 통해 사람들의 삶의 질 향상에 기여합니다.</p>
+        <h3>필요 역량</h3>
+        <p>체력, 리더십, 소통능력, 전문지식, 안전의식이 중요합니다.</p>
+      `,
+      18: `
+        <h3>주요 업무</h3>
+        <p>고객 서비스와 만족도 향상을 통해 비즈니스 성공에 기여합니다.</p>
+        <h3>필요 역량</h3>
+        <p>고객응대능력, 문제해결능력, 커뮤니케이션 스킬, 친화력이 필요합니다.</p>
+      `,
+      29: `
+        <h3>주요 업무</h3>
+        <p>환경보호와 친환경 에너지 개발을 통해 지속가능한 미래를 만듭니다.</p>
+        <h3>필요 역량</h3>
+        <p>환경의식, 분석능력, 기술적 이해력, 사회적 책임감이 중요합니다.</p>
+      `
+    };
+    return descriptions[categoryId] || `
+      <h3>주요 업무</h3>
+      <p>해당 분야의 전문적인 업무를 수행합니다.</p>
+      <h3>필요 역량</h3>
+      <p>전문지식과 실무능력이 필요합니다.</p>
+    `;
+  };
 
   const selectInterest = (interestId) => {
     const interest = data.interests.find(i => i.id === interestId);
@@ -109,7 +173,8 @@ const Career = () => {
             left: `calc(50% + ${bubble.x}px - ${bubble.size === 'large' ? '75px' : bubble.size === 'medium' ? '50px' : '35px'})`,
             top: `calc(50% + ${bubble.y}px - ${bubble.size === 'large' ? '75px' : bubble.size === 'medium' ? '50px' : '35px'})`
           }}
-          onClick={() => data.interests.find(i => i.id === bubble.id) && selectInterest(bubble.id)}
+          onClick={() => bubble.type === 'interest' && selectInterest(bubble.id)}
+          title={bubble.fullTitle || bubble.name}
         >
           {bubble.name}
         </div>
@@ -136,6 +201,18 @@ const Career = () => {
     ));
   };
 
+  if (loading) {
+    return (
+      <div className="career loading">
+        <div className="container">
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            <p>진로맵을 생성하는 중...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`career ${currentState === 'detail' ? 'detail-mode' : ''}`}>
       {currentState === 'detail' && (
@@ -148,7 +225,7 @@ const Career = () => {
             <>
               <h1>나의 진로맵</h1>
               <p>나만의 관심사는</p>
-              <h2>콘텐츠 기획, 마케팅, 디자인</h2>
+              <h2>{data.interests.map(i => i.name).join(', ')}</h2>
             </>
           ) : (
             <h1>{selectedInterest?.name} 분야를 더 알아볼까요?</h1>
@@ -156,7 +233,13 @@ const Career = () => {
         </div>
 
         <div className="interest-map">
-          {renderBubbles()}
+          {data.interests.length === 0 && data.programs.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+              아직 체험한 프로그램이 없습니다.
+            </div>
+          ) : (
+            renderBubbles()
+          )}
         </div>
 
         {currentState === 'detail' && selectedInterest && (

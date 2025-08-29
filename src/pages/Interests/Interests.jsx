@@ -39,7 +39,7 @@ export default function Interests() {
     setSubmitting(true);
     try {
       const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
-      const res = await fetch(`${API_BASE}/users/me/interests`, {
+      const res = await fetch(`${API_BASE}/me/interests`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
