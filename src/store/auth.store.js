@@ -8,6 +8,11 @@ export const useAuthStore = create((set, get) => ({
   isLoading: false,
   error: null,
 
+  // 토큰 getter
+  get token() {
+    return authService.getCurrentToken();
+  },
+
   // 액션
   setUser: (user) => set({ user, isAuthenticated: !!user }),
   
