@@ -142,7 +142,37 @@ const Home = () => {
     }
   ];
 
-  // 찜 상태 관리
+  // 찜 상태 관리 (프로그램용)
+  const [likedPrograms, setLikedPrograms] = useState(new Set());
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  const toggleProgramLike = (programId) => {
+    setLikedPrograms(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(programId)) {
+        newSet.delete(programId);
+      } else {
+        newSet.add(programId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleProgramClick = (program) => {
+    alert(`${program.title} 프로그램 상세 페이지로 이동합니다!`);
+  };
+
+  const nextSlide = () => {
+    const maxSlide = Math.max(0, upcomingProgramsArray.length - 1);
+    setCurrentSlide(prev => (prev >= maxSlide ? 0 : prev + 1));
+  };
+
+  const prevSlide = () => {
+    const maxSlide = Math.max(0, upcomingProgramsArray.length - 1);
+    setCurrentSlide(prev => (prev <= 0 ? maxSlide : prev - 1));
+  };
+
+  // 찜 상태 관리 (추천 콘텐츠용)
   const [wishlist, setWishlist] = useState(new Set());
   
   const toggleWishlist = (programId) => {
@@ -183,9 +213,6 @@ const Home = () => {
     </div>
   );
 
-  const handleProgramClick = (title) => {
-    alert(`${title} 프로그램 상세 페이지로 이동합니다!`);
-  };
 
   return (
     <div className="home">
@@ -199,8 +226,91 @@ const Home = () => {
         {isLoadingUpcoming ? (
           <div className="home__loading">로딩 중...</div>
         ) : upcomingProgramsArray.length > 0 ? (
-          <div className="recommendations-grid">
-            {upcomingProgramsArray.slice(0, 4).map(renderProgramCard)}
+          <div className="program-slider">
+            <button 
+              className="slider-btn slider-btn--prev" 
+              onClick={prevSlide}
+              disabled={upcomingProgramsArray.length <= 1}
+            >
+              ‹
+            </button>
+            <div className="slider-container">
+              <div 
+                className="slider-track" 
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {upcomingProgramsArray.map(program => (
+                  <div key={program.program_id} className="slider-slide">
+                    <div 
+                      className="popular-program-card"
+                      onClick={() => handleProgramClick(program)}
+                    >
+                      <div className="popular-program-card__img">
+                        <button
+                          className={`heart-btn ${likedPrograms.has(program.program_id) ? 'liked' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleProgramLike(program.program_id);
+                          }}
+                        >
+                          <svg width="20" height="18" viewBox="0 0 20 18" fill="none">
+                            <path
+                              d="M10 16.5C10 16.5 2 11 2 6C2 3.79086 3.79086 2 6 2C7.5 2 9 3 10 4C11 3 12.5 2 14 2C16.2091 2 18 3.79086 18 6C18 11 10 16.5 10 16.5Z"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              fill={likedPrograms.has(program.program_id) ? 'currentColor' : 'none'}
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <div className="popular-program-card__body">
+                        <h3 className="popular-program-card__title">{program.title}</h3>
+                        <div className="popular-program-card__provider">{program.provider}</div>
+                        <div className="popular-program-card__period">
+                          {program.start_date} ~ {program.end_date}
+                        </div>
+                        <div className="popular-program-card__meta">
+                          <div className="meta">
+                            <i className="fas fa-map-marker-alt" />
+                            <span>{program.venue_region}</span>
+                          </div>
+                          <div className="meta">
+                            <i className="fas fa-users" />
+                            <span>{program.target_audience}</span>
+                          </div>
+                        </div>
+                        <div className="popular-program-card__tags">
+                          <span className="tag">{program.field_category}</span>
+                          {program.price === '무료' ? (
+                            <span className="tag tag--free">무료</span>
+                          ) : (
+                            <span className="tag">{program.price}</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <button 
+              className="slider-btn slider-btn--next" 
+              onClick={nextSlide}
+              disabled={upcomingProgramsArray.length <= 1}
+            >
+              ›
+            </button>
+            {upcomingProgramsArray.length > 1 && (
+              <div className="slider-indicators">
+                {upcomingProgramsArray.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`slider-indicator ${index === currentSlide ? 'active' : ''}`}
+                    onClick={() => setCurrentSlide(index)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <div className="home__empty-state">

@@ -1,10 +1,10 @@
 // src/pages/Interests/Interests.jsx
-import React, { useMemo, useRef, useEffect, useState } from "react";
+import { useMemo, useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button.jsx";
 import "./Interests.css";
 import { useAuthStore } from "../../store/auth.store.js";
-import { ROUTES, INTEREST_DISPLAY_ORDER, INTEREST_LABELS, INTEREST_GROUPS, getLabelByCode } from "../../config/constants.js";
+import { ROUTES, INTEREST_GROUPS, getLabelByCode } from "../../config/constants.js";
 
 
 export default function Interests() {
@@ -38,7 +38,7 @@ export default function Interests() {
     if (selected.size === 0) return;
     setSubmitting(true);
     try {
-      const API_BASE = import.meta.env.VITE_API_URL || "";
+      const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
       const res = await fetch(`${API_BASE}/users/me/interests`, {
         method: "POST",
         headers: {
