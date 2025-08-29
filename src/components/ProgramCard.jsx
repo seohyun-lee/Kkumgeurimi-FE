@@ -3,18 +3,37 @@ import "./ProgramCard.css"; // 필요시 따로 스타일 파일
 import { FaHeart } from "react-icons/fa";
 
 export default function ProgramCard({ program, isLiked, onLike, onClick }) {
+  // API 응답 필드명 매핑
+  const programId = program.programId || program.program_id;
+  const title = program.programTitle || program.title;
+  const provider = program.provider;
+  const startDate = program.startDate || program.start_date;
+  const endDate = program.endDate || program.end_date;
+  const venueRegion = program.venueRegion || program.venue_region;
+  const targetAudience = program.targetAudience || program.target_audience;
+  const price = program.price;
+  const imageUrl = program.imageUrl;
+  const relatedMajor = program.relatedMajor || program.field_category;
+
   return (
     <article
       className="card"
       onClick={() => onClick?.(program)}
     >
       <div className="card__img">
+        {imageUrl && (
+          <img 
+            src={imageUrl} 
+            alt={title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        )}
         <button
           className={`heart-btn ${isLiked ? "liked" : ""}`}
           aria-label={isLiked ? "좋아요 취소" : "좋아요"}
           onClick={(e) => {
               e.stopPropagation();
-              onLike?.(program.program_id);
+              onLike?.(programId);
           }}
           >
           <svg
@@ -36,31 +55,31 @@ export default function ProgramCard({ program, isLiked, onLike, onClick }) {
       </div>
 
       <div className="card__body">
-        <h3 className="card__title">{program.title}</h3>
-        <div className="card__provider">{program.provider}</div>
+        <h3 className="card__title">{title}</h3>
+        <div className="card__provider">{provider}</div>
 
-        {/* ✅ 기간 표시 텍스트) */}
+        {/* 기간 표시 */}
         <div className="card__period">
-          <span>{program.start_date} ~ {program.end_date}</span>
+          <span>{startDate} ~ {endDate}</span>
         </div>
 
         <div className="card__meta">
           <div className="meta">
             <i className="fas fa-map-marker-alt" />
-            <span>{program.venue_region}</span>
+            <span>{venueRegion}</span>
           </div>
           <div className="meta">
             <i className="fas fa-users" />
-            <span>{program.target_audience}</span>
+            <span>{targetAudience}</span>
           </div>
         </div>
 
         <div className="card__tags">
-          <span className="tag">{program.field_category}</span>
-          {program.price === "무료" ? (
+          <span className="tag">{relatedMajor}</span>
+          {price === "0" || price === 0 ? (
             <span className="tag tag--free">무료</span>
           ) : (
-            <span className="tag">{program.price}</span>
+            <span className="tag">{Number(price).toLocaleString()}원</span>
           )}
         </div>
       </div>

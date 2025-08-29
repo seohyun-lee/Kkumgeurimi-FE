@@ -10,6 +10,8 @@ import Interests from '../pages/Interests/Interests.jsx';
 import Home from '../pages/Home/Home.jsx';
 import Assistant from '../pages/Assistant/Assistant.jsx';
 import Explore from '../pages/Explore/Explore.jsx';
+import Career from '../pages/Career/Career.jsx';
+import MyPage from '../pages/MyPage/MyPage.jsx';
 import NotFound from "../pages/NotFound/NotFound.jsx";
 
 // 페이지 컴포넌트들 (임시)
@@ -19,9 +21,8 @@ const MeRegistrations = () => <div>내 신청 페이지</div>;
 const MeLikes = () => <div>내 찜 페이지</div>;
 
 export const ProtectedLayout = () => {
-  const { isAuthenticated, isLoading } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const location = useLocation();
-  if (isLoading) return <div>로딩 중...</div>;
   if (!isAuthenticated) {
     // 로그인 후 원래 가려던 경로로 돌아가도록 state에 from 저장
     return <Navigate to="/auth/signin" replace state={{ from: location }} />;
@@ -30,8 +31,7 @@ export const ProtectedLayout = () => {
 };
 
 const GuestLayout = () => {
-  const { isAuthenticated, isLoading } = useAuthStore();
-  if (isLoading) return <div>로딩 중...</div>;
+  const { isAuthenticated } = useAuthStore();
   if (isAuthenticated) return <Navigate to="/" replace />;
   return <Outlet />;
 };
@@ -43,9 +43,10 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "explore", element: <Explore /> },
+      { path: "career", element: <Career /> },
       { path: "programs/:programId", element: <ProgramDetail /> },
-
-          { path: "assistant", element: <Assistant /> },
+      { path: "assistant", element: <Assistant /> },
+      { path: "me", element: <MyPage /> },
       // 보호 구역
       {
         element: <ProtectedLayout />,

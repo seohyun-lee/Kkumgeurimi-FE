@@ -1,27 +1,12 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { INTEREST_GROUPS } from '../../config/constants';
+import { useQuery } from '@tanstack/react-query';
+import { INTEREST_LABELS } from '../../config/constants';
+import { programsService } from '../../services/programs.service.js';
+import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCard from "../../components/ProgramCard.jsx";
 import './Explore.css';
 
-const ALL_PROGRAMS = [
-  { program_id: 1, title: 'AI 기초 프로그래밍 체험', provider: '테크 이노베이션 센터', program_type: '체험활동', venue_region: '서울', field_category: 'IT', target_audience: '고등학생', start_date: '2025-09-15', end_date: '2025-12-15', price: '무료', description: '인공지능의 기초 개념을 학습하고 간단한 AI 모델을 직접 구현해보는 프로그램입니다.', capacity: 30, avail_hours: '매주 토요일 14:00-17:00', venue: '강남구 테크센터', job_field: '개발자' },
-  { program_id: 2, title: '창의 디자인 워크샵', provider: '크리에이티브 스튜디오', program_type: '워크샵', venue_region: '경기', field_category: '디자인', target_audience: '중학생, 고등학생', start_date: '2025-10-01', end_date: '2025-11-30', price: '50,000원', description: '디자인 씽킹을 바탕으로 창의적인 문제 해결 능력을 기르는 프로그램입니다.', capacity: 25, avail_hours: '매주 일요일 10:00-16:00', venue: '수원시 크리에이티브센터', job_field: '디자이너' },
-  { program_id: 3, title: '로봇공학 체험교실', provider: '미래과학관', program_type: '실험체험', venue_region: '서울', field_category: '과학', target_audience: '중학생', start_date: '2025-09-20', end_date: '2025-12-20', price: '무료', description: '로봇의 원리를 이해하고 직접 조립하며 프로그래밍하는 체험 프로그램입니다.', capacity: 20, avail_hours: '매주 수요일 16:00-18:00', venue: '종로구 과학관', job_field: '연구원' },
-  { program_id: 4, title: '디지털 아트 창작', provider: '아트테크 스쿨', program_type: '창작활동', venue_region: '부산', field_category: '예술', target_audience: '고등학생, 대학생', start_date: '2025-09-10', end_date: '2025-11-10', price: '80,000원', description: '최신 디지털 도구를 활용한 현대적인 아트워크 제작 프로그램입니다.', capacity: 15, avail_hours: '매주 금요일 19:00-22:00', venue: '해운대구 아트센터', job_field: '디자이너' },
-  { program_id: 5, title: '바이오테크 실험실 체험', provider: '생명과학연구소', program_type: '실험체험', venue_region: '대구', field_category: '과학', target_audience: '고등학생', start_date: '2025-10-15', end_date: '2025-12-15', price: '무료', description: '최첨단 바이오 기술을 직접 경험하고 미래 생명과학의 가능성을 탐구합니다.', capacity: 18, avail_hours: '매주 토요일 09:00-12:00', venue: '수성구 바이오센터', job_field: '연구원' },
-  { program_id: 6, title: '스포츠 심리학 워크샵', provider: '스포츠 심리연구원', program_type: '워크샵', venue_region: '서울', field_category: '체육', target_audience: '고등학생, 대학생', start_date: '2025-09-25', end_date: '2025-11-25', price: '60,000원', description: '운동선수들의 심리적 컨디션 관리와 멘탈 트레이닝 기법을 배웁니다.', capacity: 22, avail_hours: '매주 화요일 18:00-21:00', venue: '송파구 스포츠센터', job_field: '기획자' },
-  { program_id: 7, title: '웹 개발 부트캠프', provider: '코딩 아카데미', program_type: '체험활동', venue_region: '서울', field_category: 'IT', target_audience: '대학생', start_date: '2025-08-20', end_date: '2025-10-20', price: '무료', description: '웹 개발의 전 과정을 체험하고 실제 웹사이트를 만들어보는 프로그램입니다.', capacity: 24, avail_hours: '매주 토요일 10:00-18:00', venue: '강남구 코딩센터', job_field: '개발자' },
-  { program_id: 8, title: '패션 디자인 아틀리에', provider: '패션 크리에이터 센터', program_type: '창작활동', venue_region: '경기', field_category: '디자인', target_audience: '고등학생', start_date: '2025-09-05', end_date: '2025-11-05', price: '120,000원', description: '패션 디자인의 기초부터 실제 의상 제작까지 경험하는 창작 프로그램입니다.', capacity: 16, avail_hours: '매주 일요일 13:00-17:00', venue: '성남시 패션센터', job_field: '디자이너' }, ];
-
-const VENUE_TYPE_CHIPS = [
-  { value: "all", label: "전체" },
-  { value: "public", label: "공공기관/공기업" },
-  { value: "private", label: "민간기업" },
-  { value: "civic", label: "청소년/시민단체" },
-  { value: "school", label: "학교/대학교" },
-  { value: "individual", label: "개인사업장" },
-];
 const EXPERIENCE_TYPE_CHIPS = [
   { value: "all", label: "전체" },
   { value: "field_company", label: "현장직업체험형" },
@@ -41,7 +26,6 @@ const COST_CHIPS = [
 
 const DEFAULT_FILTERS = {
   category: 'all',
-  venueType: 'all',
   job: 'all',
   type: 'all',
   cost: 'all',
@@ -77,16 +61,11 @@ function SelectedFilters({ filters, onClearKey, onReset }) {
     options.find(o => o.value === v)?.label ?? v;
 
   const entries = [
-    filters.venueType !== 'all' && {
-      key: 'venueType',
-      label: '체험처',
-      value: labelByValue(VENUE_TYPE_CHIPS, filters.venueType),
-    },
     filters.job !== 'all' && {
       key: 'job',
       label: '직무',
       value: labelByValue(
-        [{ value: 'all', label: '전체' }, ...INTEREST_GROUPS.map(g => ({ value: g.key, label: g.label }))],
+        [{ value: 'all', label: '전체' }, ...Object.entries(INTEREST_LABELS).map(([code, label]) => ({ value: code, label }))],
         filters.job
       ),
     },
@@ -131,6 +110,7 @@ function SelectedFilters({ filters, onClearKey, onReset }) {
 
 export default function Explore() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { isAuthenticated } = useAuthStore();
 
   // URL 쿼리 동기화: ?cat=IT
   const initialCat = searchParams.get('cat') || 'all';
@@ -144,7 +124,27 @@ export default function Explore() {
   const [page, setPage] = useState(1);
   const [liked, setLiked] = useState(() => new Set());
   const [modal, setModal] = useState({ open: false, program: null });
-  const itemsPerPage = 6;
+
+  // 찜한 프로그램 목록 조회 (로그인한 경우만)
+  const { data: likedProgramsData } = useQuery({
+    queryKey: ['liked-programs'],
+    queryFn: programsService.getLikedPrograms,
+    enabled: isAuthenticated,
+    staleTime: 10 * 60 * 1000, // 10분
+  });
+
+  // 찜 목록 데이터를 Set으로 변환
+  useEffect(() => {
+    if (likedProgramsData && Array.isArray(likedProgramsData)) {
+      const likedIds = new Set(likedProgramsData.map(program => program.program_id || program.id));
+      setLiked(likedIds);
+    }
+  }, [likedProgramsData]);
+  const [programs, setPrograms] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalElements, setTotalElements] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const itemsPerPage = 10;
 
 
   // 카테고리 변경 시 URL 업데이트 + 페이지 리셋
@@ -157,59 +157,46 @@ export default function Explore() {
     setSearchParams(next, { replace: true });
   };
 
-  /** 필터링 */
-  const filtered = useMemo(() => {
-    const s = new Date(filters.startDate);
-    const e = new Date(filters.endDate);
-  
-    return ALL_PROGRAMS.filter((p) => {
-      const cat = filters.category === 'all' || p.field_category === filters.category;
-      const job = filters.job === 'all' || p.job_field === filters.job; // 샘플 데이터와 키값이 다르면 이 조건은 항상 false 될 수 있음
-      const typ = filters.type === 'all' || p.program_type === filters.type;
-      const venueType = filters.venueType === 'all' || p.venue_type == null || p.venue_type === filters.venueType; 
-
-      const cost =
-        filters.cost === 'all' ||
-        (filters.cost === 'free' && p.price === '무료') ||
-        (filters.cost === 'paid' && p.price !== '무료');
-  
-      const dateOk = new Date(p.start_date) >= s && new Date(p.start_date) <= e;
-      return cat && job && typ && venueType && cost && dateOk;
-    });
-  }, [filters]);
-  
-
-  /** 정렬 */
-  const sorted = useMemo(() => {
-    const list = [...filtered];
-    switch (sortBy) {
-      case 'latest':
-        list.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
-        break;
-      case 'popular':
-        list.sort((a, b) => b.capacity - a.capacity);
-        break;
-      case 'deadline':
-        list.sort((a, b) => new Date(a.end_date) - new Date(b.end_date));
-        break;
-      case 'free':
-        list.sort((a, b) => (a.price === '무료' ? -1 : 1) - (b.price === '무료' ? -1 : 1));
-        break;
-      default:
-        break;
+  // API 호출 함수
+  const fetchPrograms = async () => {
+    setLoading(true);
+    try {
+      const response = await programsService.searchPrograms({
+        interestCategory: filters.job,
+        programType: filters.type,
+        cost: filters.cost,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        sortBy,
+        page,
+        size: itemsPerPage
+      });
+      
+      // 실제 API 응답 구조에 맞게 수정
+      setPrograms(response.content || []);
+      setTotalPages(response.totalPages || 1);
+      setTotalElements(response.totalElements || 0);
+    } catch (error) {
+      console.error('프로그램 검색 실패:', error);
+      setPrograms([]);
+      setTotalPages(1);
+      setTotalElements(0);
+    } finally {
+      setLoading(false);
     }
-    return list;
-  }, [filtered, sortBy]);
+  };
+  
 
-  /** 페이지네이션 */
-  const totalPages = Math.max(1, Math.ceil(sorted.length / itemsPerPage));
-  const pageData = useMemo(() => {
-    const start = (page - 1) * itemsPerPage;
-    return sorted.slice(start, start + itemsPerPage);
-  }, [sorted, page]);
+  // 필터나 정렬이 변경될 때 API 호출
+  useEffect(() => {
+    fetchPrograms();
+  }, [filters, sortBy, page]);
 
   /** 이벤트 */
-  const applyFilters = () => setPage(1);
+  const applyFilters = () => {
+    setPage(1);
+  };
+  
   const resetFilters = () => {
     setFilters({ ...DEFAULT_FILTERS, category: 'all' });
     setPage(1);
@@ -217,12 +204,30 @@ export default function Explore() {
     next.delete('cat');
     setSearchParams(next, { replace: true });
   };
-  const toggleLike = (id) => {
-    setLiked((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
+  const toggleLike = async (id) => {
+    try {
+      const isCurrentlyLiked = liked.has(id);
+      
+      if (isCurrentlyLiked) {
+        await programsService.unlikeProgram(id);
+      } else {
+        await programsService.likeProgram(id);
+      }
+      
+      // API 성공 시 UI 업데이트
+      setLiked((prev) => {
+        const next = new Set(prev);
+        if (isCurrentlyLiked) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
+        return next;
+      });
+    } catch (error) {
+      console.error('프로그램 찜하기 실패:', error);
+      // TODO: 사용자에게 에러 메시지 표시
+    }
   };
       
   useEffect(() => {
@@ -249,18 +254,12 @@ export default function Explore() {
       <div className="filters filters--compact">
         <div className="filters__row">
           <SelectFilter
-            label="체험처"
-            value={filters.venueType}
-            onChange={(v) => setFilters((f) => ({ ...f, venueType: v }))}
-            options={VENUE_TYPE_CHIPS}
-          />
-          <SelectFilter
             label="직무"
             value={filters.job}
             onChange={(v) => setFilters((f) => ({ ...f, job: v }))}
             options={[
               { value: 'all', label: '전체' },
-              ...INTEREST_GROUPS.map(g => ({ value: g.key, label: g.label })),
+              ...Object.entries(INTEREST_LABELS).map(([code, label]) => ({ value: code, label })),
             ]}
           />
           <SelectFilter
@@ -319,26 +318,35 @@ export default function Explore() {
       <section className="explore__content">
         <div className="content__top">
           <div className="results">
-            전체 <span className="results__count">{sorted.length}</span>개
+            {loading ? '검색 중...' : `전체 ${totalElements}개`}
           </div>
           <select className="sort" value={sortBy} onChange={(e) => { setSortBy(e.target.value); setPage(1); }}>
             <option value="latest">최신순</option>
             <option value="popular">인기순</option>
             <option value="deadline">마감임박순</option>
-            <option value="free">무료순</option>
           </select>
         </div>
 
         <div className="grid">
-          {pageData.map((p) => (
-            <ProgramCard
-              key={p.program_id}
-              program={p}
-              isLiked={liked.has(p.program_id)}
-              onLike={toggleLike}
-              onClick={(program) => setModal({ open: true, program })}
-            />
-          ))}
+          {loading ? (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
+              프로그램을 검색하고 있습니다...
+            </div>
+          ) : programs.length === 0 ? (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
+              검색 결과가 없습니다.
+            </div>
+          ) : (
+            programs.map((p) => (
+              <ProgramCard
+                key={p.program_id}
+                program={p}
+                isLiked={liked.has(p.program_id)}
+                onLike={toggleLike}
+                onClick={(program) => setModal({ open: true, program })}
+              />
+            ))
+          )}
         </div>
 
         {/* Pagination */}

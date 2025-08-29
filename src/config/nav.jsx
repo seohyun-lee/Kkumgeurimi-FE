@@ -24,5 +24,5 @@ export const NAV_ITEMS = [
   { id: 'explore',   label: '탐색', icon: SearchIcon, path: ROUTES.EXPLORE },       // '/explore'
   { id: 'career',    label: '진로', icon: CareerIcon, path: ROUTES.CAREER },        // '/career' (없으면 라우트 추가)
   { id: 'assistant', label: 'AI',   icon: ChatIcon,   path: ROUTES.ASSISTANT },     // '/assistant'
-  { id: 'me',        label: 'MY',   icon: MyPageIcon, path: ROUTES.ME },            // '/me'  ← '/mypage' 대신 상수 사용
+  { id: 'me',        label: 'MY',   icon: MyPageIcon, path: ROUTES.ME },            // '/mypage' 대신 상수 사용
 ];

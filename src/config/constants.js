@@ -33,6 +33,7 @@ export const ROUTES = {
   ONBOARDING_INTERESTS: "/onboarding/interests",
   PROGRAMS: '/programs',
   EXPLORE: '/explore',
+  CAREER: '/career',
   ASSISTANT: '/assistant',
   ME: '/me',
   ME_REGISTRATIONS: '/me/registrations',
