@@ -21,10 +21,9 @@ export const useAuthStore = create((set, get) => ({
     
     try {
       const response = await authService.login(credentials);
-      const user = response.user || { email: credentials.email }; // API 응답에 따라 조정
       
       set({ 
-        user, 
+        user: { email: credentials.email }, 
         isAuthenticated: true, 
         isLoading: false, 
         error: null 
@@ -32,7 +31,7 @@ export const useAuthStore = create((set, get) => ({
       
       return response;
     } catch (error) {
-      const errorMessage = error.response?.data?.error?.message || '로그인에 실패했습니다.';
+      const errorMessage = error.response?.data?.message || error.message || '로그인에 실패했습니다.';
       set({ 
         error: errorMessage, 
         isLoading: false 
@@ -50,7 +49,7 @@ export const useAuthStore = create((set, get) => ({
       set({ isLoading: false, error: null });
       return response;
     } catch (error) {
-      const errorMessage = error.response?.data?.error?.message || '회원가입에 실패했습니다.';
+      const errorMessage = error.response?.data?.message || error.message || '회원가입에 실패했습니다.';
       set({ 
         error: errorMessage, 
         isLoading: false 
@@ -95,14 +94,6 @@ export const useAuthStore = create((set, get) => ({
     const token = authService.getCurrentToken();
     if (token) {
       set({ isAuthenticated: true });
-      // 더미 사용자 정보 설정 (API가 없을 때)
-      const dummyUser = {
-        id: 1,
-        email: 'test@example.com',
-        name: '테스트 사용자',
-        profileImage: 'https://via.placeholder.com/100x100/3b82f6/ffffff?text=User'
-      };
-      set({ user: dummyUser });
     }
   },
 
