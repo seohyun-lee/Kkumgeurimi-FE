@@ -162,8 +162,8 @@ const SignUp = () => {
               disabled={isLoading}
             >
               <option value="">학교 구분을 선택하세요</option>
-              <option value="중학생">중학생</option>
-              <option value="고등학생">고등학생</option>
+              <option value="중">중학생</option>
+              <option value="고">고등학생</option>
             </select>
             {errors.school && <span className="signup__field-error">{errors.school}</span>}
           </div>
