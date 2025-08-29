@@ -5,6 +5,7 @@ import { ROUTES } from '../../config/constants.js';
 import Button from '../../components/Button.jsx';
 import './SignUp.css';
 
+
 const SignUp = () => {
   const [formData, setFormData] = useState({
     name: '',
