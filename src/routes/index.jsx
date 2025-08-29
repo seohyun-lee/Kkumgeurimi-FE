@@ -10,6 +10,7 @@ import Interests from '../pages/Interests/Interests.jsx';
 import Home from '../pages/Home/Home.jsx';
 import Assistant from '../pages/Assistant/Assistant.jsx';
 import Explore from '../pages/Explore/Explore.jsx';
+import Career from '../pages/Career/Career.jsx';
 import NotFound from "../pages/NotFound/NotFound.jsx";
 
 // 페이지 컴포넌트들 (임시)
@@ -43,9 +44,9 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "explore", element: <Explore /> },
+      { path: "career", element: <Career /> },
       { path: "programs/:programId", element: <ProgramDetail /> },
-
-          { path: "assistant", element: <Assistant /> },
+      { path: "assistant", element: <Assistant /> },
       // 보호 구역
       {
         element: <ProtectedLayout />,

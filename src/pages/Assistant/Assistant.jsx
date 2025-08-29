@@ -26,28 +26,24 @@ function messagesReducer(state, action) {
 
 const DEMO_BOTS = [
   { 
-    name: '강하나', 
-    description: '업무 도우미',
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    emoji: '💼'
+    name: '콘텐츠 기획자', 
+    description: '콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하는 역할을 합니다.',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b1cd?w=150&h=150&fit=crop&crop=face'
   },
   { 
-    name: '김지수', 
-    description: '학습 도우미',
-    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    emoji: '📚'
+    name: '마케팅 전문가', 
+    description: '마케팅은 고객의 니즈를 파악하고 제품/서비스와 연결시키는 다리 역할을 합니다.',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
   },
   { 
-    name: '이민호', 
-    description: '창작 도우미',
-    gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-    emoji: '🎨'
+    name: 'UX/UI 디자이너', 
+    description: '디자인은 단순히 예쁘게 만드는 것이 아니라 사용자의 문제를 해결하는 것입니다.',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face'
   },
   { 
-    name: '박소영', 
-    description: '생활 도우미',
-    gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-    emoji: '🏠'
+    name: '풀스택 개발자', 
+    description: '개발은 논리적 사고와 창의성이 만나는 분야입니다. 끊임없이 새로운 기술을 학습하며 문제를 해결해나가는 재미가 있어요.',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
   },
 ];
 
@@ -185,24 +181,23 @@ export default function Assistant() {
           <ul className="selector__list">
             {DEMO_BOTS.map((b, index) => (
               <li key={b.name}>
-                <button
-                  type="button"
-                  className="selector__item"
-                  onClick={() => selectBot(b, index)}
-                  aria-label={`${b.name}(${b.description})와 대화 시작`}
-                  style={{
-                    '--bot-gradient': b.gradient,
-                    '--bot-emoji': `"${b.emoji}"`
-                  }}
-                >
-                  <div className="selector__avatar" style={{ background: b.gradient }}>
-                    {b.emoji}
+                <div className="selector__item">
+                  <div className="selector__avatar">
+                    <img src={b.avatar} alt={b.name} />
                   </div>
                   <div className="selector__info">
-                    <h3 className="selector__name">{b.name}</h3>
+                    <h4 className="selector__name">{b.name}</h4>
                     <p className="selector__desc">{b.description}</p>
                   </div>
-                </button>
+                  <button
+                    type="button"
+                    className="selector__chat-btn"
+                    onClick={() => selectBot(b, index)}
+                    aria-label={`${b.name}과 대화 시작`}
+                  >
+                    대화하기
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
@@ -221,11 +216,8 @@ export default function Assistant() {
               ←
             </button>
             <div className="chat__user">
-              <div 
-                className="chat__avatar" 
-                style={{ background: currentBot.gradient || 'var(--primary-gradient)' }}
-              >
-                {currentBot.emoji || currentBot.initial}
+              <div className="chat__avatar">
+                <img src={currentBot.avatar} alt={currentBot.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
               </div>
               <div>
                 <div className="chat__name">{currentBot.name}</div>
@@ -239,7 +231,7 @@ export default function Assistant() {
               <MessageRow
                 key={m.id}
                 type={m.type}
-                avatar={m.type === 'bot' ? (currentBot.emoji || currentBot.initial) : null}
+                avatar={m.type === 'bot' ? currentBot.avatar : null}
                 content={m.content}
                 actions={m.actions}
                 onAction={navigateToFeature}
@@ -285,11 +277,8 @@ function MessageRow({ type, avatar, content, actions, onAction, botGradient }) {
   return (
     <div className={`msg msg--${type}`}>
       {type === 'bot' && (
-        <div 
-          className="msg__avatar" 
-          style={{ background: botGradient || 'var(--primary-gradient)' }}
-        >
-          {avatar}
+        <div className="msg__avatar">
+          <img src={avatar} alt="Bot Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
         </div>
       )}
       <div className={`msg__bubble msg__bubble--${type}`}>
