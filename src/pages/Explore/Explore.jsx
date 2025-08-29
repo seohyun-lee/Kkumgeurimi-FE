@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { INTEREST_LABELS } from '../../config/constants';
 import { programsService } from '../../services/programs.service.js';
+import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCard from "../../components/ProgramCard.jsx";
 import './Explore.css';
 
@@ -108,6 +110,7 @@ function SelectedFilters({ filters, onClearKey, onReset }) {
 
 export default function Explore() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { isAuthenticated } = useAuthStore();
 
   // URL 쿼리 동기화: ?cat=IT
   const initialCat = searchParams.get('cat') || 'all';
@@ -121,6 +124,22 @@ export default function Explore() {
   const [page, setPage] = useState(1);
   const [liked, setLiked] = useState(() => new Set());
   const [modal, setModal] = useState({ open: false, program: null });
+
+  // 찜한 프로그램 목록 조회 (로그인한 경우만)
+  const { data: likedProgramsData } = useQuery({
+    queryKey: ['liked-programs'],
+    queryFn: programsService.getLikedPrograms,
+    enabled: isAuthenticated,
+    staleTime: 10 * 60 * 1000, // 10분
+  });
+
+  // 찜 목록 데이터를 Set으로 변환
+  useEffect(() => {
+    if (likedProgramsData && Array.isArray(likedProgramsData)) {
+      const likedIds = new Set(likedProgramsData.map(program => program.program_id || program.id));
+      setLiked(likedIds);
+    }
+  }, [likedProgramsData]);
   const [programs, setPrograms] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
@@ -153,7 +172,8 @@ export default function Explore() {
         size: itemsPerPage
       });
       
-      setPrograms(response.programs || []);
+      // 실제 API 응답 구조에 맞게 수정
+      setPrograms(response.content || []);
       setTotalPages(response.totalPages || 1);
       setTotalElements(response.totalElements || 0);
     } catch (error) {
@@ -184,12 +204,30 @@ export default function Explore() {
     next.delete('cat');
     setSearchParams(next, { replace: true });
   };
-  const toggleLike = (id) => {
-    setLiked((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
+  const toggleLike = async (id) => {
+    try {
+      const isCurrentlyLiked = liked.has(id);
+      
+      if (isCurrentlyLiked) {
+        await programsService.unlikeProgram(id);
+      } else {
+        await programsService.likeProgram(id);
+      }
+      
+      // API 성공 시 UI 업데이트
+      setLiked((prev) => {
+        const next = new Set(prev);
+        if (isCurrentlyLiked) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
+        return next;
+      });
+    } catch (error) {
+      console.error('프로그램 찜하기 실패:', error);
+      // TODO: 사용자에게 에러 메시지 표시
+    }
   };
       
   useEffect(() => {

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/constants.js';
 import { chatService } from '../../services/chat.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
+import { getMentorsForAssistant } from '../../data/mentors.js';
 import './Assistant.css';
 
 /** ───────────────────────────────────────────────────────────
@@ -38,28 +39,7 @@ function messagesReducer(state, action) {
   }
 }
 
-const DEMO_BOTS = [
-  { 
-    name: '콘텐츠 기획자', 
-    description: '콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하는 역할을 합니다.',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b1cd?w=150&h=150&fit=crop&crop=face'
-  },
-  { 
-    name: '마케팅 전문가', 
-    description: '마케팅은 고객의 니즈를 파악하고 제품/서비스와 연결시키는 다리 역할을 합니다.',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
-  },
-  { 
-    name: 'UX/UI 디자이너', 
-    description: '디자인은 단순히 예쁘게 만드는 것이 아니라 사용자의 문제를 해결하는 것입니다.',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face'
-  },
-  { 
-    name: '풀스택 개발자', 
-    description: '개발은 논리적 사고와 창의성이 만나는 분야입니다. 끊임없이 새로운 기술을 학습하며 문제를 해결해나가는 재미가 있어요.',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
-  },
-];
+const DEMO_BOTS = getMentorsForAssistant();
 
 export default function Assistant() {
   const navigate = useNavigate();

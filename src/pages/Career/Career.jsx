@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { getMentorsForCareer } from '../../data/mentors.js';
 import './Career.css';
+
+// 멘토와 관심사 매핑
+const mapMentorToInterest = (mentorId) => {
+  const mapping = {
+    'content-planner': 'planning',
+    'marketing-specialist': 'marketing',
+    'ux-ui-designer': 'design',
+    'fullstack-developer': 'development',
+    'data-scientist': 'data',
+    'product-manager': 'planning'
+  };
+  return mapping[mentorId] || 'planning';
+};
 
 const Career = () => {
   const [currentState, setCurrentState] = useState('default');
@@ -55,22 +69,10 @@ const Career = () => {
         { id: 'cj-career', name: 'CJ 진로\n직업탐색', parentId: 'planning', size: 'small', color: '#e17055', x: -50, y: -120, weight: 35 },
         { id: 'consumer-research', name: '소비자 인\n사이트 리서\n치 컨...', parentId: 'marketing', size: 'small', color: '#fab1a0', x: 80, y: -150, weight: 30 }
       ],
-      mentors: [
-        {
-          id: 'content-planner',
-          interestId: 'planning',
-          name: '콘텐츠 기획자',
-          description: '콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하는 역할을 합니다.',
-          avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b1cd?w=150&h=150&fit=crop&crop=face'
-        },
-        {
-          id: 'marketing-expert',
-          interestId: 'marketing',
-          name: '마케팅 전문가',
-          description: '마케팅은 고객의 니즈를 파악하고 제품/서비스와 연결시키는 다리 역할을 합니다.',
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
-        }
-      ]
+      mentors: getMentorsForCareer().map(mentor => ({
+        ...mentor,
+        interestId: mapMentorToInterest(mentor.id)
+      }))
     };
     setData(mockData);
   }, []);

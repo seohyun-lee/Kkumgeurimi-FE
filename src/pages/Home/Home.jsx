@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
@@ -145,17 +145,47 @@ const Home = () => {
   // 찜 상태 관리 (프로그램용)
   const [likedPrograms, setLikedPrograms] = useState(new Set());
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  // 찜한 프로그램 목록 조회 (로그인한 경우만)
+  const { data: likedProgramsData } = useQuery({
+    queryKey: ['liked-programs'],
+    queryFn: programsService.getLikedPrograms,
+    enabled: isAuthenticated,
+    staleTime: 10 * 60 * 1000, // 10분
+  });
+
+  // 찜 목록 데이터를 Set으로 변환
+  useEffect(() => {
+    if (likedProgramsData && Array.isArray(likedProgramsData)) {
+      const likedIds = new Set(likedProgramsData.map(program => program.program_id || program.id));
+      setLikedPrograms(likedIds);
+    }
+  }, [likedProgramsData]);
   
-  const toggleProgramLike = (programId) => {
-    setLikedPrograms(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(programId)) {
-        newSet.delete(programId);
+  const toggleProgramLike = async (programId) => {
+    try {
+      const isCurrentlyLiked = likedPrograms.has(programId);
+      
+      if (isCurrentlyLiked) {
+        await programsService.unlikeProgram(programId);
       } else {
-        newSet.add(programId);
+        await programsService.likeProgram(programId);
       }
-      return newSet;
-    });
+      
+      // API 성공 시 UI 업데이트
+      setLikedPrograms(prev => {
+        const newSet = new Set(prev);
+        if (isCurrentlyLiked) {
+          newSet.delete(programId);
+        } else {
+          newSet.add(programId);
+        }
+        return newSet;
+      });
+    } catch (error) {
+      console.error('프로그램 찜하기 실패:', error);
+      // TODO: 사용자에게 에러 메시지 표시
+    }
   };
 
   const handleProgramClick = (program) => {
@@ -175,16 +205,34 @@ const Home = () => {
   // 찜 상태 관리 (추천 콘텐츠용)
   const [wishlist, setWishlist] = useState(new Set());
   
-  const toggleWishlist = (programId) => {
-    setWishlist(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(programId)) {
-        newSet.delete(programId);
-      } else {
-        newSet.add(programId);
+  const toggleWishlist = async (itemId) => {
+    try {
+      const isCurrentlyLiked = wishlist.has(itemId);
+      
+      // 실제 프로그램 ID가 있는 경우만 API 호출
+      // 학년별 콘텐츠 같은 경우는 로컬 상태만 관리
+      if (typeof itemId === 'number' || (typeof itemId === 'string' && !itemId.startsWith('grade-'))) {
+        if (isCurrentlyLiked) {
+          await programsService.unlikeProgram(itemId);
+        } else {
+          await programsService.likeProgram(itemId);
+        }
       }
-      return newSet;
-    });
+      
+      // UI 업데이트
+      setWishlist(prev => {
+        const newSet = new Set(prev);
+        if (isCurrentlyLiked) {
+          newSet.delete(itemId);
+        } else {
+          newSet.add(itemId);
+        }
+        return newSet;
+      });
+    } catch (error) {
+      console.error('찜하기 실패:', error);
+      // TODO: 사용자에게 에러 메시지 표시
+    }
   };
 
   const renderProgramCard = (program) => (
