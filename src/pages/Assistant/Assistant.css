@@ -20,6 +20,63 @@
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ========= Top Matches (프로그램 추천) ========= */
+.top-matches {
+  margin-top: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid #e2e8f0;
+}
+
+.top-matches__title {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.top-matches__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.top-matches__item {
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.top-matches__item:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+.top-matches__name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.top-matches__desc {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.top-matches__score {
+  font-size: 11px;
+  color: var(--brand-blue-600);
+  font-weight: 500;
+}
+
 /* ========= 페이지 컨테이너 ========= */
 .assistant {
   min-height: 100dvh;

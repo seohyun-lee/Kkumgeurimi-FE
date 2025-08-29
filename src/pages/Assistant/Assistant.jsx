@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/constants.js';
+import { chatService } from '../../services/chat.service.js';
+import { useAuthStore } from '../../store/auth.store.js';
 import './Assistant.css';
 
 /** ───────────────────────────────────────────────────────────
@@ -8,9 +10,21 @@ import './Assistant.css';
  *  type: 'user' | 'bot'
  *  content: string
  *  actions?: { title, description, feature }[]
+ *  topMatches?: 프로그램 매칭 정보[]
  *  id: string
  *  createdAt: number
  *  ─────────────────────────────────────────────────────────── */
+
+// 간단한 마크다운 렌더링
+function renderMarkdown(text) {
+  if (!text) return '';
+  
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // **bold**
+    .replace(/\*(.*?)\*/g, '<em>$1</em>') // *italic*
+    .replace(/`(.*?)`/g, '<code>$1</code>') // `code`
+    .replace(/\n/g, '<br />'); // 줄바꿈
+}
 const msgId = () => Math.random().toString(36).slice(2, 9);
 
 function messagesReducer(state, action) {
@@ -49,6 +63,7 @@ const DEMO_BOTS = [
 
 export default function Assistant() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const [mode, setMode] = useState('selector'); // 'selector' | 'chat'
   const [currentBot, setCurrentBot] = useState(null);
   const [input, setInput] = useState('');
@@ -123,50 +138,45 @@ export default function Assistant() {
     }
   };
 
-  /** 데모용 응답(실서비스에선 서버 스트리밍/웹소켓 교체) */
-  const demoResponses = useMemo(
-    () => [
-      {
-        text: '건강 관리에 도움이 될 기능들을 추천드릴게요! 🏃‍♀️',
-        actions: [
-          { title: '운동 플래너', description: '개인별 맞춤 운동 계획을 세워보세요', feature: 'workout_planner' },
-          { title: '식단 기록하기', description: 'AI 영양사가 식단을 분석해드립니다', feature: 'diet_tracker' },
-        ],
-      },
-      {
-        text: '학습에 도움이 될 도구들을 안내해드릴게요. 📖',
-        actions: [
-          { title: '학습 스케줄러', description: '효율적인 학습 일정을 만들어보세요', feature: 'study_scheduler' },
-          { title: '진도 체크', description: '학습 진행상황을 확인하세요', feature: 'progress_tracker' },
-          { title: '퀴즈 생성기', description: '학습한 내용으로 퀴즈를 만들어보세요', feature: 'quiz_generator' },
-        ],
-      },
-      {
-        text: '업무 효율을 높이는 방법을 제안해드릴게요. 💼',
-        actions: [{ title: '업무 관리 도구', description: '할일과 일정을 효율적으로 관리하세요', feature: 'task_manager' }],
-      },
-      { text: '좋은 질문이네요! 더 자세히 분석해보겠습니다. 🤔' },
-    ],
-    []
-  );
 
-  const simulateBotResponse = (userText) => {
-    const pick = demoResponses[Math.floor(Math.random() * demoResponses.length)];
-    // 네트워크/추론 대기 모사
-    const delay = 700 + Math.random() * 900;
-    setTimeout(() => {
+  const simulateBotResponse = async (userText) => {
+    try {
+      // 실제 채팅 API 호출
+      const response = await chatService.sendMessage({
+        query: userText,
+        profession: currentBot?.name || '학생',
+        userId: user?.id || null
+      });
+
+      // 봇 응답 메시지 추가
       dispatch({
         type: 'ADD',
         payload: {
           id: msgId(),
           type: 'bot',
-          content: pick.text,
-          actions: pick.actions,
+          content: response.answer,
+          topMatches: response.topMatches,
           createdAt: Date.now(),
         },
       });
+
       setIsTyping(false);
-    }, delay);
+    } catch (error) {
+      console.error('Chat API error:', error);
+      
+      // API 실패 시 폴백 응답
+      dispatch({
+        type: 'ADD',
+        payload: {
+          id: msgId(),
+          type: 'bot',
+          content: '죄송합니다. 일시적으로 응답을 생성할 수 없습니다. 잠시 후 다시 시도해주세요.',
+          createdAt: Date.now(),
+        },
+      });
+      
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -234,8 +244,8 @@ export default function Assistant() {
                 avatar={m.type === 'bot' ? currentBot.avatar : null}
                 content={m.content}
                 actions={m.actions}
+                topMatches={m.topMatches}
                 onAction={navigateToFeature}
-                botGradient={currentBot.gradient}
               />
             ))}
 
@@ -273,7 +283,9 @@ export default function Assistant() {
 }
 
 /** 메시지 한 줄 */
-function MessageRow({ type, avatar, content, actions, onAction, botGradient }) {
+function MessageRow({ type, avatar, content, actions, topMatches, onAction }) {
+  const navigate = useNavigate();
+  
   return (
     <div className={`msg msg--${type}`}>
       {type === 'bot' && (
@@ -282,7 +294,34 @@ function MessageRow({ type, avatar, content, actions, onAction, botGradient }) {
         </div>
       )}
       <div className={`msg__bubble msg__bubble--${type}`}>
-        <div className="msg__text">{content}</div>
+        <div 
+          className="msg__text"
+          dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }}
+        />
+        
+        {/* 프로그램 매칭 결과 표시 */}
+        {Array.isArray(topMatches) && topMatches.length > 0 && (
+          <div className="top-matches">
+            <h4 className="top-matches__title">추천 프로그램</h4>
+            <div className="top-matches__list">
+              {topMatches.slice(0, 3).map((program, index) => (
+                <div 
+                  key={program.id || index} 
+                  className="top-matches__item"
+                  onClick={() => navigate(`/programs/${program.id}`)}
+                >
+                  <div className="top-matches__name">{program.title || program.name}</div>
+                  <div className="top-matches__desc">{program.description}</div>
+                  {program.score && (
+                    <div className="top-matches__score">매칭도: {Math.round(program.score * 100)}%</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {/* 액션 버튼들 */}
         {Array.isArray(actions) && actions.length > 0 && (
           <div className="actions">
             {actions.map((a) => (
