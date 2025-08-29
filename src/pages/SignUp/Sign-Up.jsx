@@ -13,6 +13,7 @@ const SignUp = () => {
     password: '',
     passwordConfirm: '',
     birth: '',
+    school: '',
   });
   const [errors, setErrors] = useState({});
 
@@ -65,6 +66,10 @@ const SignUp = () => {
       newErrors.birth = '생년월일을 입력해주세요.';
     }
 
+    if (!formData.school) {
+      newErrors.school = '학교 구분을 선택해주세요.';
+    }
+
     if (!formData.passwordConfirm) {
       newErrors.passwordConfirm = '비밀번호 확인을 입력해주세요.';
     } else if (formData.password !== formData.passwordConfirm) {
@@ -88,6 +93,7 @@ const SignUp = () => {
         name: formData.name.trim(),
         email: formData.email,
         birth: formData.birth,
+        school: formData.school,
         password: formData.password,
         
       });
@@ -143,6 +149,23 @@ const SignUp = () => {
               max={new Date().toISOString().split('T')[0]}
             />
             {errors.birth && <span className="signup__field-error">{errors.birth}</span>}
+          </div>
+
+          <div className="signup__field">
+            <label htmlFor="school" className="signup__label">학교 구분</label>
+            <select
+              id="school"
+              name="school"
+              className={`signup__input ${errors.school ? 'error' : ''}`}
+              value={formData.school}
+              onChange={handleChange}
+              disabled={isLoading}
+            >
+              <option value="">학교 구분을 선택하세요</option>
+              <option value="중학생">중학생</option>
+              <option value="고등학생">고등학생</option>
+            </select>
+            {errors.school && <span className="signup__field-error">{errors.school}</span>}
           </div>
 
           <div className="signup__field">
