@@ -157,7 +157,6 @@ body.no-scroll { overflow: hidden; touch-action: none; overscroll-behavior: none
 /* ====== 필터 바 기본 (데스크톱) ====== */
 .filters--compact {
   padding: 10px 12px 8px;
-  border-bottom: 1px solid #eee;
   background: #fff;
 }
 .filters__row{
