@@ -6,7 +6,7 @@ import './Home.css';
 
 const Home = () => {
   const { isAuthenticated } = useAuthStore();
-  const [activeGradeTab, setActiveGradeTab] = useState('중등');
+  const [activeGradeTab, setActiveGradeTab] = useState('중1-2');
 
   // 다가오는 프로그램 조회
   const { data: upcomingPrograms, isLoading: isLoadingUpcoming } = useQuery({
@@ -40,21 +40,20 @@ const Home = () => {
   const recommendedProgramsArray = getProgramsArray(recommendedPrograms);
 
   // 학년별 추천 콘텐츠
-  // 학년별 추천 콘텐츠 (초등 / 중등 / 고등)
   const gradeContents = {
-    '초등': [
+    '중1-2': [
       { icon: '🔬', title: '과학실험 체험', desc: '화학·물리 실험을 통한 과학 원리 이해', category: '과학기술' },
       { icon: '🎨', title: '디지털 아트', desc: 'Procreate로 창작하는 디지털 미술', category: '예술' },
       { icon: '🎮', title: '게임 제작 입문', desc: 'Scratch로 나만의 게임 만들기', category: 'IT' },
       { icon: '🎭', title: '연극·뮤지컬', desc: '연기, 노래, 춤을 통한 무대 예술 체험', category: '공연예술' }
     ],
-    '중등': [
+    '중3-고1': [
       { icon: '📺', title: '방송 PD 체험', desc: '기획부터 촬영까지 방송 제작 전 과정', category: '미디어' },
       { icon: '⚖️', title: '모의재판 체험', desc: '검사, 변호사, 판사 역할을 통한 법조인 체험', category: '법률' },
       { icon: '🧬', title: '바이오 연구원', desc: 'DNA 추출과 세포 관찰 실험', category: '생명과학' },
       { icon: '📊', title: '마케팅 전략가', desc: '브랜드 분석과 마케팅 캠페인 기획', category: '마케팅' }
     ],
-    '고등': [
+    '고1-고2': [
       { icon: '🌍', title: '외교관 체험', desc: '국제회의 시뮬레이션과 협상 전략', category: '국제' },
       { icon: '🎓', title: '대학 연구실 체험', desc: '교수님과 함께하는 실제 연구 프로젝트', category: '학술' },
       { icon: '📱', title: '앱개발 프로젝트', desc: 'Flutter로 실제 출시 가능한 앱 개발', category: 'IT' },

@@ -22,13 +22,13 @@ export const meService = {
   // 내 신청 목록 조회
   async getRegistrations(status = null) {
     const params = status ? { status } : {};
-    const response = await http.get('/me/registrations', { params });
+    const response = await http.get('/me/programs/registrations', { params });
     return response.data;
   },
 
   // 내 찜 목록 조회
   async getLikes() {
-    const response = await http.get('/me/likes');
+    const response = await http.get('/me/programs/likes');
     return response.data;
   },
 
