@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth.store.js';
 import { ROUTES } from '../../config/constants.js';
 import Button from '../../components/Button.jsx';
-import './SignUp.css';
+// import './SignUp.css';
 
 
 const SignUp = () => {
