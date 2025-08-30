@@ -18,7 +18,9 @@ export default function MyPage() {
       category: "개발",
       startDate: "2024-01-15",
       endDate: "2024-03-15",
-      imageUrl: "/mock_image_url/korean_man_1.jpeg",
+      price: 299000,
+      backgroundColor: "#FF6B6B",
+      emoji: "💻",
       description: "React, Vue.js 등 현대적인 프론트엔드 기술을 배우고 취업에 성공할 수 있도록 도와드립니다."
     },
     {
@@ -28,7 +30,9 @@ export default function MyPage() {
       category: "디자인",
       startDate: "2024-02-01",
       endDate: "2024-04-01",
-      imageUrl: "/mock_image_url/korean_woman_1.jpeg",
+      price: 399000,
+      backgroundColor: "#4ECDC4",
+      emoji: "🎨",
       description: "사용자 경험과 인터페이스 디자인의 기본 원리를 배우고 실무에 적용할 수 있는 능력을 기릅니다."
     }
   ]);
@@ -41,7 +45,9 @@ export default function MyPage() {
       category: "데이터",
       startDate: "2024-03-01",
       endDate: "2024-05-01",
-      imageUrl: "/mock_image_url/korean_man_2.jpeg",
+      price: 499000,
+      backgroundColor: "#45B7D1",
+      emoji: "📊",
       description: "Python을 활용한 데이터 분석과 머신러닝의 기초를 배우는 과정입니다."
     },
     {
@@ -51,7 +57,9 @@ export default function MyPage() {
       category: "마케팅",
       startDate: "2024-04-01",
       endDate: "2024-06-01",
-      imageUrl: "/mock_image_url/korean_woman_2.jpeg",
+      price: 349000,
+      backgroundColor: "#96CEB4",
+      emoji: "📈",
       description: "디지털 마케팅의 핵심 전략과 실행 방법을 체계적으로 학습합니다."
     },
     {
@@ -61,7 +69,9 @@ export default function MyPage() {
       category: "창업",
       startDate: "2024-05-01",
       endDate: "2024-07-01",
-      imageUrl: "/mock_image_url/korean_man_1.jpeg",
+      price: 599000,
+      backgroundColor: "#FFEAA7",
+      emoji: "🚀",
       description: "창업 아이디어를 발굴하고 시장 검증을 통해 사업화 가능성을 높이는 방법을 배웁니다."
     }
   ]);
