@@ -399,28 +399,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 개인화 추천 섹션 (로그인한 경우만) */}
-      {isAuthenticated && (
-        <section className="home__section">
-          <div className="home__section-header">
-            <h2 className="home__section-title">나에게 딱 맞는 추천</h2>
-            <a href="#" className="home__section-more">더보기 &gt;</a>
-          </div>
-          
-          {isLoadingRecommended ? (
-            <div className="home__loading">로딩 중...</div>
-          ) : recommendedProgramsArray.length > 0 ? (
-            <div className="recommendations-grid">
-              {recommendedProgramsArray.slice(0, 4).map(renderProgramCard)}
-            </div>
-          ) : (
-            <div className="home__empty-state">
-              <p>아직 추천할 프로그램이 없습니다.</p>
-            </div>
-          )}
-        </section>
-      )}
-
       {/* 인기 프로그램 섹션 */}
       <section className="home__section">
         <div className="home__section-header">
