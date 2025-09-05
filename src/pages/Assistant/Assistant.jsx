@@ -78,7 +78,7 @@ export default function Assistant() {
         {
           id: msgId(),
           type: 'bot',
-          content: `안녕하세요! 저는 ${bot.name}입니다. ${bot.description}로 무엇을 도와드릴까요?`,
+          content: `안녕하세요! 저는 ${bot.name}입니다. ${bot.description} 무엇을 도와드릴까요?`,
           createdAt: Date.now(),
         },
       ],
