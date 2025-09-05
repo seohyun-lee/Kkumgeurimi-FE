@@ -6,28 +6,34 @@ export default function ProgramCard({ program, isLiked, onLike, onClick }) {
   // API 응답 필드명 매핑
   const programId = program.programId || program.program_id;
   const title = program.programTitle || program.title;
-  const provider = program.provider;
+  const provider = program.provider || program.mentor;
   const startDate = program.startDate || program.start_date;
   const endDate = program.endDate || program.end_date;
   const venueRegion = program.venueRegion || program.eligibleRegion || program.venue_region;
   const targetAudience = program.targetAudience || program.target_audience;
   const price = program.price;
-  const imageUrl = program.imageUrl;
-  const relatedMajor = program.relatedMajor || program.field_category;
+  const backgroundColor = program.backgroundColor || "#667eea";
+  const emoji = program.emoji || "📚";
+  const relatedMajor = program.relatedMajor || program.field_category || program.category;
 
   return (
     <article
       className="card"
       onClick={() => onClick?.(program)}
     >
-      <div className="card__img">
-        {imageUrl && (
-          <img 
-            src={imageUrl} 
-            alt={title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        )}
+      <div 
+        className="card__img"
+        style={{ 
+          backgroundColor: backgroundColor,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '48px'
+        }}
+      >
+        <span role="img" aria-label="프로그램 아이콘">
+          {emoji}
+        </span>
         <button
           className={`heart-btn ${isLiked ? "liked" : ""}`}
           aria-label={isLiked ? "좋아요 취소" : "좋아요"}
@@ -66,11 +72,11 @@ export default function ProgramCard({ program, isLiked, onLike, onClick }) {
         <div className="card__meta">
           <div className="meta">
             <i className="fas fa-map-marker-alt" />
-            <span>{venueRegion}</span>
+            <span>{venueRegion || "온라인"}</span>
           </div>
           <div className="meta">
             <i className="fas fa-users" />
-            <span>{targetAudience}</span>
+            <span>{targetAudience || "일반"}</span>
           </div>
         </div>
 
