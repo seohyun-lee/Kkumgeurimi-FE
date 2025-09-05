@@ -13,8 +13,11 @@ export default function ProgramCard({ program, isLiked, onLike, onClick }) {
   const targetAudience = program.targetAudience || program.target_audience;
   const price = program.price;
   const backgroundColor = program.backgroundColor || "#667eea";
-  const emoji = program.emoji || "📚";
+  const emoji = program.icon || program.emoji || "📚";
   const relatedMajor = program.relatedMajor || program.field_category || program.category;
+  
+  // 디버깅용 로그
+  console.log('Program:', title, 'backgroundColor:', backgroundColor);
 
   return (
     <article
@@ -25,6 +28,7 @@ export default function ProgramCard({ program, isLiked, onLike, onClick }) {
         className="card__img"
         style={{ 
           backgroundColor: backgroundColor,
+          backgroundImage: 'none',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

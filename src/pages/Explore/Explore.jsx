@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { INTEREST_LABELS } from '../../config/constants';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
+import { expandedMockPrograms } from '../../data/mockPrograms.js';
 import ProgramCard from "../../components/ProgramCard.jsx";
 import './Explore.css';
 
@@ -150,39 +151,40 @@ export default function Explore() {
     setSearchParams(next, { replace: true });
   };
 
+
   // API 호출 함수
   const fetchPrograms = async () => {
     setLoading(true);
-    try {
-      const response = await programsService.searchPrograms({
-        interestCategory: filters.job,
-        programType: filters.type,
-        cost: filters.cost,
-        startDate: filters.startDate,
-        endDate: filters.endDate,
-        sortBy,
-        page,
-        size: itemsPerPage
-      });
-      
-      // 실제 API 응답 구조에 맞게 수정
-      setPrograms(response.content || []);
-      setTotalPages(response.totalPages || 1);
-      setTotalElements(response.totalElements || 0);
-    } catch (error) {
-      console.error('프로그램 검색 실패:', error);
-      setPrograms([]);
-      setTotalPages(1);
-      setTotalElements(0);
-    } finally {
-      setLoading(false);
-    }
+    
+    // 목업 데이터 직접 사용 (서버 상태와 관계없이)
+    console.log('목업 데이터 사용 중...');
+    const filteredMockData = expandedMockPrograms.filter(program => {
+      if (filters.job !== 'all' && program.interestCategoryId !== filters.job) return false;
+      if (filters.type !== 'all' && program.programType !== EXPERIENCE_TYPE_CHIPS.find(chip => chip.value === filters.type)?.label) return false;
+      if (filters.cost === 'free' && program.price > 0) return false;
+      if (filters.cost === 'paid' && program.price === 0) return false;
+      return true;
+    });
+    
+    // 페이징 처리
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedData = filteredMockData.slice(startIndex, endIndex);
+    
+    console.log(`필터링된 데이터: ${filteredMockData.length}개, 페이지 데이터: ${paginatedData.length}개`);
+    
+    setPrograms(paginatedData);
+    setTotalPages(Math.ceil(filteredMockData.length / itemsPerPage));
+    setTotalElements(filteredMockData.length);
+    
+    setLoading(false);
   };
   
 
   // 필터나 정렬이 변경될 때 API 호출
   useEffect(() => {
     fetchPrograms();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, sortBy, page]);
 
   /** 이벤트 */
@@ -198,28 +200,29 @@ export default function Explore() {
     setSearchParams(next, { replace: true });
   };
   const toggleLike = async (id) => {
+    const isCurrentlyLiked = liked.has(id);
+    
+    // 클릭 즉시 UI 업데이트 (낙관적 업데이트)
+    setLiked((prev) => {
+      const next = new Set(prev);
+      if (isCurrentlyLiked) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+    
+    // 백그라운드에서 API 호출 (실패해도 UI는 이미 변경됨)
     try {
-      const isCurrentlyLiked = liked.has(id);
-      
       if (isCurrentlyLiked) {
         await programsService.unlikeProgram(id);
       } else {
         await programsService.likeProgram(id);
       }
-      
-      // API 성공 시 UI 업데이트
-      setLiked((prev) => {
-        const next = new Set(prev);
-        if (isCurrentlyLiked) {
-          next.delete(id);
-        } else {
-          next.add(id);
-        }
-        return next;
-      });
     } catch (error) {
-      console.error('프로그램 찜하기 실패:', error);
-      // TODO: 사용자에게 에러 메시지 표시
+      console.error('프로그램 찜하기 API 실패:', error);
+      // API 실패 시에도 UI 변경은 유지 (사용자 경험 개선)
     }
   };
       
@@ -332,10 +335,10 @@ export default function Explore() {
           ) : (
             programs.map((p) => (
               <ProgramCard
-                key={p.program_id}
+                key={p.program_id || p.id}
                 program={p}
-                isLiked={liked.has(p.program_id)}
-                onLike={toggleLike}
+                isLiked={liked.has(p.program_id || p.id)}
+                onLike={() => toggleLike(p.program_id || p.id)}
                 onClick={(program) => setModal({ open: true, program })}
               />
             ))
@@ -384,7 +387,7 @@ export default function Explore() {
               <div className="program-header">
                 <h2 className="program-title">{modal.program.programTitle || modal.program.title}</h2>
                 <div className="program-provider">{modal.program.provider}</div>
-            </div>
+              </div>
 
               {/* 프로그램 설명 */}
               {modal.program.description && (

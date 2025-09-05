@@ -124,7 +124,7 @@
 
 .mypage__section:first-of-type .mypage__grid > * {
   flex-shrink: 0;
-  width: 280px;
+  width: 240px;
   margin-bottom: 0;
 }
 
@@ -145,7 +145,7 @@
 
 .mypage__section:last-of-type .mypage__grid > * {
   flex-shrink: 0;
-  width: 280px;
+  width: 240px;
 }
 
 /* 반응형 디자인 */
@@ -169,7 +169,7 @@
   
   .mypage__section:first-of-type .mypage__grid > *,
   .mypage__section:last-of-type .mypage__grid > * {
-    width: 260px;
+    width: 220px;
   }
 }
 
