@@ -99,6 +99,7 @@ export default function Assistant() {
   const send = () => {
     const text = input.trim();
     if (!text) return;
+    
     // 사용자 메시지 추가
     dispatch({
       type: 'ADD',
