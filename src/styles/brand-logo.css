@@ -3,6 +3,7 @@
   color: var(--gray-600);
   font-family: var(--font-brand);
   font-weight: 700; /* 기본은 bold */
+  font-size: 24px; /* 다른 페이지 제목보다 조금 더 크게 */
   letter-spacing: -0.2px;
   font-synthesis-weight: none; /* 브라우저 임의 굵기 합성 방지(선택) */
 }

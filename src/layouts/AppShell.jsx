@@ -3,6 +3,7 @@ import React from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
 import { ROUTES } from '../config/constants';
+import { NAV_ITEMS } from '../config/nav';
 import BottomNavigation from '../components/BottomNavigation/BottomNavigation.jsx'
 import './AppShell.css';
 
@@ -16,8 +17,17 @@ const AppShell = () => {
     navigate(ROUTES.HOME);
   };
 
+  // 페이지별 제목 결정
+  const getPageTitle = () => {
+    if (pathname === ROUTES.HOME) {
+      return '꿈그리미';
+    }
+    
+    const currentNavItem = NAV_ITEMS.find(item => item.path === pathname);
+    return currentNavItem ? currentNavItem.label : '꿈그리미';
+  };
 
-  const isAssistant = location.pathname.startsWith('/assistant');
+  const isAssistant = pathname.startsWith('/assistant');
 
   return (
   <div className="app-shell">
@@ -25,7 +35,11 @@ const AppShell = () => {
     <header className="app-shell__header">
       <div className="app-shell__header-content">
         <div className="app-shell__logo">
-          <Link to={ROUTES.HOME} className="brand-wordmark">꿈그리미</Link>
+          {pathname === ROUTES.HOME ? (
+            <Link to={ROUTES.HOME} className="brand-wordmark">꿈그리미</Link>
+          ) : (
+            <span className="app-shell__page-title">{getPageTitle()}</span>
+          )}
         </div>
 
 
