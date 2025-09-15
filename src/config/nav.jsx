@@ -15,7 +15,7 @@ const ExploreIcon = ({ isActive }) => (
   </svg>
 );
 
-// 진로 아이콘 - 너비 확대
+// 진로 아이콘
 const CareerIcon = ({ isActive }) => (
   <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M13 21C16.5 18 21 14.5 21 10C21 5.5 17 2 13 2C9 2 5 5.5 5 10C5 14.5 9.5 18 13 21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
