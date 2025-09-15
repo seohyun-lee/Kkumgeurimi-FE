@@ -11,13 +11,25 @@ body { margin: 0; }
 /* 헤더 */
 .app-shell__header {
   background-color: white;
-  border-bottom: 1px solid #e5e7eb;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
-  display: block
+  left: 50%;
+  transform: translateX(-50%);
+  width: 390px;
+  height: 52px;
+  z-index: 1000;
+  padding-top: env(safe-area-inset-top, 0);
+  display: block;
 }
-.app-shell__bottomnav { display: none; }
+.app-shell__bottomnav { 
+  display: block;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
 
 :root {
   --tabbar-h: 64px;
@@ -26,13 +38,18 @@ body { margin: 0; }
 
 
 .app-shell__header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
+  width: 100%;
+  height: 52px;
+  padding: 8px 28px 0 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+}
+
+.app-shell__page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
 }
 
 
@@ -113,12 +130,13 @@ body { margin: 0; }
 /* 메인 콘텐츠 */
 .app-shell__main {
   flex: 1;
-  max-width: 1200px;
+  max-width: 390px;
   margin: 0 auto;
   padding: 24px;
   width: 100%;
-  min-height: calc(100vh - var(--tabbar-h) - var(--safe-bottom));
-  padding-bottom: calc(var(--tabbar-h) + var(--safe-bottom));
+  min-height: calc(100vh - 52px - 60px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
+  padding-top: calc(52px + env(safe-area-inset-top, 0) + 24px);
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0) + 24px);
   box-sizing: border-box;
 }
 
@@ -127,24 +145,4 @@ body { margin: 0; }
   background:transparent;
   border-radius:0;
   box-shadow:none;
-}
-
-/* 반응형 */
-@media (max-width: 768px) {
-  .app-shell__header { display: none; }
-  .app-shell__bottomnav {
-    display: block;
-    z-index: 50;
-  }
-
-  /* 하단 탭에 가리지 않도록 메인에 패딩 추가 */
-  .app-shell__main {
-    padding-bottom: calc(var(--tabbar-h) + var(--safe-bottom));
-  }
-}
-
-/* 데스크톱에선 메인 패딩 평소대로 */
-@media (min-width: 768px) {
-  .app-shell__main { padding-bottom: 0; }
-  .app-shell__bottomnav { display: none; }
 }

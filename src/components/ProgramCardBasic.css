@@ -1,0 +1,120 @@
+.program-card-basic {
+  background: #fff;
+  border-radius: 16px;
+  border: 0.4px solid rgba(0, 82, 205, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  width: 165px;
+  height: 240px;
+}
+
+.program-card-basic:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* 이미지 영역 */
+.program-card-basic__image {
+  width: 100%;
+  height: 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.program-card-basic__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.program-card-basic__placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 카테고리 - 우측 상단 */
+.program-card-basic__category {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #6b7280;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 400;
+  z-index: 2;
+}
+
+/* 콘텐츠 영역 */
+.program-card-basic__content {
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 제목 */
+.program-card-basic__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 기관 */
+.program-card-basic__organization {
+  font-size: 11px;
+  font-weight: 400;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+/* 날짜 */
+.program-card-basic__date {
+  font-size: 11px;
+  font-weight: 400;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* 태그들 - 하단 */
+.program-card-basic__tags {
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+.program-card-basic__tag {
+  background: #EFF7FF;
+  color: #278EFF;
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 400;
+  white-space: nowrap;
+}
