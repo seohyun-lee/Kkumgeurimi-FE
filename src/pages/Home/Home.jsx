@@ -218,16 +218,6 @@ const Home = () => {
         }
       }
       
-      // UI 업데이트
-      setWishlist(prev => {
-        const newSet = new Set(prev);
-        if (isCurrentlyLiked) {
-          newSet.delete(itemId);
-        } else {
-          newSet.add(itemId);
-        }
-        return newSet;
-      });
     } catch (error) {
       console.error('찜하기 실패:', error);
       // TODO: 사용자에게 에러 메시지 표시
@@ -236,20 +226,6 @@ const Home = () => {
 
   const renderProgramCard = (program) => (
     <div key={program.id} className="recommendation-card">
-      <button 
-        className={`wishlist-btn ${wishlist.has(program.id) ? 'active' : ''}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleWishlist(program.id);
-        }}
-      >
-        <svg width="20" height="18" viewBox="0 0 20 18" fill="none">
-          <path d="M10 16.5C10 16.5 2 11 2 6C2 3.79086 3.79086 2 6 2C7.5 2 9 3 10 4C11 3 12.5 2 14 2C16.2091 2 18 3.79086 18 6C18 11 10 16.5 10 16.5Z" 
-                stroke="currentColor" 
-                strokeWidth="1.5" 
-                fill={wishlist.has(program.id) ? 'currentColor' : 'none'} />
-        </svg>
-      </button>
       <div className="recommendation-icon">🎯</div>
       <h4 className="recommendation-title">{program.title}</h4>
       <p className="recommendation-description">{program.description}</p>
@@ -322,20 +298,6 @@ const Home = () => {
                 <div className="home__category-tag">카테고리</div>
               </div>
               <div className="home__program-info">
-                <button 
-                  className={`wishlist-btn ${wishlist.has(program.id) ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleWishlist(program.id);
-                  }}
-                >
-                  <svg width="20" height="18" viewBox="0 0 20 18" fill="none">
-                    <path d="M10 16.5C10 16.5 2 11 2 6C2 3.79086 3.79086 2 6 2C7.5 2 9 3 10 4C11 3 12.5 2 14 2C16.2091 2 18 3.79086 18 6C18 11 10 16.5 10 16.5Z" 
-                          stroke="currentColor" 
-                          strokeWidth="1.5" 
-                          fill={wishlist.has(program.id) ? 'currentColor' : 'none'} />
-                  </svg>
-                </button>
                 <h4 className="program-title">{program.title}</h4>
                 <p className="program-subtitle">{program.company}</p>
                 <p className="program-date">2025-08-06 ~ 2025-12-31</p>
