@@ -14,7 +14,7 @@ const Community = () => {
       category: '진로·적성',
       title: '제목',
       content: '자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.',
-      author: '고학생',
+      author: '고1학생',
       date: '2025.09.13',
       likes: 21,
       comments: 12,
@@ -25,8 +25,8 @@ const Community = () => {
       id: 2,
       category: '자유소통',
       title: '제목',
-      content: '고학생들의 일상 이야기',
-      author: '고학생',
+      content: '고등학생들의 일상 이야기',
+      author: '고2학생',
       date: '2025.09.13',
       likes: 21,
       comments: 12,
@@ -38,7 +38,7 @@ const Community = () => {
       category: '고민상담',
       title: '제목',
       content: '진로 고민에 대한 조언 부탁드려요',
-      author: '고학생',
+      author: '고2학생',
       date: '2025.09.13',
       likes: 21,
       comments: 12,
@@ -83,21 +83,21 @@ const Community = () => {
   const comments = [
     {
       id: 1,
-      author: '고학생',
+      author: '고1학생',
       content: '댓글댓글댓글댓글댓글댓글',
       date: '2025.09.13',
       isAuthor: false
     },
     {
       id: 2,
-      author: '고학생 (글쓴이)',
+      author: '고2학생 (글쓴이)',
       content: '댓글댓글댓글댓글댓글댓글',
       date: '2025.09.13',
       isAuthor: true
     },
     {
       id: 3,
-      author: '고학생',
+      author: '고1학생',
       content: '댓글댓글댓글댓글댓글댓글',
       date: '2025.09.13',
       isAuthor: false
@@ -176,7 +176,7 @@ const Community = () => {
         category: selectedWriteCategory,
         title: newPost.title,
         content: newPost.content,
-        author: '고학생',
+        author: '고3학생',
         date: new Date().toLocaleDateString('ko-KR').replace(/\./g, '.').slice(0, -1),
         likes: 0,
         comments: 0,
