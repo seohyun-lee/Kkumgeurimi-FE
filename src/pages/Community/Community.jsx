@@ -19,7 +19,8 @@ const Community = () => {
       likes: 21,
       comments: 12,
       views: 78,
-      hashtag: '#해시태그'
+      hashtag: '#해시태그',
+      imageUrl: null
     },
     {
       id: 2,
@@ -31,7 +32,8 @@ const Community = () => {
       likes: 21,
       comments: 12,
       views: 78,
-      hashtag: '#해시태그'
+      hashtag: '#해시태그',
+      imageUrl: null
     },
     {
       id: 3,
@@ -43,7 +45,8 @@ const Community = () => {
       likes: 21,
       comments: 12,
       views: 78,
-      hashtag: '#해시태그'
+      hashtag: '#해시태그',
+      imageUrl: null
     }
   ]);
 
@@ -181,7 +184,8 @@ const Community = () => {
         likes: 0,
         comments: 0,
         views: 1,
-        hashtag: hashtags.length > 0 ? hashtags.map(tag => `#${tag}`).join(' ') : ''
+        hashtag: hashtags.length > 0 ? hashtags.map(tag => `#${tag}`).join(' ') : '',
+        imageUrl: selectedImages.length > 0 ? selectedImages[0] : null
       };
       setPosts([post, ...posts]);
       setNewPost({ title: '', content: '', hashtag: '' });
@@ -247,8 +251,11 @@ const Community = () => {
         </div>
         
         {/* Right Image */}
-        <div className="community__post-image">
-        </div>
+        {post.imageUrl && (
+          <div className="community__post-image">
+            <img src={post.imageUrl} alt="게시글 이미지" className="community__post-image-content" />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -260,7 +267,7 @@ const Community = () => {
         <div className="community__header">
           <button onClick={() => setCurrentView('main')} className="community__close-button">
             <svg className="community__close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6 18L18 6M6 6l12 12"/>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
           <h1 className="community__header-title">글쓰기</h1>
@@ -397,7 +404,7 @@ const Community = () => {
         <div className="community__header">
           <button onClick={() => setCurrentView('main')} className="community__back-button">
             <svg className="community__header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 12H5m7-7l-7 7 7 7"/>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 12H5m7-7l-7 7 7 7"/>
             </svg>
           </button>
         </div>
