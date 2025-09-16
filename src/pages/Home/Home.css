@@ -330,8 +330,7 @@ body {
   background: #fff;
   border-radius: 16px;
   padding: 20px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
   margin: 20px 20px 24px 20px;
 }
 
@@ -365,7 +364,6 @@ body {
   padding: 12px 8px;
   border-radius: 12px;
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
   transition: all 0.2s ease;
 }
 

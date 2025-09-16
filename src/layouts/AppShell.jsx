@@ -27,7 +27,6 @@ const AppShell = () => {
     return currentNavItem ? currentNavItem.label : '꿈그리미';
   };
 
-  const isAssistant = pathname.startsWith('/assistant');
   const isHome = pathname === ROUTES.HOME;
 
   return (
@@ -55,7 +54,7 @@ const AppShell = () => {
     </header>
 
     {/* 메인 */}
-    <main className={`app-shell__main ${isAssistant ? 'app-shell__main--flush' : ''} ${isHome ? 'app-shell__main--home' : ''}`}>
+    <main className={`app-shell__main app-shell__main--home}`}>
       <Outlet />
     </main>
 
