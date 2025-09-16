@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaPlus, FaTimes } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import './Community.css';
 
 const Community = () => {
@@ -53,7 +53,7 @@ const Community = () => {
     hashtag: ''
   });
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImages, setSelectedImages] = useState([]);
   const [hashtagInput, setHashtagInput] = useState('');
   const [hashtags, setHashtags] = useState([]);
   const [isEditingHashtag, setIsEditingHashtag] = useState(false);
@@ -130,14 +130,20 @@ const Community = () => {
   };
 
   const handleImageSelect = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+    const files = Array.from(e.target.files);
+    const remainingSlots = 4 - selectedImages.length;
+    const filesToAdd = files.slice(0, remainingSlots);
+
+    filesToAdd.forEach(file => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setSelectedImage(e.target.result);
+        setSelectedImages(prev => [...prev, e.target.result]);
       };
       reader.readAsDataURL(file);
-    }
+    });
+
+    // Reset input
+    e.target.value = '';
   };
 
   const handleHashtagKeyPress = (e) => {
@@ -180,7 +186,7 @@ const Community = () => {
       setPosts([post, ...posts]);
       setNewPost({ title: '', content: '', hashtag: '' });
       setHashtags([]);
-      setSelectedImage(null);
+      setSelectedImages([]);
       setSelectedWriteCategory('진로·적성');
       setCurrentView('main');
     }
@@ -299,18 +305,40 @@ const Community = () => {
             onChange={(e) => setNewPost({...newPost, content: e.target.value})}
             className="community__write-content"
           />
-          
+
+          {/* Selected Images Preview */}
+          {selectedImages.length > 0 && (
+            <div className="community__images-preview">
+              {selectedImages.map((image, index) => (
+                <div key={index} className="community__image-preview">
+                  <img src={image} alt={`첨부 이미지 ${index + 1}`} className="community__preview-image" />
+                  <button
+                    className="community__image-remove"
+                    onClick={() => setSelectedImages(prev => prev.filter((_, i) => i !== index))}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="community__write-actions">
             <div className="community__write-tools">
               <input
                 type="file"
                 accept="image/*"
+                multiple
                 ref={fileInputRef}
                 onChange={handleImageSelect}
                 style={{ display: 'none' }}
               />
-              <button className="community__tool-button" onClick={() => fileInputRef.current?.click()}>
+              <button
+                className="community__tool-button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={selectedImages.length >= 4}
+              >
                 <svg className="community__tool-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -494,7 +522,9 @@ const Community = () => {
           onClick={() => setCurrentView('write')}
           className="community__write-button"
         >
-          <FaPlus className="community__write-button-icon" />
+          <svg className="community__write-button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
           <span className="community__write-button-text">글쓰기</span>
         </button>
       </div>
