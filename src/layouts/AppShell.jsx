@@ -28,10 +28,11 @@ const AppShell = () => {
   };
 
   const isAssistant = pathname.startsWith('/assistant');
+  const isHome = pathname === ROUTES.HOME;
 
   return (
   <div className="app-shell">
-    {/* 헤더 (PC 전용) */}
+    {/* 헤더 */}
     <header className="app-shell__header">
       <div className="app-shell__header-content">
         <div className="app-shell__logo">
@@ -54,7 +55,7 @@ const AppShell = () => {
     </header>
 
     {/* 메인 */}
-    <main className={`app-shell__main ${isAssistant ? 'app-shell__main--flush' : ''}`}>
+    <main className={`app-shell__main ${isAssistant ? 'app-shell__main--flush' : ''} ${isHome ? 'app-shell__main--home' : ''}`}>
       <Outlet />
     </main>
 

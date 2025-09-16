@@ -263,141 +263,46 @@ const Home = () => {
 
   return (
     <div className="home">
-      {/* 다가오는 프로그램 섹션 */}
-      <section className="home__section">
-        <div className="home__section-header">
-          <h2 className="home__section-title">다가오는 프로그램</h2>
-          <a href="#" className="home__section-more">더보기 &gt;</a>
+      {/* Featured Program Section */}
+      <div className="home__featured-section">
+        <div className="home__featured-card">
+          <div className="home__featured-badge">추천 프로그램</div>
+          <h2 className="home__featured-title">3D 그래픽 디자인 배우기</h2>
+          <p className="home__featured-date">2025.08.10 (일) 오후 14-16시</p>
+          <div className="home__pagination-dots">
+            <div className="home__dot active"></div>
+            <div className="home__dot"></div>
+            <div className="home__dot"></div>
+          </div>
         </div>
-        
-        {isLoadingUpcoming ? (
-          <div className="home__loading">로딩 중...</div>
-        ) : upcomingProgramsArray.length > 0 ? (
-          <div className="program-slider">
-            <button 
-              className="slider-btn slider-btn--prev" 
-              onClick={prevSlide}
-              disabled={upcomingProgramsArray.length <= 1}
-            >
-              ‹
-            </button>
-            <div className="slider-container">
-              <div 
-                className="slider-track" 
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-              >
-                {upcomingProgramsArray.map(program => (
-                  <div key={program.program_id} className="slider-slide">
-                    <div 
-                      className="popular-program-card"
-                      onClick={() => handleProgramClick(program)}
-                    >
-                      <div className="popular-program-card__img">
-                        <button
-                          className={`heart-btn ${likedPrograms.has(program.program_id) ? 'liked' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleProgramLike(program.program_id);
-                          }}
-                        >
-                          <svg width="20" height="18" viewBox="0 0 20 18" fill="none">
-                            <path
-                              d="M10 16.5C10 16.5 2 11 2 6C2 3.79086 3.79086 2 6 2C7.5 2 9 3 10 4C11 3 12.5 2 14 2C16.2091 2 18 3.79086 18 6C18 11 10 16.5 10 16.5Z"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              fill={likedPrograms.has(program.program_id) ? 'currentColor' : 'none'}
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="popular-program-card__body">
-                        <h3 className="popular-program-card__title">{program.title}</h3>
-                        <div className="popular-program-card__provider">{program.provider}</div>
-                        <div className="popular-program-card__period">
-                          {program.start_date} ~ {program.end_date}
-                        </div>
-                        <div className="popular-program-card__meta">
-                          <div className="meta">
-                            <i className="fas fa-map-marker-alt" />
-                            <span>{program.venue_region}</span>
-                          </div>
-                          <div className="meta">
-                            <i className="fas fa-users" />
-                            <span>{program.target_audience}</span>
-                          </div>
-                        </div>
-                        <div className="popular-program-card__tags">
-                          <span className="tag">{program.field_category}</span>
-                          {program.price === '무료' ? (
-                            <span className="tag tag--free">무료</span>
-                          ) : (
-                            <span className="tag">{program.price}</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <button 
-              className="slider-btn slider-btn--next" 
-              onClick={nextSlide}
-              disabled={upcomingProgramsArray.length <= 1}
-            >
-              ›
-            </button>
-            {upcomingProgramsArray.length > 1 && (
-              <div className="slider-indicators">
-                {upcomingProgramsArray.map((_, index) => (
-                  <button
-                    key={index}
-                    className={`slider-indicator ${index === currentSlide ? 'active' : ''}`}
-                    onClick={() => setCurrentSlide(index)}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="home__empty-state">
-            <p>현재 다가오는 프로그램이 없습니다.</p>
-          </div>
-        )}
-      </section>
+      </div>
 
-      {/* 진로 탐색 현황 섹션 */}
+      {/* Progress Section */}
       <div className="home__progress-section">
         <div className="home__progress-header">
-          <h3>🎯 나의 진로 탐색 여정</h3>
-          <span className="progress-percentage">25%</span>
+          <div className="home__progress-title">나의 진로 탐색 여정</div>
+          <div className="progress-percentage">25%</div>
         </div>
         <div className="home__progress-steps">
           <div className="home__progress-step completed">
-            <div className="home__progress-step-circle active">
-              <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
-                <path d="M1 4.5L4.5 8L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
+            <div className="home__progress-step-circle active">✓</div>
             <div className="home__progress-step-text">흥미 탐색</div>
           </div>
-          <div className="home__progress-step-line completed"></div>
-          <div className="home__progress-step current">
-            <div className="home__progress-step-circle active">2</div>
-            <div className="home__progress-step-text">적성 파악</div>
-          </div>
-          <div className="home__progress-step-line"></div>
           <div className="home__progress-step">
-            <div className="home__progress-step-circle">3</div>
+            <div className="home__progress-step-circle">2</div>
             <div className="home__progress-step-text">직업 체험</div>
           </div>
-          <div className="home__progress-step-line"></div>
+          <div className="home__progress-step">
+            <div className="home__progress-step-circle">3</div>
+            <div className="home__progress-step-text">적성 파악</div>
+          </div>
           <div className="home__progress-step">
             <div className="home__progress-step-circle">4</div>
             <div className="home__progress-step-text">진로 설계</div>
           </div>
         </div>
       </div>
+
 
       {/* 인기 프로그램 섹션 */}
       <section className="home__section">
@@ -407,48 +312,37 @@ const Home = () => {
         </div>
         
         <div className="popular-programs-grid">
-          {popularPrograms.map(program => (
+          {popularPrograms.map((program) => (
             <div 
               key={program.id} 
               className="popular-program-card"
               onClick={() => handleProgramClick(program.title)}
             >
-              <button 
-                className={`wishlist-btn ${wishlist.has(program.id) ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleWishlist(program.id);
-                }}
-              >
-                <svg width="20" height="18" viewBox="0 0 20 18" fill="none">
-                  <path d="M10 16.5C10 16.5 2 11 2 6C2 3.79086 3.79086 2 6 2C7.5 2 9 3 10 4C11 3 12.5 2 14 2C16.2091 2 18 3.79086 18 6C18 11 10 16.5 10 16.5Z" 
-                        stroke="currentColor" 
-                        strokeWidth="1.5" 
-                        fill={wishlist.has(program.id) ? 'currentColor' : 'none'} />
-                </svg>
-              </button>
-              {program.isHot && <div className="home__hot-badge">HOT</div>}
-              <div className="program-header">
-                <div className="program-icon">{program.icon}</div>
-                <div className="program-info">
-                  <h4 className="program-title">{program.title}</h4>
-                  <p className="program-company">{program.company}</p>
-                </div>
+              <div className="home__program-image">
+                <div className="home__category-tag">카테고리</div>
               </div>
-              <p className="program-description">{program.description}</p>
-              <div className="program-stats">
-                <div className="stat">
-                  <span className="stat-icon">⭐</span>
-                  <span>{program.rating}</span>
+              <div className="home__program-info">
+                <button 
+                  className={`wishlist-btn ${wishlist.has(program.id) ? 'active' : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleWishlist(program.id);
+                  }}
+                >
+                  <svg width="20" height="18" viewBox="0 0 20 18" fill="none">
+                    <path d="M10 16.5C10 16.5 2 11 2 6C2 3.79086 3.79086 2 6 2C7.5 2 9 3 10 4C11 3 12.5 2 14 2C16.2091 2 18 3.79086 18 6C18 11 10 16.5 10 16.5Z" 
+                          stroke="currentColor" 
+                          strokeWidth="1.5" 
+                          fill={wishlist.has(program.id) ? 'currentColor' : 'none'} />
+                  </svg>
+                </button>
+                <h4 className="program-title">{program.title}</h4>
+                <p className="program-subtitle">{program.company}</p>
+                <p className="program-date">2025-08-06 ~ 2025-12-31</p>
+                <div className="home__program-tags">
+                  <span className="tag">{program.level}</span>
+                  <span className="tag free">무료</span>
                 </div>
-                <div className="stat">
-                  <span className="stat-icon">👥</span>
-                  <span>{program.participants}명 참여</span>
-                </div>
-              </div>
-              <div className="program-meta">
-                <span className="duration">{program.duration}</span>
-                <span className={`level level-${program.level}`}>{program.level}</span>
               </div>
             </div>
           ))}
@@ -481,60 +375,10 @@ const Home = () => {
      */
      }
 
-      {/* 학년별 추천 섹션 */}
-      <section className="home__section">
-        <div className="home__section-header">
-          <h2 className="home__section-title">학년별 추천 콘텐츠</h2>
-        </div>
-        
-        <div className="home__grade-section">
-          <div className="home__grade-tabs">
-            {Object.keys(gradeContents).map(grade => (
-              <div 
-                key={grade}
-                className={`home__grade-tab ${activeGradeTab === grade ? 'active' : ''}`}
-                onClick={() => setActiveGradeTab(grade)}
-              >
-                {grade}
-              </div>
-            ))}
-          </div>
-          <div className="home__grade-content">
-            {gradeContents[activeGradeTab].map((item, index) => (
-              <div key={index} className="home__grade-item">
-                <button 
-                  className={`wishlist-btn small ${wishlist.has(`grade-${activeGradeTab}-${index}`) ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleWishlist(`grade-${activeGradeTab}-${index}`);
-                  }}
-                >
-                  <svg width="16" height="14" viewBox="0 0 20 18" fill="none">
-                    <path d="M10 16.5C10 16.5 2 11 2 6C2 3.79086 3.79086 2 6 2C7.5 2 9 3 10 4C11 3 12.5 2 14 2C16.2091 2 18 3.79086 18 6C18 11 10 16.5 10 16.5Z" 
-                          stroke="currentColor" 
-                          strokeWidth="1.5" 
-                          fill={wishlist.has(`grade-${activeGradeTab}-${index}`) ? 'currentColor' : 'none'} />
-                  </svg>
-                </button>
-                
-                {/* 아이콘을 메인으로, 제목과 설명 중앙에 배치 */}
-                <div className="home__grade-item-icon">{item.icon}</div>
-                <h5>{item.title}</h5>
-                <p>{item.desc}</p>
-                
-                {/* 카테고리를 하단으로 이동 */}
-                <span className="grade-category">{item.category}</span>
-              </div>
-
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* 성공 스토리 섹션 */}
       <section className="home__section">
         <div className="home__section-header">
-          <h2 className="home__section-title">선배들의 진로 스토리</h2>
+          <h2 className="home__section-title">커뮤니티 인기글</h2>
           <a href="#" className="home__section-more">더보기 &gt;</a>
         </div>
         
