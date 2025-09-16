@@ -8,12 +8,6 @@ const Home = () => {
   const { isAuthenticated } = useAuthStore();
   const [activeGradeTab, setActiveGradeTab] = useState('중1-2');
 
-  // 다가오는 프로그램 조회
-  const { data: upcomingPrograms, isLoading: isLoadingUpcoming } = useQuery({
-    queryKey: ['upcoming-programs'],
-    queryFn: programsService.getUpcoming,
-    staleTime: 5 * 60 * 1000, // 5분
-  });
 
   // 개인화 추천 프로그램 조회 (로그인한 경우만)
   const { data: recommendedPrograms, isLoading: isLoadingRecommended } = useQuery({
@@ -36,7 +30,6 @@ const Home = () => {
   };
 
   // 실제 프로그램 데이터 배열
-  const upcomingProgramsArray = getProgramsArray(upcomingPrograms);
   const recommendedProgramsArray = getProgramsArray(recommendedPrograms);
 
   // 학년별 추천 콘텐츠
@@ -60,6 +53,46 @@ const Home = () => {
       { icon: '🎬', title: '영상제작 스튜디오', desc: '기획·촬영·편집·배급까지 영상 제작 전 과정', category: '미디어' }
     ]
   };
+
+  // Featured 프로그램 목업 데이터
+  const featuredPrograms = [
+    {
+      id: 1,
+      title: '3D 그래픽 디자인 배우기',
+      description: '블렌더와 Maya를 활용한 3D 모델링과 애니메이션 기초부터 심화까지',
+      date: '2025.08.10 (일) 오후 14-16시',
+      badge: '추천 프로그램',
+      category: '디자인',
+      isNew: true
+    },
+    {
+      id: 2,
+      title: 'AI 프로그래밍 입문',
+      description: 'Python과 TensorFlow로 시작하는 인공지능 개발 첫걸음',
+      date: '2025.08.15 (금) 오후 15-17시',
+      badge: '인기 프로그램',
+      category: 'IT',
+      isNew: false
+    },
+    {
+      id: 3,
+      title: '웹툰 작가 체험',
+      description: '디지털 드로잉부터 스토리텔링까지 웹툰 제작 전 과정',
+      date: '2025.08.20 (수) 오후 14-16시',
+      badge: '신규 프로그램',
+      category: '예술',
+      isNew: true
+    },
+    {
+      id: 4,
+      title: '유튜버 크리에이터',
+      description: '영상 기획부터 편집, 채널 운영까지 크리에이터 되기',
+      date: '2025.08.25 (월) 오후 16-18시',
+      badge: 'HOT 프로그램',
+      category: '미디어',
+      isNew: false
+    }
+  ];
 
   // 인기 프로그램 목업 데이터
   const popularPrograms = [
@@ -143,7 +176,7 @@ const Home = () => {
 
   // 찜 상태 관리 (프로그램용)
   const [likedPrograms, setLikedPrograms] = useState(new Set());
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentFeaturedSlide, setCurrentFeaturedSlide] = useState(0);
 
   // 찜한 프로그램 목록 조회 (로그인한 경우만)
   const { data: likedProgramsData } = useQuery({
@@ -191,15 +224,30 @@ const Home = () => {
     alert(`${program.title} 프로그램 상세 페이지로 이동합니다!`);
   };
 
-  const nextSlide = () => {
-    const maxSlide = Math.max(0, upcomingProgramsArray.length - 1);
-    setCurrentSlide(prev => (prev >= maxSlide ? 0 : prev + 1));
+  // Featured program carousel 네비게이션
+  const nextFeaturedSlide = () => {
+    setCurrentFeaturedSlide(prev => 
+      prev >= featuredPrograms.length - 1 ? 0 : prev + 1
+    );
   };
 
-  const prevSlide = () => {
-    const maxSlide = Math.max(0, upcomingProgramsArray.length - 1);
-    setCurrentSlide(prev => (prev <= 0 ? maxSlide : prev - 1));
+  const prevFeaturedSlide = () => {
+    setCurrentFeaturedSlide(prev => 
+      prev <= 0 ? featuredPrograms.length - 1 : prev - 1
+    );
   };
+
+  // 자동 슬라이드 기능
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentFeaturedSlide(prev => 
+        prev >= featuredPrograms.length - 1 ? 0 : prev + 1
+      );
+    }, 5000); // 5초마다 자동 슬라이드
+
+    return () => clearInterval(interval);
+  }, []);
+
 
   // 찜 상태 관리 (추천 콘텐츠용)
   const [wishlist, setWishlist] = useState(new Set());
@@ -239,16 +287,50 @@ const Home = () => {
 
   return (
     <div className="home">
-      {/* Featured Program Section */}
+      {/* Featured Program Carousel */}
       <div className="home__featured-section">
-        <div className="home__featured-card">
-          <div className="home__featured-badge">추천 프로그램</div>
-          <h2 className="home__featured-title">3D 그래픽 디자인 배우기</h2>
-          <p className="home__featured-date">2025.08.10 (일) 오후 14-16시</p>
+        <div className="home__featured-carousel">
+          <div 
+            className="home__featured-track"
+            style={{ transform: `translateX(-${currentFeaturedSlide * 100}%)` }}
+          >
+            {featuredPrograms.map(program => (
+              <div key={program.id} className="home__featured-slide">
+                <div className="home__featured-card">
+                  <div className="home__featured-badge">{program.badge}</div>
+                  {program.isNew && <div className="home__new-badge">NEW</div>}
+                  <h2 className="home__featured-title">{program.title}</h2>
+                  <p className="home__featured-description">{program.description}</p>
+                  <p className="home__featured-date">{program.date}</p>
+                  <div className="home__featured-category">{program.category}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Navigation Buttons */}
+          <button 
+            className="home__featured-nav home__featured-nav--prev" 
+            onClick={prevFeaturedSlide}
+          >
+            ‹
+          </button>
+          <button 
+            className="home__featured-nav home__featured-nav--next" 
+            onClick={nextFeaturedSlide}
+          >
+            ›
+          </button>
+          
+          {/* Pagination Dots */}
           <div className="home__pagination-dots">
-            <div className="home__dot active"></div>
-            <div className="home__dot"></div>
-            <div className="home__dot"></div>
+            {featuredPrograms.map((_, index) => (
+              <button
+                key={index}
+                className={`home__dot ${index === currentFeaturedSlide ? 'active' : ''}`}
+                onClick={() => setCurrentFeaturedSlide(index)}
+              />
+            ))}
           </div>
         </div>
       </div>
