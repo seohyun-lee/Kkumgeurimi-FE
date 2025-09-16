@@ -34,7 +34,7 @@ export const ROUTES = {
   PROGRAMS: '/programs',
   EXPLORE: '/explore',
   CAREER: '/career',
-  ASSISTANT: '/assistant',
+  COMMUNITY: '/community',
   ME: '/me',
   ME_REGISTRATIONS: '/me/registrations',
   ME_LIKES: '/me/likes'
