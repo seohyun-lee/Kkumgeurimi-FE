@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ProgramCardBasic from "../../components/ProgramCardBasic";
+import ProgramDetailModal from "../../components/ProgramDetailModal.jsx";
+import { getCategoryName } from "../../utils/category.js";
 import { useAuthStore } from "../../store/auth.store.js";
 import { meService } from "../../services/my.service.js";
+import { programsService } from "../../services/programs.service.js";
 import "./MyPage.css";
 import seongnaemiImage from "../../assets/img/성나미.png";
 import programIcon from "../../assets/icons/my/program.svg";
@@ -15,6 +18,9 @@ export default function MyPage() {
   const { user: authUser } = useAuthStore();
   const [joinedPrograms, setJoinedPrograms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState(null);
+  const [likedPrograms, setLikedPrograms] = useState(new Set());
 
   const user = {
     name: authUser?.name || "성나미",
@@ -69,7 +75,7 @@ export default function MyPage() {
     fetchJoinedPrograms();
   }, []);
 
-  const [likedPrograms] = useState([
+  const [likedProgramsData] = useState([
     {
       programId: 3,
       title: "데이터 사이언스 입문",
@@ -107,6 +113,73 @@ export default function MyPage() {
       description: "창업 아이디어를 발굴하고 시장 검증을 통해 사업화 가능성을 높이는 방법을 배웁니다."
     }
   ]);
+
+  // 모달 관련 함수들
+  const handleProgramClick = (program) => {
+    // 프로그램 데이터를 Career/Home과 동일한 구조로 변환
+    const transformedProgram = {
+      programId: program.programId || program.id,
+      programTitle: program.title,
+      provider: program.mentor || program.provider,
+      objective: program.description || '프로그램 설명이 없습니다.',
+      targetAudience: '중고등학생',
+      programType: 1,
+      startDate: program.startDate,
+      endDate: program.endDate,
+      relatedMajor: program.category || '기타',
+      costType: 'FREE',
+      price: null,
+      imageUrl: program.imageUrl || null,
+      eligibleRegion: '전국',
+      venueRegion: program.mentor || '미정',
+      operateCycle: '주 1회',
+      interestCategory: 1, // 기본값
+      programDetail: {
+        programDetailId: `detail-${program.programId || program.id}`,
+        description: program.description || '프로그램 상세 설명이 없습니다.',
+        requiredHours: '총 2시간',
+        availHours: '주말 오후',
+        capacity: 20,
+        targetSchoolType: '중학교, 고등학교',
+        levelInfo: '중학생, 고등학생'
+      },
+      tags: ['체험처', '무료']
+    };
+    setSelectedProgram(transformedProgram);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProgram(null);
+  };
+
+  const handleLikeProgram = async (program) => {
+    try {
+      if (likedPrograms.has(program.programId)) {
+        await programsService.unlikeProgram(program.programId);
+        setLikedPrograms(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(program.programId);
+          return newSet;
+        });
+      } else {
+        await programsService.likeProgram(program.programId);
+        setLikedPrograms(prev => {
+          const newSet = new Set(prev);
+          newSet.add(program.programId);
+          return newSet;
+        });
+      }
+    } catch (error) {
+      console.error('프로그램 찜하기 실패:', error);
+    }
+  };
+
+  const handleApplyProgram = (program) => {
+    alert(`${program.programTitle} 프로그램에 신청합니다!`);
+    handleCloseModal();
+  };
 
   return (
     <div className="mypage">
@@ -183,7 +256,7 @@ export default function MyPage() {
                 date={`${p.startDate} ~ ${p.endDate}`}
                 category={p.category || "카테고리"}
                 tags={["체험처", "무료"]}
-                onClick={() => {}}
+                onClick={() => handleProgramClick(p)}
               />
             ))
           ) : (
@@ -191,6 +264,16 @@ export default function MyPage() {
           )}
         </div>
       </section>
+
+      {/* 프로그램 상세 모달 */}
+      <ProgramDetailModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        program={selectedProgram}
+        onLike={handleLikeProgram}
+        onApply={handleApplyProgram}
+        isLiked={selectedProgram ? likedPrograms.has(selectedProgram.programId) : false}
+      />
     </div>
   );
 }

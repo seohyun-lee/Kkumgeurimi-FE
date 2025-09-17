@@ -1,3 +1,5 @@
+import { CATEGORY_DETAILS } from '../utils/category.js';
+
 export const careerService = {
   // 체험한 프로그램 목록 조회 (관심사 버블 생성용)
   async getExperiencedPrograms(token) {
@@ -60,21 +62,24 @@ export const careerService = {
   mapCategoryToBubble(categoryId, programs) {
     // 카테고리별 버블 설정 (위치, 색상, 크기)
     const categoryConfig = {
-      1: { name: '과학기술', color: '#74b9ff', x: -150, y: -100, size: 'large' },
-      2: { name: 'IT개발', color: '#0984e3', x: 200, y: -80, size: 'large' },
-      11: { name: '예술디자인', color: '#fd79a8', x: -100, y: 150, size: 'large' },
-      12: { name: '체육', color: '#fdcb6e', x: 250, y: 100, size: 'large' },
-      18: { name: '서비스업', color: '#00b894', x: -200, y: 50, size: 'large' },
-      29: { name: '환경에너지', color: '#00cec9', x: 100, y: -150, size: 'large' },
+      1: { x: -150, y: -100, size: 'large' },
+      2: { x: 200, y: -80, size: 'large' },
+      11: { x: -100, y: 150, size: 'large' },
+      12: { x: 250, y: 100, size: 'large' },
+      18: { x: -200, y: 50, size: 'large' },
+      29: { x: 100, y: -150, size: 'large' },
       // 추가 카테고리들...
     };
 
-    const config = categoryConfig[categoryId] || {
-      name: `카테고리 ${categoryId}`,
-      color: '#ddd',
-      x: Math.random() * 400 - 200,
-      y: Math.random() * 300 - 150,
-      size: 'large'
+    const categoryInfo = CATEGORY_DETAILS[categoryId];
+    const positionConfig = categoryConfig[categoryId];
+    
+    const config = {
+      name: categoryInfo?.name || `카테고리 ${categoryId}`,
+      color: categoryInfo?.color || '#ddd',
+      x: positionConfig?.x || Math.random() * 400 - 200,
+      y: positionConfig?.y || Math.random() * 300 - 150,
+      size: positionConfig?.size || 'large'
     };
 
     // 해당 카테고리의 프로그램 개수에 따라 버블 크기 조정

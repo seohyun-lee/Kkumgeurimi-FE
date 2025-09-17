@@ -1,5 +1,6 @@
 import React from 'react';
 import './ProgramDetailModal.css';
+import { getCategoryName } from '../utils/category.js';
 import likeIcon from '../assets/icons/my/like.svg';
 import heartEmptyIcon from '../assets/icons/heart_empty.svg';
 
@@ -13,18 +14,6 @@ const ProgramDetailModal = ({
 }) => {
   if (!isOpen || !program) return null;
 
-  // 카테고리 ID를 카테고리 이름으로 변환
-  const getCategoryName = (categoryId) => {
-    const categoryMapping = {
-      1: '과학기술',
-      2: 'IT개발',
-      11: '예술디자인',
-      12: '체육',
-      18: '서비스업',
-      29: '환경에너지'
-    };
-    return categoryMapping[categoryId] || '기타';
-  };
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
