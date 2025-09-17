@@ -171,18 +171,22 @@ export const programsService = {
   async searchPrograms({
     interestCategory = 'all',
     programType = 'all',
-    cost = 'all',
+    costType = 'all',
     startDate = '2025-08-29',
     endDate = '2025-12-31',
     sortBy = 'latest',
     page = 1,
-    size = 10
+    size = 10,
+    targetAudience,
+    keyword
   } = {}) {
     const params = new URLSearchParams();
     
     if (interestCategory !== 'all') params.append('interestCategory', interestCategory);
     if (programType !== 'all') params.append('programType', programType);
-    if (cost !== 'all') params.append('cost', cost);
+    if (costType !== 'all') params.append('costType', costType);
+    if (targetAudience) params.append('targetAudience', targetAudience);
+    if (keyword) params.append('keyword', keyword);
     
     params.append('startDate', startDate);
     params.append('endDate', endDate);
@@ -196,16 +200,80 @@ export const programsService = {
     } catch (error) {
       console.warn('프로그램 검색 API 호출 실패, 더미 데이터 사용:', error.message);
       
-      // 더미 데이터로 필터링 시뮬레이션 (실제 API 응답 구조와 맞춤)
+      // 기획자 맞춤 더미 데이터 (새로운 API 응답 구조에 맞춤)
       const ALL_PROGRAMS = [
-        { programId: "1", programTitle: 'AI 기초 프로그래밍 체험', provider: '테크 이노베이션 센터', programType: '현장직업체험형', venueRegion: '서울', relatedMajor: 'IT 개발자', targetAudience: '고등학생', startDate: '2025-09-15', endDate: '2025-12-15', price: "0", imageUrl: 'https://via.placeholder.com/300x200', interest_category: '2' },
-        { programId: "2", programTitle: '창의 디자인 워크샵', provider: '크리에이티브 스튜디오', programType: '워크샵', venueRegion: '경기', relatedMajor: '디자이너', targetAudience: '중 고', startDate: '2025-10-01', endDate: '2025-11-30', price: "50000", imageUrl: 'https://via.placeholder.com/300x200', interest_category: '11' },
-        { programId: "3", programTitle: '로봇공학 체험교실', provider: '미래과학관', programType: '실험체험', venueRegion: '서울', relatedMajor: '과학 연구원', targetAudience: '중', startDate: '2025-09-20', endDate: '2025-12-20', price: "0", imageUrl: 'https://via.placeholder.com/300x200', interest_category: '1' },
-        { programId: "4", programTitle: '디지털 아트 창작', provider: '아트테크 스쿨', programType: '창작활동', venueRegion: '부산', relatedMajor: '디지털 아티스트', targetAudience: '고', startDate: '2025-09-10', endDate: '2025-11-10', price: "80000", imageUrl: 'https://via.placeholder.com/300x200', interest_category: '11' },
-        { programId: "5", programTitle: '바이오테크 실험실 체험', provider: '생명과학연구소', programType: '실험체험', venueRegion: '대구', relatedMajor: '생명과학 연구원', targetAudience: '고', startDate: '2025-10-15', endDate: '2025-12-15', price: "0", imageUrl: 'https://via.placeholder.com/300x200', interest_category: '1' },
-        { programId: "6", programTitle: '스포츠 심리학 워크샵', provider: '스포츠 심리연구원', programType: '워크샵', venueRegion: '서울', relatedMajor: '스포츠 심리학자', targetAudience: '고', startDate: '2025-09-25', endDate: '2025-11-25', price: "60000", imageUrl: 'https://via.placeholder.com/300x200', interest_category: '12' },
-        { programId: "7", programTitle: '웹 개발 부트캠프', provider: '코딩 아카데미', programType: '현장직업체험형', venueRegion: '서울', relatedMajor: '웹 개발자', targetAudience: '고', startDate: '2025-08-20', endDate: '2025-10-20', price: "0", imageUrl: 'https://via.placeholder.com/300x200', interest_category: '2' },
-        { programId: "8", programTitle: '패션 디자인 아틀리에', provider: '패션 크리에이터 센터', programType: '창작활동', venueRegion: '경기', relatedMajor: '패션 디자이너', targetAudience: '고', startDate: '2025-09-05', endDate: '2025-11-05', price: "120000", imageUrl: 'https://via.placeholder.com/300x200', interest_category: '11' },
+        { 
+          programId: "explore-1", 
+          programTitle: '서비스 기획자 직무 체험', 
+          provider: '네이버 커넥트재단', 
+          programTypeLabel: '체험처', 
+          startDate: '2025-09-15', 
+          endDate: '2025-12-15', 
+          costType: 'FREE', 
+          imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center', 
+          venueRegion: '서울', 
+          interestCategoryLabel: '서비스업'
+        },
+        { 
+          programId: "explore-2", 
+          programTitle: '마케팅 전략 수립 워크샵', 
+          provider: '카카오 임팩트', 
+          programTypeLabel: '체험처', 
+          startDate: '2025-10-01', 
+          endDate: '2025-11-30', 
+          costType: 'PAID', 
+          imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop&crop=center', 
+          venueRegion: '경기', 
+          interestCategoryLabel: '서비스업'
+        },
+        { 
+          programId: "explore-3", 
+          programTitle: 'UX/UI 기획 온라인 부트캠프', 
+          provider: '디자인컴퍼니', 
+          programTypeLabel: '온라인', 
+          startDate: '2025-09-20', 
+          endDate: '2025-12-20', 
+          costType: 'PAID', 
+          imageUrl: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=400&h=300&fit=crop&crop=center', 
+          venueRegion: '온라인', 
+          interestCategoryLabel: '예술디자'
+        },
+        { 
+          programId: "explore-4", 
+          programTitle: '스타트업 창업 기획 체험', 
+          provider: 'D.CAMP', 
+          programTypeLabel: '체험처', 
+          startDate: '2025-09-10', 
+          endDate: '2025-11-10', 
+          costType: 'FREE', 
+          imageUrl: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=300&fit=crop&crop=center', 
+          venueRegion: '서울', 
+          interestCategoryLabel: '서비스업'
+        },
+        { 
+          programId: "explore-5", 
+          programTitle: '콘텐츠 기획자 양성 과정', 
+          provider: 'CJ ENM', 
+          programTypeLabel: '체험처', 
+          startDate: '2025-10-15', 
+          endDate: '2025-12-15', 
+          costType: 'PAID', 
+          imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center', 
+          venueRegion: '서울', 
+          interestCategoryLabel: '서비스업'
+        },
+        { 
+          programId: "explore-6", 
+          programTitle: '프로덕트 매니저 실무 체험', 
+          provider: '라인플러스', 
+          programTypeLabel: '체험처', 
+          startDate: '2025-09-25', 
+          endDate: '2025-11-25', 
+          costType: 'FREE', 
+          imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop&crop=center', 
+          venueRegion: '서울', 
+          interestCategoryLabel: '서비스업'
+        }
       ];
 
       // 간단한 필터링 시뮬레이션
@@ -213,19 +281,19 @@ export const programsService = {
       
       // 관심 카테고리 필터링
       if (interestCategory !== 'all') {
-        filteredPrograms = filteredPrograms.filter(p => p.interest_category === interestCategory);
+        filteredPrograms = filteredPrograms.filter(p => p.interestCategoryLabel.includes(interestCategory));
       }
       
       // 프로그램 타입 필터링
       if (programType !== 'all') {
-        filteredPrograms = filteredPrograms.filter(p => p.program_type === programType);
+        filteredPrograms = filteredPrograms.filter(p => p.programTypeLabel === programType);
       }
       
       // 비용 필터링
-      if (cost === 'free') {
-        filteredPrograms = filteredPrograms.filter(p => p.price === '무료');
-      } else if (cost === 'paid') {
-        filteredPrograms = filteredPrograms.filter(p => p.price !== '무료');
+      if (costType === 'free') {
+        filteredPrograms = filteredPrograms.filter(p => p.costType === 'FREE');
+      } else if (costType === 'paid') {
+        filteredPrograms = filteredPrograms.filter(p => p.costType === 'PAID');
       }
 
       // 페이지네이션 시뮬레이션

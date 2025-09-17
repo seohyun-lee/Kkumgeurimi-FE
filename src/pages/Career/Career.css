@@ -5,7 +5,7 @@
   min-height: 100vh;
   overflow-x: hidden;
   transition: all 0.3s ease;
-  padding-top: 0;
+  padding-top: 20px;
   padding-bottom: 100px;
   background: linear-gradient(180deg, #FFE3B4 0%, #FFF8E7 30%, #FFFFFF 45%);
 }
@@ -19,14 +19,14 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 16px;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 0px;
+  margin-bottom: 20px;
   transition: all 0.3s ease;
-  padding: 80px 0 0px 0;
+  padding: 40px 0 0px 0;
 }
 
 .header h1 {
@@ -38,7 +38,7 @@
 }
 
 .career .intro-text {
-  font-size: 16px;
+  font-size: 15px;
   color: #64748b;
   margin-bottom: 4px;
   font-weight: bold;
@@ -46,9 +46,9 @@
 }
 
 .career .interest-title {
-  font-size: 26px;
+  font-size: 22px;
   color: #1e293b;
-  margin: 0;
+  margin: 0 0 20px 0;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -73,8 +73,9 @@
 .interest-map {
   position: relative;
   width: 100%;
-  height: 600px;
-  margin-bottom: 20px;
+  height: 380px;
+  margin-top: 60px; /* intro와의 간격 */
+  margin-bottom: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -226,24 +227,24 @@
 }
 
 .bubble-large {
-  width: 90px;
-  height: 90px;
-  font-size: 1.0rem;
+  width: 75px;
+  height: 75px;
+  font-size: 0.85rem;
   font-weight: 700;
   border-radius: 50%;
 }
 
 .bubble-medium {
-  width: 96px;
-  height: 96px;
-  font-size: 0.9rem;
+  width: 70px;
+  height: 70px;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
 .bubble-small {
-  width: 70px;
-  height: 70px;
-  font-size: 0.7rem;
+  width: 60px;
+  height: 60px;
+  font-size: 0.65rem;
   font-weight: 500;
   line-height: 1.2;
   border-radius: 50%;
@@ -265,8 +266,8 @@
 .job-info {
   background: #ffffff;
   border-radius: 16px;
-  padding: 32px;
-  margin-bottom: 24px;
+  padding: 20px;
+  margin: 16px 0;
   border: 1px solid #e2e8f0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -303,7 +304,7 @@
   border-radius: 16px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-bottom: 32px;
+  margin: 16px 0;
 }
 
 .mentor-header {
@@ -332,8 +333,9 @@
   border: 1px solid #e2e8f0;
   transition: all 0.2s ease;
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  text-align: center;
+  gap: 12px;
 }
 
 .mentor-card:hover {
@@ -358,7 +360,7 @@
 
 .mentor-info {
   flex: 1;
-  text-align: left;
+  text-align: center;
 }
 
 .mentor-info h4 {
@@ -395,7 +397,7 @@
 
 .career__programs-section {
   background: white;
-  margin-top: -180px;
+  margin-top: -50px;
   margin-bottom: 40px;
 }
 
@@ -430,85 +432,13 @@
 .career__programs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  padding: 0 20px;
+  gap: 8px;
+  padding: 0 12px;
   justify-items: center;
 }
 
 .career__programs-grid .program-card-basic {
   width: 100%;
-  max-width: 180px;
-}
-
-
-/* 모바일 앱 전용 스타일 */
-.career {
-  padding-top: 16px;
-}
-
-.intro-text {
-  font-size: 15px;
-}
-
-.interest-title {
-  font-size: 22px;
-}
-
-.interest-map {
-  height: 350px;
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-
-.bubble-large {
-  width: 75px;
-  height: 75px;
-  font-size: 0.85rem;
-}
-
-.bubble-small {
-  width: 60px;
-  height: 60px;
-  font-size: 0.65rem;
-}
-
-.job-info, .mentor-section {
-  margin: 16px 0;
-  padding: 20px;
-}
-
-.container {
-  padding: 0 16px;
-}
-
-.back-btn {
-  top: 70px;
-  left: 16px;
-  width: 40px;
-  height: 40px;
-  font-size: 1.125rem;
-}
-
-.career__programs-section {
-  margin-top: -50px;
-}
-
-.career__programs-grid {
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 0 12px;
-}
-
-.career__programs-grid .program-card-basic {
   max-width: 160px;
 }
 
-.mentor-card {
-  flex-direction: column;
-  text-align: center;
-  gap: 12px;
-}
-
-.mentor-info {
-  text-align: center;
-}

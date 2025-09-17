@@ -5,6 +5,8 @@ import { INTEREST_LABELS } from '../../config/constants';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCardBasic from "../../components/ProgramCardBasic.jsx";
+import ProgramDetailModal from "../../components/ProgramDetailModal.jsx";
+import { getCategoryName } from '../../utils/category.js';
 import './Explore.css';
 
 const EXPERIENCE_TYPE_CHIPS = [
@@ -115,8 +117,9 @@ export default function Explore() {
 
   const [sortBy, setSortBy] = useState('latest');
   const [page, setPage] = useState(1);
-  const [liked, setLiked] = useState(() => new Set());
-  const [modal, setModal] = useState({ open: false, program: null });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState(null);
+  const [likedPrograms, setLikedPrograms] = useState(new Set());
 
   // 찜한 프로그램 목록 조회 (로그인한 경우만)
   const { data: likedProgramsData } = useQuery({
@@ -129,8 +132,8 @@ export default function Explore() {
   // 찜 목록 데이터를 Set으로 변환
   useEffect(() => {
     if (likedProgramsData && Array.isArray(likedProgramsData)) {
-      const likedIds = new Set(likedProgramsData.map(program => program.program_id || program.id));
-      setLiked(likedIds);
+      const likedIds = new Set(likedProgramsData.map(program => program.programId || program.program_id || program.id));
+      setLikedPrograms(likedIds);
     }
   }, [likedProgramsData]);
   const [programs, setPrograms] = useState([]);
@@ -157,7 +160,7 @@ export default function Explore() {
       const response = await programsService.searchPrograms({
         interestCategory: filters.job,
         programType: filters.type,
-        cost: filters.cost,
+        costType: filters.cost,
         startDate: filters.startDate,
         endDate: filters.endDate,
         sortBy,
@@ -197,40 +200,72 @@ export default function Explore() {
     next.delete('cat');
     setSearchParams(next, { replace: true });
   };
-  const toggleLike = async (id) => {
+  // 모달 관련 함수들
+  const handleProgramClick = (program) => {
+    // 프로그램 데이터를 ProgramDetailModal 형식에 맞게 변환
+    const transformedProgram = {
+      programId: program.programId,
+      programTitle: program.programTitle,
+      provider: program.provider,
+      objective: '프로그램 목표 설명',
+      targetAudience: '중고등학생',
+      programType: 1,
+      startDate: program.startDate,
+      endDate: program.endDate,
+      relatedMajor: program.interestCategoryLabel,
+      costType: program.costType,
+      price: program.costType === 'PAID' ? '가격 문의' : null,
+      imageUrl: program.imageUrl,
+      eligibleRegion: '전국',
+      venueRegion: program.venueRegion,
+      operateCycle: '주 1회',
+      interestCategory: 18, // 기본값
+      programDetail: {
+        programDetailId: `detail-${program.programId}`,
+        description: '프로그램 상세 설명입니다.',
+        requiredHours: '총 6시간',
+        availHours: '주말 오후',
+        capacity: 20,
+        targetSchoolType: '중학교, 고등학교',
+        levelInfo: '중학생, 고등학생'
+      },
+      tags: [program.programTypeLabel, program.costType === 'FREE' ? '무료' : '유료']
+    };
+    setSelectedProgram(transformedProgram);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProgram(null);
+  };
+
+  const handleLikeProgram = async (program) => {
     try {
-      const isCurrentlyLiked = liked.has(id);
-      
-      if (isCurrentlyLiked) {
-        await programsService.unlikeProgram(id);
+      if (likedPrograms.has(program.programId)) {
+        await programsService.unlikeProgram(program.programId);
+        setLikedPrograms(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(program.programId);
+          return newSet;
+        });
       } else {
-        await programsService.likeProgram(id);
+        await programsService.likeProgram(program.programId);
+        setLikedPrograms(prev => {
+          const newSet = new Set(prev);
+          newSet.add(program.programId);
+          return newSet;
+        });
       }
-      
-      // API 성공 시 UI 업데이트
-      setLiked((prev) => {
-        const next = new Set(prev);
-        if (isCurrentlyLiked) {
-          next.delete(id);
-        } else {
-          next.add(id);
-        }
-        return next;
-      });
     } catch (error) {
       console.error('프로그램 찜하기 실패:', error);
-      // TODO: 사용자에게 에러 메시지 표시
     }
   };
-      
-  useEffect(() => {
-    if (modal.open) {
-      document.body.classList.add("no-scroll");
-    } else {
-      document.body.classList.remove("no-scroll");
-    }
-    return () => document.body.classList.remove("no-scroll");
-  }, [modal.open]);
+
+  const handleApplyProgram = (program) => {
+    alert(`${program.programTitle} 프로그램에 신청합니다!`);
+    handleCloseModal();
+  };
   
   return (
     <div className="explore">
@@ -332,13 +367,14 @@ export default function Explore() {
           ) : (
             programs.map((p) => (
               <ProgramCardBasic
-                key={p.program_id}
-                title={p.programTitle || p.title}
-                organization={p.provider || p.mentor}
+                key={p.programId}
+                title={p.programTitle}
+                organization={p.provider}
                 date={`${p.startDate} ~ ${p.endDate}`}
-                category={p.category || "카테고리"}
-                tags={[p.programType || "체험처", (p.price === "0" || p.price === 0) ? "무료" : "유료"]}
-                onClick={() => setModal({ open: true, program: p })}
+                category={p.interestCategoryLabel}
+                tags={[p.programTypeLabel, p.costType === 'FREE' ? '무료' : '유료']}
+                imageUrl={p.imageUrl || 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center'}
+                onClick={() => handleProgramClick(p)}
               />
             ))
           )}
@@ -577,6 +613,16 @@ export default function Explore() {
           </div>
         </div>
       )}
+
+      {/* 프로그램 상세 모달 */}
+      <ProgramDetailModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        program={selectedProgram}
+        onLike={handleLikeProgram}
+        onApply={handleApplyProgram}
+        isLiked={selectedProgram ? likedPrograms.has(selectedProgram.programId) : false}
+      />
     </div>
   );
 }

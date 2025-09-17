@@ -19,6 +19,8 @@
   font-style: normal;
   font-display: swap;
 }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
 @font-face {
 	font-family: 'Pretendard Variable';
 	font-weight: 45 920;
@@ -26,8 +28,6 @@
 	font-display: swap;
 	src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
 :root {
   --font-brand: "Okticon", "Pretendard", "Noto Sans KR", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
