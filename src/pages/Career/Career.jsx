@@ -5,6 +5,7 @@ import { careerService } from '../../services/career.service.js';
 import { authService } from '../../services/auth.service.js';
 import { getLabelByCode } from '../../config/constants.js';
 import { useAuthStore } from '../../store/auth.store.js';
+import { getCategoryName, getCategoryJobTitle, getCategoryDescription } from '../../utils/category.js';
 import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
 import ProgramDetailModal from '../../components/ProgramDetailModal.jsx';
 import showAllIcon from '../../assets/icons/showall.svg';
@@ -165,8 +166,8 @@ const Career = () => {
         setData({
           interests: mockBubbleData.interests.map(interest => ({
             ...interest,
-            title: generateJobTitle(interest.categoryId),
-            description: generateJobDescription(interest.categoryId)
+            title: getCategoryJobTitle(interest.categoryId),
+            description: getCategoryDescription(interest.categoryId)
           })),
           programs: mockBubbleData.programs,
           mentors
@@ -198,18 +199,6 @@ const Career = () => {
     }
   }, [searchParams, data.interests, currentState]);
 
-  // 카테고리 ID를 기반으로 직업 제목 생성
-  const generateJobTitle = (categoryId) => {
-    const jobTitles = {
-      1: '과학기술 연구원',
-      2: 'IT 개발자', 
-      11: '예술 디자이너',
-      12: '체육 지도사',
-      18: '서비스업 전문가',
-      29: '환경에너지 전문가'
-    };
-    return jobTitles[categoryId] || `분야 ${categoryId} 전문가`;
-  };
 
   // 카테고리 ID를 기반으로 직업 설명 생성
   const generateJobDescription = (categoryId) => {

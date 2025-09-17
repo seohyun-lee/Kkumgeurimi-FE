@@ -5,21 +5,24 @@
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1001;
+  padding: 20px 16px;
+  box-sizing: border-box;
 }
 
 /* 모달 컨테이너 */
 .program-detail-modal {
   background: #ffffff !important;
   border-radius: 8px;
-  max-width: 480px;
+  max-width: 330px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 75vh;
   position: relative;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   display: flex;
@@ -27,7 +30,12 @@
   overflow: hidden;
   gap: 0;
   padding: 0 !important;
-  margin: 0 !important;
+  margin: auto !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
 }
 
 /* 이미지 컨테이너 - 상단 전체 */
@@ -105,8 +113,10 @@
 .modal-content {
   padding: 0 !important;
   flex: 1;
-  overflow-y: auto;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
   min-height: 0;
+  max-height: calc(75vh - 200px);
   background: #fff !important;
   margin: 0 !important;
   border-radius: 0 0 8px 8px;
@@ -158,12 +168,11 @@
 /* 상세 정보 섹션들 */
 .program-detail-modal__details {
   margin-bottom: 24px;
-  padding: 0 20px 0 20px;
+  padding: 0 20px;
 }
 
 .program-detail-modal__section {
   margin-bottom: 16px;
-  padding: 0 20px 0 20px;
 }
 
 .program-detail-modal__section:last-child {
@@ -189,8 +198,11 @@
 .program-detail-modal__actions {
   display: flex;
   gap: 12px;
-  padding: 20px 20px 20px 20px;
+  padding: 20px;
   border-top: 1px solid #e5e7eb;
+  flex-shrink: 0;
+  background: #fff;
+  margin-top: auto;
 }
 
 .program-detail-modal__like-btn {
@@ -238,21 +250,21 @@
 }
 
 /* 스크롤바 스타일링 */
-.program-detail-modal::-webkit-scrollbar {
+.modal-content::-webkit-scrollbar {
   width: 6px;
 }
 
-.program-detail-modal::-webkit-scrollbar-track {
+.modal-content::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 3px;
 }
 
-.program-detail-modal::-webkit-scrollbar-thumb {
+.modal-content::-webkit-scrollbar-thumb {
   background: #c1c1c1;
   border-radius: 3px;
 }
 
-.program-detail-modal::-webkit-scrollbar-thumb:hover {
+.modal-content::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
 
@@ -263,7 +275,7 @@
   }
   
   .program-detail-modal {
-    max-height: 95vh;
+    max-height: 70vh;
   }
   
   .modal-content {

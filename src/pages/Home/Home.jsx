@@ -3,12 +3,16 @@ import { useQuery } from '@tanstack/react-query';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
+import ProgramDetailModal from '../../components/ProgramDetailModal.jsx';
+import { getCategoryName } from '../../utils/category.js';
 import showAllIcon from '../../assets/icons/showall.svg';
 import './Home.css';
 
 const Home = () => {
   const { isAuthenticated } = useAuthStore();
   const [activeGradeTab, setActiveGradeTab] = useState('중1-2');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState(null);
 
 
   // 개인화 추천 프로그램 조회 (로그인한 경우만)
@@ -96,55 +100,119 @@ const Home = () => {
     }
   ];
 
-  // 인기 프로그램 목업 데이터
+  // 인기 프로그램 목업 데이터 (Career 페이지와 동일한 구조)
   const popularPrograms = [
-    { 
-      id: 1,
-      icon: '🌿',
-      title: '천연 방향제 만들기',
-      description: '에센셜 오일과 안전한 재료로 나만의 향을 조합해 방향제를 만들어요',
-      duration: '90분',
-      level: '쉬워요',
-      isHot: true,
-      company: '청소년과학관',
-      participants: 328,
-      rating: 4.9
+    {
+      programId: "home-prog-001",
+      programTitle: "천연 방향제 만들기 체험",
+      provider: "청소년과학관",
+      objective: "에센셜 오일과 안전한 재료로 나만의 향을 조합해 방향제를 만들어요",
+      targetAudience: "중고등학생",
+      programType: 1,
+      startDate: "2025-08-06",
+      endDate: "2025-12-31",
+      relatedMajor: "화학공학",
+      costType: "FREE",
+      price: null,
+      imageUrl: null,
+      eligibleRegion: "전국",
+      venueRegion: "청소년과학관",
+      operateCycle: "주 2회",
+      interestCategory: 1, // 과학기술
+      programDetail: {
+        programDetailId: "home-detail-001",
+        description: "화학의 기초 원리를 이해하고 천연 재료로 방향제를 만드는 체험 활동입니다.",
+        requiredHours: "총 2시간",
+        availHours: "주말 오후 2-4시",
+        capacity: 20,
+        targetSchoolType: "중학교, 고등학교",
+        levelInfo: "중학생, 고등학생"
+      },
+      tags: ["체험처", "무료"]
     },
-    { 
-      id: 2,
-      icon: '🎮',
-      title: '게임개발 첫걸음',
-      description: '블록 코딩으로 캐릭터를 움직이고, 간단한 나만의 게임을 완성해요',
-      duration: '120분',
-      level: '도전해요',
-      isHot: true,
-      company: '인디게임랩',
-      participants: 241,
-      rating: 4.8
+    {
+      programId: "home-prog-002",
+      programTitle: "게임개발 첫걸음",
+      provider: "인디게임랩",
+      objective: "블록 코딩으로 캐릭터를 움직이고, 간단한 나만의 게임을 완성해요",
+      targetAudience: "중고등학생",
+      programType: 2,
+      startDate: "2025-08-10",
+      endDate: "2025-12-31",
+      relatedMajor: "컴퓨터공학",
+      costType: "FREE",
+      price: null,
+      imageUrl: null,
+      eligibleRegion: "전국",
+      venueRegion: "인디게임랩",
+      operateCycle: "주 1회",
+      interestCategory: 2, // IT개발
+      programDetail: {
+        programDetailId: "home-detail-002",
+        description: "게임 개발의 기초부터 실제 게임 제작까지 체험할 수 있는 프로그램입니다.",
+        requiredHours: "총 3시간",
+        availHours: "토요일 오후 1-4시",
+        capacity: 15,
+        targetSchoolType: "중학교, 고등학교",
+        levelInfo: "중학생, 고등학생"
+      },
+      tags: ["체험처", "무료"]
     },
-    { 
-      id: 3,
-      icon: '🎬',
-      title: '영화감독 체험',
-      description: '짧은 이야기로 촬영·연출·편집까지, 한 편의 미니 영화 만들기',
-      duration: '100분',
-      level: '도전해요',
-      isHot: false,
-      company: '영화창작스튜디오',
-      participants: 167,
-      rating: 4.7
+    {
+      programId: "home-prog-003",
+      programTitle: "영화감독 체험",
+      provider: "영화창작스튜디오",
+      objective: "짧은 이야기로 촬영·연출·편집까지, 한 편의 미니 영화 만들기",
+      targetAudience: "중고등학생",
+      programType: 1,
+      startDate: "2025-08-15",
+      endDate: "2025-12-31",
+      relatedMajor: "영상학",
+      costType: "PAID",
+      price: "50,000원",
+      imageUrl: null,
+      eligibleRegion: "서울, 경기",
+      venueRegion: "영화창작스튜디오",
+      operateCycle: "월 2회",
+      interestCategory: 11, // 예술디자인
+      programDetail: {
+        programDetailId: "home-detail-003",
+        description: "영화 제작의 전 과정을 체험하며 창작 능력을 기르는 프로그램입니다.",
+        requiredHours: "총 4시간",
+        availHours: "일요일 오전 10시-오후 2시",
+        capacity: 12,
+        targetSchoolType: "중학교, 고등학교",
+        levelInfo: "중학생, 고등학생"
+      },
+      tags: ["체험처", "유료"]
     },
-    { 
-      id: 4,
-      icon: '🤖',
-      title: '로봇공학자 체험',
-      description: '센서로 반응하는 로봇을 조립하고 간단한 코딩으로 미션 수행',
-      duration: '120분',
-      level: '심화',
-      isHot: true,
-      company: '메이커스페이스',
-      participants: 193,
-      rating: 4.8
+    {
+      programId: "home-prog-004",
+      programTitle: "로봇공학자 체험",
+      provider: "메이커스페이스",
+      objective: "센서로 반응하는 로봇을 조립하고 간단한 코딩으로 미션 수행",
+      targetAudience: "중고등학생",
+      programType: 2,
+      startDate: "2025-08-20",
+      endDate: "2025-12-31",
+      relatedMajor: "기계공학",
+      costType: "FREE",
+      price: null,
+      imageUrl: null,
+      eligibleRegion: "전국",
+      venueRegion: "메이커스페이스",
+      operateCycle: "주 1회",
+      interestCategory: 1, // 과학기술
+      programDetail: {
+        programDetailId: "home-detail-004",
+        description: "로봇 공학의 기초를 배우고 직접 로봇을 제작하는 체험 프로그램입니다.",
+        requiredHours: "총 3시간",
+        availHours: "토요일 오후 2-5시",
+        capacity: 18,
+        targetSchoolType: "중학교, 고등학교",
+        levelInfo: "중학생, 고등학생"
+      },
+      tags: ["체험처", "무료"]
     }
   ];
 
@@ -223,7 +291,41 @@ const Home = () => {
   };
 
   const handleProgramClick = (program) => {
-    alert(`${program.title} 프로그램 상세 페이지로 이동합니다!`);
+    setSelectedProgram(program);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProgram(null);
+  };
+
+  const handleLikeProgram = async (program) => {
+    try {
+      if (likedPrograms.has(program.id)) {
+        await programsService.unlikeProgram(program.id);
+        setLikedPrograms(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(program.id);
+          return newSet;
+        });
+      } else {
+        await programsService.likeProgram(program.id);
+        setLikedPrograms(prev => {
+          const newSet = new Set(prev);
+          newSet.add(program.id);
+          return newSet;
+        });
+      }
+    } catch (error) {
+      console.error('프로그램 찜하기 실패:', error);
+      // TODO: 사용자에게 에러 메시지 표시
+    }
+  };
+
+  const handleApplyProgram = (program) => {
+    alert(`${program.programTitle} 프로그램에 신청합니다!`);
+    handleCloseModal();
   };
 
   // Featured program carousel 네비게이션
@@ -377,12 +479,12 @@ const Home = () => {
         <div className="popular-programs-grid">
           {popularPrograms.slice(0, 4).map((program) => (
             <ProgramCardBasic
-              key={program.id}
-              title={program.title}
-              organization={program.company}
-              date="2025-08-06 ~ 2025-12-31"
-              category="카테고리"
-              tags={[program.level, "무료"]}
+              key={program.programId}
+              title={program.programTitle}
+              organization={program.provider}
+              date={`${program.startDate} ~ ${program.endDate}`}
+              category={getCategoryName(program.interestCategory)}
+              tags={program.tags}
               onClick={() => handleProgramClick(program)}
             />
           ))}
@@ -445,6 +547,16 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* 프로그램 상세 모달 */}
+      <ProgramDetailModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        program={selectedProgram}
+        onLike={handleLikeProgram}
+        onApply={handleApplyProgram}
+        isLiked={selectedProgram ? likedPrograms.has(selectedProgram.id) : false}
+      />
     </div>
   );
 };
