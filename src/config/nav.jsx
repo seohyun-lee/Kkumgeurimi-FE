@@ -46,6 +46,6 @@ export const NAV_ITEMS = [
   { id: 'home',      label: '홈',     icon: HomeIcon,      path: ROUTES.HOME },
   { id: 'search',    label: '탐색',   icon: ExploreIcon,   path: ROUTES.EXPLORE },
   { id: 'career',    label: '진로',   icon: CareerIcon,    path: ROUTES.CAREER },
-  { id: 'community', label: '커뮤니티', icon: CommunityIcon, path: ROUTES.ASSISTANT },
+  { id: 'community', label: '꿈터', icon: CommunityIcon, path: ROUTES.ASSISTANT },
   { id: 'mypage',    label: 'MY',     icon: MyPageIcon,    path: ROUTES.ME },
 ];
