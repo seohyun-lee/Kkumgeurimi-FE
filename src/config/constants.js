@@ -35,6 +35,7 @@ export const ROUTES = {
   EXPLORE: '/explore',
   CAREER: '/career',
   COMMUNITY: '/community',
+  ASSISTANT: '/assistant',
   ME: '/me',
   ME_REGISTRATIONS: '/me/registrations',
   ME_LIKES: '/me/likes'
