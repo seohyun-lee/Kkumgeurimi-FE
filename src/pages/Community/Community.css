@@ -292,7 +292,7 @@ body.community-write-view .app-shell__main {
   outline: none;
   color: #1f2937;
   margin-bottom: 16px;
-  font-family: 'Inter', 'Arial', 'Pretendard', sans-serif;
+  /* font-family는 globals.css에서 전역 관리 */
 }
 
 .community__write-title::placeholder {
@@ -306,7 +306,7 @@ body.community-write-view .app-shell__main {
   outline: none;
   resize: none;
   font-size: 16px;
-  font-family: 'Inter', 'Arial', 'Pretendard', sans-serif;
+  /* font-family는 globals.css에서 전역 관리 */
   line-height: 1.6;
   color: #374151;
 }

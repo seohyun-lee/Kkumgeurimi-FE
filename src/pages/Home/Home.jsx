@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
+import showAllIcon from '../../assets/icons/showall.svg';
 import './Home.css';
 
 const Home = () => {
@@ -367,7 +368,10 @@ const Home = () => {
       <section className="home__section">
         <div className="home__section-header">
           <h2 className="home__section-title">이번 주 인기 프로그램</h2>
-          <span className="home__section-more">전체 보기 ></span>
+          <span className="home__section-more">
+            더보기
+            <img src={showAllIcon} alt="더보기" style={{ marginLeft: '4px', width: '10px', height: '10px' }} />
+          </span>
         </div>
         
         <div className="popular-programs-grid">
@@ -415,7 +419,10 @@ const Home = () => {
       <section className="home__section">
         <div className="home__section-header">
           <h2 className="home__section-title">커뮤니티 인기글</h2>
-          <span className="home__section-more">전체 보기 ></span>
+          <span className="home__section-more">
+            더보기
+            <img src={showAllIcon} alt="더보기" style={{ marginLeft: '4px', width: '10px', height: '10px' }} />
+          </span>
         </div>
         
         <div className="home__success-stories">

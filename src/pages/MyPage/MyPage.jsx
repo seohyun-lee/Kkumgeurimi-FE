@@ -8,6 +8,7 @@ import programIcon from "../../assets/icons/my/program.svg";
 import likeIcon from "../../assets/icons/my/like.svg";
 import mypostIcon from "../../assets/icons/my/mypost.svg";
 import thumbupIcon from "../../assets/icons/my/thumbup.svg";
+import showAllIcon from "../../assets/icons/showall.svg";
 
 export default function MyPage() {
   // 목업 데이터로 하드코딩
@@ -167,7 +168,10 @@ export default function MyPage() {
       <section className="mypage__programs-section">
         <div className="mypage__section-header">
           <h2 className="mypage__section-title">참여 예정 프로그램</h2>
-          <span className="mypage__section-more">전체 보기></span>
+          <span className="mypage__section-more">
+            더보기
+            <img src={showAllIcon} alt="더보기" style={{ marginLeft: '4px', width: '10px', height: '10px' }} />
+          </span>
         </div>
         <div className="mypage__programs-grid">
           {joinedPrograms.length > 0 ? (
