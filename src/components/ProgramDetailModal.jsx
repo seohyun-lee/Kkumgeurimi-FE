@@ -1,171 +1,210 @@
 import React from 'react';
-import { FaRegStar, FaStar, FaFileAlt, FaTimes } from 'react-icons/fa';
-import { getLabelByCode } from '../config/constants';
 import './ProgramDetailModal.css';
+import likeIcon from '../assets/icons/my/like.svg';
+import heartEmptyIcon from '../assets/icons/heart_empty.svg';
 
-export default function ProgramDetailModal({ program, isOpen, onClose, isLiked, onLike, onApply }) {
+const ProgramDetailModal = ({ 
+  isOpen, 
+  onClose, 
+  program,
+  onLike,
+  onApply,
+  isLiked = false
+}) => {
   if (!isOpen || !program) return null;
 
-  // API 응답 필드명 매핑
-  const programId = program.programId || program.program_id;
-  const title = program.programTitle || program.title;
-  const provider = program.provider;
-  const description = program.description || "프로그램에 대한 상세한 설명이 제공되지 않았습니다.";
-  const targetAudience = program.targetAudience || program.target_audience;
-  const programType = program.programType || program.program_type;
-  const startDate = program.startDate || program.start_date;
-  const endDate = program.endDate || program.end_date;
-  const relatedMajor = program.relatedMajor || program.job_field;
-  const price = program.price;
-  const imageUrl = program.imageUrl;
-  const eligibleRegion = program.eligibleRegion || program.venue_region;
-  const venueRegion = program.venueRegion || program.venue;
-  const operateCycle = program.operateCycle || program.operate_cycle;
-  const interestCategoryId = program.interestCategoryId;
-  const interestText = program.interestText || program.field_category;
-  const likeCount = program.likeCount || 0;
-  const registrationCount = program.registrationCount || 0;
-  const requiredHours = program.requiredHours;
-  const availHours = program.availHours || program.avail_hours;
-  const capacity = program.capacity;
-  const targetSchoolType = program.targetSchoolType;
-
-  // 가격 표시 포맷팅
-  const formatPrice = (price) => {
-    if (price === "0" || price === 0) return "무료";
-    return `${Number(price).toLocaleString()}원`;
+  // 카테고리 ID를 카테고리 이름으로 변환
+  const getCategoryName = (categoryId) => {
+    const categoryMapping = {
+      1: '과학기술',
+      2: 'IT개발',
+      11: '예술디자인',
+      12: '체육',
+      18: '서비스업',
+      29: '환경에너지'
+    };
+    return categoryMapping[categoryId] || '기타';
   };
 
-  // 기간 표시 포맷팅
-  const formatPeriod = (start, end) => {
-    if (start && end) {
-      return `${start} ~ ${end}`;
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
     }
-    return start || "미정";
   };
 
-  // 운영시간 표시 포맷팅
-  const formatOperatingHours = (cycle, hours) => {
-    if (cycle && hours) {
-      return `${cycle} ${hours}`;
-    }
-    return hours || cycle || "미정";
+  const handleLikeClick = () => {
+    onLike?.(program);
+  };
+
+  const handleApplyClick = () => {
+    onApply?.(program);
   };
 
   return (
-    <div className="program-detail-modal" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        {/* 헤더 */}
-        <div className="modal-header">
-          <button className="close-button" onClick={onClose}>
-            <FaTimes />
-          </button>
-        </div>
-
-        {/* 메인 콘텐츠 */}
-        <div className="modal-body">
-          {/* 프로그램 제목 및 제공자 */}
-          <div className="program-header">
-            <h2 className="program-title">{title}</h2>
-            <div className="program-provider">{provider}</div>
-          </div>
-
-          {/* 프로그램 설명 */}
-          {description && (
-            <div className="program-description">
-              {description}
+    <div className="program-detail-modal-backdrop" onClick={handleBackdropClick}>
+      <div className="program-detail-modal">
+        {/* 이미지 영역 */}
+        <div className="modal-image-container">
+          {program.imageUrl ? (
+            <img src={program.imageUrl} alt={program.programTitle} />
+          ) : (
+            <div className="modal-image-placeholder">
+              <span>이미지</span>
             </div>
           )}
+          
+          <button className="modal-close-btn" onClick={onClose}>✕</button>
+        </div>
 
-          {/* 프로그램 정보 그리드 */}
-          <div className="program-info-grid">
-            <div className="info-item">
-              <span className="info-label">프로그램 유형</span>
-              <span className="info-value">{programType || "미정"}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">대상</span>
-              <span className="info-value">{targetAudience || "미정"}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">지역</span>
-              <span className="info-value">{eligibleRegion || "전국"}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">참가비</span>
-              <span className="info-value">{formatPrice(price)}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">모집인원</span>
-              <span className="info-value">{capacity ? `${capacity}명` : "미정"}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">운영시간</span>
-              <span className="info-value">{formatOperatingHours(operateCycle, availHours)}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">장소</span>
-              <span className="info-value">{venueRegion || "미정"}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">관련직종</span>
-              <span className="info-value">{relatedMajor || "미정"}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">기간</span>
-              <span className="info-value">{formatPeriod(startDate, endDate)}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">분야</span>
-              <span className="info-value">
-                {interestCategoryId ? getLabelByCode(interestCategoryId) : (interestText || "미정")}
+        {/* 콘텐츠 영역 */}
+        <div className="modal-content">
+          <h2 className="program-detail-modal__title">
+            {program.programTitle}
+          </h2>
+          
+          <p className="program-detail-modal__provider">
+            {program.provider}
+          </p>
+
+          <div className="program-detail-modal__date">
+            {program.startDate && program.endDate 
+              ? `${program.startDate} ~ ${program.endDate}`
+              : program.date
+            }
+          </div>
+
+          {/* 태그들 - 중복 제거 */}
+          <div className="program-detail-modal__tags">
+            {program.tags && program.tags.filter(tag => 
+              tag !== '무료' && 
+              tag !== '유료' && 
+              tag !== '중고등학생' && 
+              tag !== '고등학생' &&
+              tag !== '중학생' &&
+              tag !== '체험처'
+            ).map((tag, index) => (
+              <span key={index} className="program-detail-modal__tag">
+                {tag}
               </span>
-            </div>
-            {requiredHours && (
-              <div className="info-item">
-                <span className="info-label">필요시간</span>
-                <span className="info-value">{requiredHours}</span>
-              </div>
-            )}
-            {targetSchoolType && (
-              <div className="info-item">
-                <span className="info-label">대상학교</span>
-                <span className="info-value">{targetSchoolType}</span>
-              </div>
-            )}
+            ))}
           </div>
 
-          {/* 액션 버튼 */}
-          <div className="action-buttons">
-            <button className="btn-apply" onClick={() => onApply?.(programId)}>
-              <FaFileAlt />
-              <span>신청하기</span>
-            </button>
+          {/* 프로그램 상세 정보 */}
+          <div className="program-detail-modal__details">
+            {/* 분야 카테고리 */}
+            <div className="program-detail-modal__section">
+              <h3>분야</h3>
+              <p>{getCategoryName(program.interestCategory) || '미분류'}</p>
+            </div>
+
+            {/* program_detail 엔티티 필드들 */}
+            {program.programDetail?.description && (
+              <div className="program-detail-modal__section">
+                <h3>목표</h3>
+                <p>{program.programDetail.description}</p>
+              </div>
+            )}
+
+            {program.programDetail?.requiredHours && (
+              <div className="program-detail-modal__section">
+                <h3>체험 이수 시간</h3>
+                <p>{program.programDetail.requiredHours}</p>
+              </div>
+            )}
+
+            {program.programDetail?.availHours && (
+              <div className="program-detail-modal__section">
+                <h3>체험 가능 시간</h3>
+                <p>{program.programDetail.availHours}</p>
+              </div>
+            )}
+
+            {program.programDetail?.capacity && (
+              <div className="program-detail-modal__section">
+                <h3>모집 인원</h3>
+                <p>{program.programDetail.capacity}명</p>
+              </div>
+            )}
+
+            {program.programDetail?.targetSchoolType && (
+              <div className="program-detail-modal__section">
+                <h3>대상 학교 유형</h3>
+                <p>{program.programDetail.targetSchoolType}</p>
+              </div>
+            )}
+
+            {program.programDetail?.levelInfo && (
+              <div className="program-detail-modal__section">
+                <h3>대상 학년</h3>
+                <p>{program.programDetail.levelInfo}</p>
+              </div>
+            )}
+
+            {/* program 엔티티 필드들 */}
+            {program.relatedMajor && (
+              <div className="program-detail-modal__section">
+                <h3>체험 직무/학과</h3>
+                <p>{program.relatedMajor}</p>
+              </div>
+            )}
+
+            {program.eligibleRegion && (
+              <div className="program-detail-modal__section">
+                <h3>신청 가능 지역</h3>
+                <p>{program.eligibleRegion}</p>
+              </div>
+            )}
+
+            {program.venueRegion && (
+              <div className="program-detail-modal__section">
+                <h3>진행 장소</h3>
+                <p>{program.venueRegion}</p>
+              </div>
+            )}
+
+            {program.operateCycle && (
+              <div className="program-detail-modal__section">
+                <h3>운영 주기</h3>
+                <p>{program.operateCycle}</p>
+              </div>
+            )}
+
+            {/* 참가비 - 무료/유료 모두 표시 */}
+            <div className="program-detail-modal__section">
+              <h3>참가비</h3>
+              <p>
+                {program.costType === 'FREE' 
+                  ? '무료' 
+                  : program.price || '유료 (금액 미정)'
+                }
+              </p>
+            </div>
+          </div>
+
+          {/* 액션 버튼들 */}
+          <div className="program-detail-modal__actions">
             <button 
-              className={`btn-like ${isLiked ? 'liked' : ''}`} 
-              onClick={() => onLike?.(programId)}
+              className={`program-detail-modal__like-btn ${isLiked ? 'liked' : ''}`}
+              onClick={handleLikeClick}
             >
-              {isLiked ? <FaStar /> : <FaRegStar />}
-              <span>찜하기</span>
+              <img 
+                src={isLiked ? likeIcon : heartEmptyIcon} 
+                alt="찜하기" 
+                className="heart-icon"
+              />
             </button>
-          </div>
-
-          {/* 커뮤니티 섹션 */}
-          <div className="community-section">
-            <div className="community-header">
-              <span className="community-title">커뮤니티</span>
-              <span className="community-count">{likeCount + registrationCount}</span>
-            </div>
-            <div className="community-preview">
-              <div className="community-item">
-                <span className="user-name">김서연</span>
-                <span className="user-status">관심있음</span>
-                <span className="time-ago">2시간 전</span>
-              </div>
-            </div>
+            
+            <button 
+              className="program-detail-modal__apply-btn"
+              onClick={handleApplyClick}
+            >
+              신청하기
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default ProgramDetailModal;

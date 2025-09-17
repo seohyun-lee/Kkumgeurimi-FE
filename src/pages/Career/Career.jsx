@@ -6,6 +6,7 @@ import { authService } from '../../services/auth.service.js';
 import { getLabelByCode } from '../../config/constants.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
+import ProgramDetailModal from '../../components/ProgramDetailModal.jsx';
 import showAllIcon from '../../assets/icons/showall.svg';
 import backIcon from '../../assets/icons/back.svg';
 import './Career.css';
@@ -33,6 +34,9 @@ const Career = () => {
     mentors: []
   });
   const [showAllPrograms, setShowAllPrograms] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [likedPrograms, setLikedPrograms] = useState(new Set());
   
   const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
@@ -284,34 +288,103 @@ const Career = () => {
   const getRecommendedPrograms = () => {
     return [
       {
-        title: "'공간인간' 유현준 교수와 함께 하는 진로콘서트",
-        organization: "서구진로교육지원센터",
-        date: "2025-08-06 ~ 2025-12-31",
-        category: "카테고리",
+        programId: "prog-001",
+        programTitle: "'공간인간' 유현준 교수와 함께 하는 진로콘서트",
+        provider: "서구진로교육지원센터",
+        objective: "건축의 기초부터 실제 설계까지 체험할 수 있는 진로 탐색 프로그램",
+        targetAudience: "중고등학생",
+        programType: 1,
+        startDate: "2025-08-06",
+        endDate: "2025-12-31",
+        relatedMajor: "건축학",
+        costType: "FREE",
+        price: null,
+        imageUrl: null,
+        eligibleRegion: "서구 거주자",
+        venueRegion: "서구진로교육지원센터",
+        operateCycle: "월 2회",
+        interestCategory: 11, // 예술 디자이너
+        programDetail: {
+          programDetailId: "detail-001",
+          description: "건축가의 시각으로 공간을 이해하고 설계하는 방법을 배웁니다.",
+          requiredHours: "총 40시간",
+          availHours: "주중 오후 2-6시",
+          capacity: 30,
+          targetSchoolType: "중학교, 고등학교",
+          levelInfo: "중학생, 고등학생"
+        },
         tags: ["체험처", "무료"]
       },
       {
-        title: "공간인간 유현준 교수와 함께 하는 진로콘서트",
-        organization: "서구진로교육지원센터",
-        date: "2025-08-06 ~ 2025-12-31",
-        category: "카테고리",
-        tags: ["체험처", "무료"]
-      },
-      {
-        title: "AI 개발자 멘토링 프로그램",
-        organization: "테크 아카데미",
-        date: "2025-09-01 ~ 2025-11-30",
-        category: "IT개발",
+        programId: "prog-002", 
+        programTitle: "AI 개발자 멘토링 프로그램",
+        provider: "테크 아카데미",
+        objective: "현직 AI 개발자와 함께하는 실무 중심 멘토링",
+        targetAudience: "고등학생",
+        programType: 2,
+        startDate: "2025-09-01",
+        endDate: "2025-11-30",
+        relatedMajor: "컴퓨터공학",
+        costType: "PAID",
+        price: "150,000원",
+        imageUrl: null,
+        eligibleRegion: "전국",
+        venueRegion: "온라인 + 강남 테크센터",
+        operateCycle: "주 1회",
+        interestCategory: 2, // IT 개발자
+        programDetail: {
+          programDetailId: "detail-002",
+          description: "Python, 머신러닝 기초부터 실제 프로젝트까지 진행합니다.",
+          requiredHours: "총 60시간",
+          availHours: "토요일 오전 9시-오후 6시",
+          capacity: 20,
+          targetSchoolType: "고등학교",
+          levelInfo: "고등학생"
+        },
         tags: ["멘토링", "유료"]
-      },
-      {
-        title: "마케팅 전략 수립 및 실행",
-        organization: "비즈니스 인사이트",
-        date: "2025-10-15 ~ 2025-12-15",
-        category: "마케팅",
-        tags: ["전략", "실무"]
       }
     ];
+  };
+
+  // 카테고리 ID를 카테고리 이름으로 변환
+  const getCategoryName = (categoryId) => {
+    const categoryMapping = {
+      1: '과학기술',
+      2: 'IT개발',
+      11: '예술디자인',
+      12: '체육',
+      18: '서비스업',
+      29: '환경에너지'
+    };
+    return categoryMapping[categoryId] || '기타';
+  };
+
+  // 모달 관련 함수들
+  const handleProgramClick = (program) => {
+    setSelectedProgram(program);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProgram(null);
+  };
+
+  const handleLikeProgram = (program) => {
+    const newLikedPrograms = new Set(likedPrograms);
+    if (newLikedPrograms.has(program.programId)) {
+      newLikedPrograms.delete(program.programId);
+    } else {
+      newLikedPrograms.add(program.programId);
+    }
+    setLikedPrograms(newLikedPrograms);
+    
+    console.log(`프로그램 ${program.programTitle} 찜하기 토글`);
+  };
+
+  const handleApplyProgram = (program) => {
+    console.log(`프로그램 ${program.programTitle} 신청`);
+    alert(`${program.programTitle} 프로그램 신청이 완료되었습니다!`);
   };
 
   // CSS 기반 연결선 (더 안정적)
@@ -510,17 +583,27 @@ const Career = () => {
             {getRecommendedPrograms().slice(0, showAllPrograms ? 4 : 2).map((program, index) => (
               <ProgramCardBasic
                 key={index}
-                title={program.title}
-                organization={program.organization}
-                date={program.date}
-                category={program.category}
+                title={program.programTitle}
+                organization={program.provider}
+                date={`${program.startDate} ~ ${program.endDate}`}
+                category={getCategoryName(program.interestCategory)}
                 tags={program.tags}
-                onClick={() => {}}
+                onClick={() => handleProgramClick(program)}
               />
             ))}
           </div>
         </section>
       )}
+
+      {/* 프로그램 상세 모달 */}
+      <ProgramDetailModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        program={selectedProgram}
+        onLike={handleLikeProgram}
+        onApply={handleApplyProgram}
+        isLiked={selectedProgram ? likedPrograms.has(selectedProgram.programId) : false}
+      />
     </div>
   );
 };
