@@ -169,38 +169,72 @@ export const programsService = {
 
   // 프로그램 검색 (Explore 페이지용)
   async searchPrograms({
-    interestCategory = 'all',
-    programType = 'all',
-    costType = 'all',
-    startDate = '2025-08-29',
-    endDate = '2025-12-31',
-    sortBy = 'latest',
-    page = 1,
+    interestCategory,
+    programType,
+    costType,
+    startDate,
+    endDate,
+    sortBy,
+    page = 0,
     size = 10,
     targetAudience,
     keyword
   } = {}) {
     const params = new URLSearchParams();
     
-    if (interestCategory !== 'all') params.append('interestCategory', interestCategory);
-    if (programType !== 'all') params.append('programType', programType);
-    if (costType !== 'all') params.append('costType', costType);
-    if (targetAudience) params.append('targetAudience', targetAudience);
-    if (keyword) params.append('keyword', keyword);
-    
-    params.append('startDate', startDate);
-    params.append('endDate', endDate);
-    params.append('sortBy', sortBy);
-    params.append('page', page.toString());
+    // 필수 페이징 파라미터 (백엔드는 1-based 페이징)
+    params.append('page', (page + 1).toString());
     params.append('size', size.toString());
+    
+    // 선택적 필터 파라미터 (값이 있고 'all'이 아닐 때만 추가)
+    if (interestCategory && interestCategory !== 'all') {
+      const categoryNum = parseInt(interestCategory);
+      if (!isNaN(categoryNum)) {
+        params.append('interestCategory', categoryNum.toString());
+      }
+    }
+    if (programType && programType !== 'all') {
+      const typeNum = parseInt(programType);
+      if (!isNaN(typeNum)) {
+        params.append('programType', typeNum.toString());
+      }
+    }
+    if (costType && costType !== 'all') {
+      params.append('costType', costType);
+    }
+    if (startDate) {
+      params.append('startDate', startDate);
+    }
+    if (endDate) {
+      params.append('endDate', endDate);
+    }
+    if (sortBy) {
+      params.append('sortBy', sortBy);
+    }
+    if (targetAudience && targetAudience !== 'all') {
+      params.append('targetAudience', targetAudience);
+    }
+    if (keyword && keyword.trim()) {
+      params.append('keyword', keyword.trim());
+    }
 
     try {
-      const response = await http.get(`/programs/search?${params.toString()}`);
+      const url = `/programs/search?${params.toString()}`;
+      console.log('API 요청 URL:', url);
+      console.log('전송 파라미터:', Object.fromEntries(params));
+      console.log('원본 파라미터들:', { 
+        interestCategory, programType, costType, startDate, endDate, 
+        sortBy, page, size, targetAudience, keyword 
+      });
+      
+      const response = await http.get(url);
       return response.data;
     } catch (error) {
+      console.error('API 요청 실패:', error);
+      console.error('요청 URL:', `/programs/search?${params.toString()}`);
       console.warn('프로그램 검색 API 호출 실패, 더미 데이터 사용:', error.message);
       
-      // 기획자 맞춤 더미 데이터 (새로운 API 응답 구조에 맞춤)
+      // 기획자 맞춤 목업용 더미 데이터
       const ALL_PROGRAMS = [
         { 
           programId: "explore-1", 

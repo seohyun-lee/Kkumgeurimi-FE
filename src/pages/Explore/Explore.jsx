@@ -9,33 +9,87 @@ import ProgramDetailModal from "../../components/ProgramDetailModal.jsx";
 import { getCategoryName } from '../../utils/category.js';
 import './Explore.css';
 
-const EXPERIENCE_TYPE_CHIPS = [
+const PROGRAM_TYPE_CHIPS = [
   { value: "all", label: "전체" },
-  { value: "field_company", label: "현장직업체험형" },
-  { value: "job_practice", label: "직업실무체험형" },
-  { value: "field_academic", label: "현장견학형" },
-  { value: "subject", label: "학과체험형" },
-  { value: "camp", label: "캠프형" },
-  { value: "lecture", label: "강연형" },
-  { value: "dialogue", label: "대화형" },
+  { value: "0", label: "현장직업체험형" },
+  { value: "1", label: "직업실무체험형" },
+  { value: "2", label: "현장견학형" },
+  { value: "3", label: "학과체험형" },
+  { value: "4", label: "캠프형" },
+  { value: "5", label: "강연형" },
+  { value: "6", label: "대화형" },
 ];
 
-const COST_CHIPS = [
+const COST_TYPE_CHIPS = [
   { value: "all", label: "전체" },
-  { value: "free", label: "무료" },
-  { value: "paid", label: "유료" },
+  { value: "FREE", label: "무료" },
+  { value: "PAID", label: "유료" },
 ];
 
-const DEFAULT_FILTERS = {
-  category: 'all',
-  job: 'all',
-  type: 'all',
-  cost: 'all',
-  startDate: '2025-08-29',
-  endDate: '2025-12-31',
+const INTEREST_CATEGORY_CHIPS = [
+  { value: "all", label: "전체" },
+  { value: "0", label: "인문사회" },
+  { value: "1", label: "자연생명" },
+  { value: "2", label: "정보통신" },
+  { value: "3", label: "건설채굴" },
+  { value: "4", label: "제조공학" },
+  { value: "5", label: "사회복지" },
+  { value: "6", label: "교육" },
+  { value: "7", label: "법률" },
+  { value: "8", label: "경찰소방" },
+  { value: "9", label: "군인" },
+  { value: "10", label: "보건의료" },
+  { value: "11", label: "예술디자인" },
+  { value: "12", label: "스포츠" },
+  { value: "13", label: "경호경비" },
+  { value: "14", label: "돌봄서비스" },
+  { value: "15", label: "청소서비스" },
+  { value: "16", label: "미용예식" },
+  { value: "17", label: "여행숙박" },
+  { value: "18", label: "음식서비스" },
+  { value: "19", label: "영업판매" },
+  { value: "20", label: "운전운송" },
+  { value: "21", label: "건설채굴" },
+  { value: "22", label: "식품가공" },
+  { value: "23", label: "인쇄목재" },
+  { value: "24", label: "제조단순" },
+  { value: "25", label: "기계정비" },
+  { value: "26", label: "금속재료" },
+  { value: "27", label: "전기전자" },
+  { value: "28", label: "정보통신" },
+  { value: "29", label: "화학환경" },
+  { value: "30", label: "섬유의복" },
+  { value: "31", label: "농림어업" },
+];
+
+const TARGET_AUDIENCE_CHIPS = [
+  { value: "all", label: "전체" },
+  { value: "중학생", label: "중학생" },
+  { value: "고등학생", label: "고등학생" }
+];
+
+// 현재 날짜를 동적으로 설정
+const getCurrentDate = () => {
+  const today = new Date();
+  return today.toISOString().split('T')[0]; 
 };
 
+const getEndDate = () => {
+  const today = new Date();
+  const endDate = new Date(today);
+  endDate.setMonth(endDate.getMonth() + 4); // 4개월 후
+  return endDate.toISOString().split('T')[0];
+};
 
+const DEFAULT_FILTERS = {
+  interestCategory: 'all',
+  programType: 'all',
+  costType: 'all',
+  startDate: getCurrentDate(),
+  endDate: getEndDate(),
+  targetAudience: 'all',
+  keyword: ''
+};
 
 function SelectFilter({ label, value, onChange, options }) {
   return (
@@ -51,28 +105,34 @@ function SelectFilter({ label, value, onChange, options }) {
 }
 
 function SelectedFilters({ filters, onClearKey, onReset }) {
-  // ✅ value → label 헬퍼
   const labelByValue = (options, v) =>
     options.find(o => o.value === v)?.label ?? v;
 
   const entries = [
-    filters.job !== 'all' && {
-      key: 'job',
-      label: '직무',
-      value: labelByValue(
-        [{ value: 'all', label: '전체' }, ...Object.entries(INTEREST_LABELS).map(([code, label]) => ({ value: code, label }))],
-        filters.job
-      ),
+    filters.interestCategory !== 'all' && {
+      key: 'interestCategory',
+      label: '관심분야',
+      value: labelByValue(INTEREST_CATEGORY_CHIPS, filters.interestCategory),
     },
-    filters.type !== 'all' && {
-      key: 'type',
-      label: '체험유형',
-      value: labelByValue(EXPERIENCE_TYPE_CHIPS, filters.type),
+    filters.programType !== 'all' && {
+      key: 'programType',
+      label: '프로그램유형',
+      value: labelByValue(PROGRAM_TYPE_CHIPS, filters.programType),
     },
-    filters.cost !== 'all' && {
-      key: 'cost',
+    filters.costType !== 'all' && {
+      key: 'costType',
       label: '비용',
-      value: labelByValue(COST_CHIPS, filters.cost), // ✅ paid → 유료
+      value: labelByValue(COST_TYPE_CHIPS, filters.costType),
+    },
+    filters.targetAudience !== 'all' && {
+      key: 'targetAudience',
+      label: '대상',
+      value: labelByValue(TARGET_AUDIENCE_CHIPS, filters.targetAudience),
+    },
+    filters.keyword && {
+      key: 'keyword',
+      label: '키워드',
+      value: filters.keyword,
     },
     ((filters.startDate !== DEFAULT_FILTERS.startDate) ||
      (filters.endDate !== DEFAULT_FILTERS.endDate)) && {
@@ -107,71 +167,74 @@ export default function Explore() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { isAuthenticated } = useAuthStore();
 
-  // URL 쿼리 동기화: ?cat=IT
   const initialCat = searchParams.get('cat') || 'all';
 
   const [filters, setFilters] = useState({
     ...DEFAULT_FILTERS,
-    category: initialCat,
+    interestCategory: initialCat,
   });
 
-  const [sortBy, setSortBy] = useState('latest');
-  const [page, setPage] = useState(1);
+  const [sortBy, setSortBy] = useState('LATEST');
+  const [page, setPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [likedPrograms, setLikedPrograms] = useState(new Set());
 
-  // 찜한 프로그램 목록 조회 (로그인한 경우만)
   const { data: likedProgramsData } = useQuery({
     queryKey: ['liked-programs'],
     queryFn: programsService.getLikedPrograms,
     enabled: isAuthenticated,
-    staleTime: 10 * 60 * 1000, // 10분
+    staleTime: 10 * 60 * 1000,
   });
 
-  // 찜 목록 데이터를 Set으로 변환
   useEffect(() => {
     if (likedProgramsData && Array.isArray(likedProgramsData)) {
       const likedIds = new Set(likedProgramsData.map(program => program.programId || program.program_id || program.id));
       setLikedPrograms(likedIds);
     }
   }, [likedProgramsData]);
+
   const [programs, setPrograms] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(false);
   const itemsPerPage = 10;
 
-
-  // 카테고리 변경 시 URL 업데이트 + 페이지 리셋
   const handleChangeCategory = (cat) => {
-    setFilters((f) => ({ ...f, category: cat }));
-    setPage(1);
+    setFilters((f) => ({ ...f, interestCategory: cat }));
+    setPage(0);
     const next = new URLSearchParams(searchParams);
     if (cat === 'all') next.delete('cat');
     else next.set('cat', cat);
     setSearchParams(next, { replace: true });
   };
 
-  // API 호출 함수
   const fetchPrograms = async () => {
     setLoading(true);
     try {
       const response = await programsService.searchPrograms({
-        interestCategory: filters.job,
-        programType: filters.type,
-        costType: filters.cost,
+        interestCategory: filters.interestCategory,
+        programType: filters.programType,
+        costType: filters.costType,
         startDate: filters.startDate,
         endDate: filters.endDate,
+        targetAudience: filters.targetAudience === 'all' ? undefined : filters.targetAudience,
+        keyword: filters.keyword,
         sortBy,
         page,
         size: itemsPerPage
       });
       
-      // 실제 API 응답 구조에 맞게 수정
       setPrograms(response.content || []);
       setTotalPages(response.totalPages || 1);
       setTotalElements(response.totalElements || 0);
+      
+      // 백엔드는 1-based 페이징을 사용하므로 프론트엔드는 0-based로 변환
+      console.log('백엔드 응답 페이지 정보:', {
+        pageNumber: response.pageNumber,
+        totalPages: response.totalPages,
+        totalElements: response.totalElements
+      });
     } catch (error) {
       console.error('프로그램 검색 실패:', error);
       setPrograms([]);
@@ -182,27 +245,34 @@ export default function Explore() {
     }
   };
   
+  // 검색 버튼을 눌렀을 때만 API 호출
+  const applyFilters = () => {
+    setPage(0);
+    fetchPrograms();
+  };
 
-  // 필터나 정렬이 변경될 때 API 호출
+  // 초기 로드 시 검색
   useEffect(() => {
     fetchPrograms();
-  }, [filters, sortBy, page]);
+  }, []);
 
-  /** 이벤트 */
-  const applyFilters = () => {
-    setPage(1);
-  };
+  // 페이지 변경 시에만 API 호출
+  useEffect(() => {
+    if (page > 0) {
+      fetchPrograms();
+    }
+  }, [page]);
   
   const resetFilters = () => {
-    setFilters({ ...DEFAULT_FILTERS, category: 'all' });
-    setPage(1);
+    setFilters({ ...DEFAULT_FILTERS, interestCategory: 'all', targetAudience: 'all' });
+    setPage(0);
     const next = new URLSearchParams(searchParams);
     next.delete('cat');
     setSearchParams(next, { replace: true });
+    fetchPrograms(); // 리셋 후 바로 검색
   };
-  // 모달 관련 함수들
+
   const handleProgramClick = (program) => {
-    // 프로그램 데이터를 ProgramDetailModal 형식에 맞게 변환
     const transformedProgram = {
       programId: program.programId,
       programTitle: program.programTitle,
@@ -219,7 +289,7 @@ export default function Explore() {
       eligibleRegion: '전국',
       venueRegion: program.venueRegion,
       operateCycle: '주 1회',
-      interestCategory: 18, // 기본값
+      interestCategory: 18,
       programDetail: {
         programDetailId: `detail-${program.programId}`,
         description: '프로그램 상세 설명입니다.',
@@ -269,39 +339,53 @@ export default function Explore() {
   
   return (
     <div className="explore">
-      {/* 네비게이터: 카테고리 퀵 필터 (sticky 적용 가능) */}
-
-      {/* Header */}
       <header className="explore__header">
         <div className="header__top">
           <h1 className="header__title">프로그램 탐색</h1>
           <i className="fas fa-search header__icon" aria-hidden="true" />
         </div>
 
-      {/* 컴팩트 필터 바 */}
       <div className="filters filters--compact">
         <div className="filters__row">
+            <label className="selectfilter">
+              <span className="selectfilter__label">키워드</span>
+              <input
+                type="text"
+                className="selectfilter__input"
+                placeholder="프로그램명 검색"
+                value={filters.keyword}
+                onChange={(e) => setFilters((f) => ({ ...f, keyword: e.target.value }))}
+              />
+            </label>
+            
           <SelectFilter
-            label="직무"
-            value={filters.job}
-            onChange={(v) => setFilters((f) => ({ ...f, job: v }))}
-            options={[
-              { value: 'all', label: '전체' },
-              ...Object.entries(INTEREST_LABELS).map(([code, label]) => ({ value: code, label })),
-            ]}
-          />
+              label="관심분야"
+              value={filters.interestCategory}
+              onChange={(v) => setFilters((f) => ({ ...f, interestCategory: v }))}
+              options={INTEREST_CATEGORY_CHIPS}
+            />
+            
           <SelectFilter
-            label="체험유형"
-            value={filters.type}
-            onChange={(v) => setFilters((f) => ({ ...f, type: v }))}
-            options={EXPERIENCE_TYPE_CHIPS}
-          />
+              label="프로그램유형"
+              value={filters.programType}
+              onChange={(v) => setFilters((f) => ({ ...f, programType: v }))}
+              options={PROGRAM_TYPE_CHIPS}
+            />
+            
           <SelectFilter
             label="비용"
-            value={filters.cost}
-            onChange={(v) => setFilters((f) => ({ ...f, cost: v }))}
-            options={COST_CHIPS}
-          />
+              value={filters.costType}
+              onChange={(v) => setFilters((f) => ({ ...f, costType: v }))}
+              options={COST_TYPE_CHIPS}
+            />
+            
+            <SelectFilter
+              label="대상"
+              value={filters.targetAudience}
+              onChange={(v) => setFilters((f) => ({ ...f, targetAudience: v }))}
+              options={TARGET_AUDIENCE_CHIPS}
+            />
+            
           <label className="selectfilter selectfilter--date">
             <span className="selectfilter__label">체험일</span>
             <div className="date">
@@ -326,32 +410,32 @@ export default function Explore() {
           </div>
         </div>
 
-        {/* ✅ 선택된 필터 배지 */}
         <SelectedFilters
           filters={filters}
-          onClearKey={(key) => {
-            if (key === 'date') {
-              setFilters(f => ({ ...f, startDate: DEFAULT_FILTERS.startDate, endDate: DEFAULT_FILTERS.endDate }));
-            } else {
-              setFilters(f => ({ ...f, [key]: 'all' }));
-            }
-            setPage(1);
-          }}
+            onClearKey={(key) => {
+              if (key === 'date') {
+                setFilters(f => ({ ...f, startDate: DEFAULT_FILTERS.startDate, endDate: DEFAULT_FILTERS.endDate }));
+              } else if (key === 'keyword') {
+                setFilters(f => ({ ...f, [key]: '' }));
+              } else {
+                setFilters(f => ({ ...f, [key]: 'all' }));
+              }
+              setPage(0);
+            }}
           onReset={resetFilters}
         />
       </div>
     </header>
 
-      {/* Content */}
       <section className="explore__content">
         <div className="content__top">
           <div className="results">
             {loading ? '검색 중...' : `전체 ${totalElements}개`}
           </div>
-          <select className="sort" value={sortBy} onChange={(e) => { setSortBy(e.target.value); setPage(1); }}>
-            <option value="latest">최신순</option>
-            <option value="popular">인기순</option>
-            <option value="deadline">마감임박순</option>
+          <select className="sort" value={sortBy} onChange={(e) => { setSortBy(e.target.value); setPage(0); fetchPrograms(); }}>
+            <option value="LATEST">최신순</option>
+            <option value="POPULAR">인기순</option>
+            <option value="DEADLINE">마감임박순</option>
           </select>
         </div>
 
@@ -380,241 +464,30 @@ export default function Explore() {
           )}
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <nav className="pagination" aria-label="페이지네이션">
-            <button className="page nav" disabled={page <= 1} onClick={() => setPage((v) => Math.max(1, v - 1))}>
+            <button className="page nav" disabled={page <= 0} onClick={() => setPage((v) => Math.max(0, v - 1))}>
               <span className="nav__arrow">‹</span>
             </button>
           
-            {Array.from({ length: totalPages }).slice(Math.max(0, page - 3), Math.min(totalPages, page + 2)).map((_, i) => {
-              const first = Math.max(1, page - 2);
-              const number = first + i;
+            {Array.from({ length: totalPages }).slice(Math.max(0, page - 2), Math.min(totalPages, page + 3)).map((_, i) => {
+              const first = Math.max(0, page - 2);
+              const pageNum = first + i;
+              const displayNum = pageNum + 1;
               return (
-                <button key={number} className={`page ${number === page ? 'active' : ''}`} onClick={() => setPage(number)}>
-                  {number}
+                <button key={pageNum} className={`page ${pageNum === page ? 'active' : ''}`} onClick={() => setPage(pageNum)}>
+                  {displayNum}
                 </button>
               );
             })}
           
-            <button className="page nav" disabled={page >= totalPages} onClick={() => setPage((v) => Math.min(totalPages, v + 1))}>
+            <button className="page nav" disabled={page >= totalPages - 1} onClick={() => setPage((v) => Math.min(totalPages - 1, v + 1))}>
               <span className="nav__arrow">›</span>
             </button>
           </nav>
-          
         )}
       </section>
 
-      {/* Program Detail Modal */}
-      {modal.open && modal.program && (
-        <div className="program-detail-modal" onClick={() => setModal({ open: false, program: null })}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            {/* 헤더 */}
-            <div className="modal-header">
-              <button className="close-button" onClick={() => setModal({ open: false, program: null })}>
-                ×
-              </button>
-            </div>
-
-            {/* 메인 콘텐츠 */}
-            <div className="modal-body">
-              {/* 프로그램 제목 및 제공자 */}
-              <div className="program-header">
-                <h2 className="program-title">{modal.program.programTitle || modal.program.title}</h2>
-                <div className="program-provider">{modal.program.provider}</div>
-            </div>
-
-              {/* 프로그램 설명 */}
-              {modal.program.description && (
-                <div className="program-description">
-                  {modal.program.description}
-                </div>
-              )}
-
-              {/* 프로그램 정보 그리드 */}
-              <div className="program-info-grid">
-                <div className="info-item">
-                  <span className="info-label">프로그램 유형</span>
-                  <span className="info-value">{modal.program.programType || modal.program.program_type || "미정"}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">대상</span>
-                  <span className="info-value">{modal.program.targetAudience || modal.program.target_audience || "미정"}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">지역</span>
-                  <span className="info-value">{modal.program.eligibleRegion || modal.program.venue_region || "전국"}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">참가비</span>
-                  <span className="info-value">
-                    {(modal.program.price === "0" || modal.program.price === 0) ? "무료" : `${Number(modal.program.price).toLocaleString()}원`}
-                  </span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">모집인원</span>
-                  <span className="info-value">{modal.program.capacity ? `${modal.program.capacity}명` : "미정"}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">운영시간</span>
-                  <span className="info-value">
-                    {modal.program.operateCycle && modal.program.availHours 
-                      ? `${modal.program.operateCycle} ${modal.program.availHours}`
-                      : (modal.program.availHours || modal.program.operateCycle || "미정")}
-                  </span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">장소</span>
-                  <span className="info-value">{modal.program.venueRegion || modal.program.venue || "미정"}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">관련직종</span>
-                  <span className="info-value">{modal.program.relatedMajor || modal.program.job_field || "미정"}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">기간</span>
-                  <span className="info-value">
-                    {modal.program.startDate && modal.program.endDate 
-                      ? `${modal.program.startDate} ~ ${modal.program.endDate}`
-                      : (modal.program.startDate || "미정")}
-                  </span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">분야</span>
-                  <span className="info-value">
-                    {modal.program.interestCategoryId 
-                      ? INTEREST_LABELS[modal.program.interestCategoryId] || String(modal.program.interestCategoryId)
-                      : (modal.program.interestText || modal.program.field_category || "미정")}
-                  </span>
-                </div>
-                {modal.program.requiredHours && (
-                  <div className="info-item">
-                    <span className="info-label">필요시간</span>
-                    <span className="info-value">{modal.program.requiredHours}</span>
-                  </div>
-                )}
-                {modal.program.targetSchoolType && (
-                  <div className="info-item">
-                    <span className="info-label">대상학교</span>
-                    <span className="info-value">{modal.program.targetSchoolType}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* 액션 버튼 */}
-              <div className="action-buttons">
-                <button className="btn-apply" onClick={() => {
-                  console.log('프로그램 신청:', modal.program.programId || modal.program.program_id);
-                  alert('프로그램 신청 기능은 준비 중입니다.');
-                }}>
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16.6667 5.83333H15.8333V5C15.8333 3.61917 14.7142 2.5 13.3333 2.5H6.66667C5.28583 2.5 4.16667 3.61917 4.16667 5V5.83333H3.33333C2.9525 5.83333 2.66667 6.11917 2.66667 6.5V17.5C2.66667 17.8808 2.9525 18.1667 3.33333 18.1667H16.6667C17.0475 18.1667 17.3333 17.8808 17.3333 17.5V6.5C17.3333 6.11917 17.0475 5.83333 16.6667 5.83333ZM13.3333 5.83333H6.66667V5C6.66667 4.54167 7.04167 4.16667 7.5 4.16667H12.5C12.9583 4.16667 13.3333 4.54167 13.3333 5V5.83333Z" fill="currentColor"/>
-                  </svg>
-                  <span>신청하기</span>
-                </button>
-                <button 
-                  className={`btn-like ${liked.has(modal.program.programId || modal.program.program_id) ? 'liked' : ''}`} 
-                  onClick={() => toggleLike(modal.program.programId || modal.program.program_id)}
-                >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 16.5C10 16.5 2 11 2 6C2 3.79086 3.79086 2 6 2C7.5 2 9 3 10 4C11 3 12.5 2 14 2C16.2091 2 18 3.79086 18 6C18 11 10 16.5 10 16.5Z" stroke="currentColor" strokeWidth="1.5" fill={liked.has(modal.program.programId || modal.program.program_id) ? "currentColor" : "none"}/>
-                  </svg>
-                  <span>찜하기</span>
-                </button>
-                </div>
-
-              {/* 커뮤니티 섹션 */}
-              <div className="community-section">
-                <div className="community-header">
-                  <span className="community-title">💬 댓글 목록 </span>
-                </div>
-                <div className="community-preview">
-                  <div className="chat-message">
-                    <div className="user-avatar">
-                      <img src="/mock_image_url/korean_woman_1.jpeg" alt="김서연" />
-                    </div>
-                    <div className="message-content">
-                      <div className="message-header">
-                        <span className="user-name">김서연</span>
-                        <span className="user-badge 관심있음">관심있음</span>
-                        <span className="time-ago">2시간 전</span>
-                      </div>
-                      <div className="message-text">
-                        혹시 수성구 사시는 분들 중에 이 체험 같이 가실 분 계실까요.. 🤔
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="chat-message">
-                    <div className="user-avatar">
-                      <img src="/mock_image_url/korean_man_1.jpeg" alt="박민수" />
-                    </div>
-                    <div className="message-content">
-                      <div className="message-header">
-                        <span className="user-name">박민수</span>
-                        <span className="user-badge">신청완료</span>
-                        <span className="time-ago">1시간 전</span>
-                      </div>
-                      <div className="message-text">
-                        @김서연 저요!! 오픈채팅 링크: https://open.kakao.com/o/biotechlab2025 여기로 들어와주세요~~~~
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="chat-message">
-                    <div className="user-avatar">
-                      <img src="/mock_image_url/korean_woman_2.jpeg" alt="이지은" />
-                    </div>
-                    <div className="message-content">
-                      <div className="message-header">
-                        <span className="user-name">이지은</span>
-                        <span className="user-badge 관심있음">관심있음</span>
-                        <span className="time-ago">30분 전</span>
-                      </div>
-                      <div className="message-text">
-                        @박민수 저도 관심 있는데 연락드려도 될까요?
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="chat-message">
-                    <div className="user-avatar">
-                      <img src="/mock_image_url/korean_man_2.jpeg" alt="최준호" />
-                    </div>
-                    <div className="message-content">
-                      <div className="message-header">
-                        <span className="user-name">최준호</span>
-                        <span className="time-ago">15분 전</span>
-                      </div>
-                      <div className="message-text">
-                      아 이런거 서울에는 없나..ㅠㅠ
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="chat-message">
-                    <div className="user-avatar">
-                      <img src="/mock_image_url/korean_woman_1.jpeg" alt="정다은" />
-                    </div>
-                    <div className="message-content">
-                      <div className="message-header">
-                        <span className="user-name">정다은</span>
-                        <span className="user-badge 관심있음">관심있음</span>
-                        <span className="time-ago">5분 전</span>
-                      </div>
-                      <div className="message-text">
-                        헉 신청 마감됐네요..ㅠㅠ 
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 프로그램 상세 모달 */}
       <ProgramDetailModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -626,3 +499,4 @@ export default function Explore() {
     </div>
   );
 }
+
