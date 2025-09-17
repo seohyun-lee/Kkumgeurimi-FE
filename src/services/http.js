@@ -3,7 +3,7 @@ import { AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../config/constants';
 
 // Axios 인스턴스 생성
 const http = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://api.kkumgeurimi.r-e.kr',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

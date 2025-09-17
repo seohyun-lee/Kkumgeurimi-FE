@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth.store.js';
-import { ROUTES } from '../../config/constants.js';
+import { ROUTES, INTEREST_CATEGORIES } from '../../config/constants.js';
+import { meService } from '../../services/me.service.js';
 import Button from '../../components/Button.jsx';
 import './Sign-Up.css';
 
@@ -14,6 +15,7 @@ const SignUp = () => {
     passwordConfirm: '',
     birth: '',
     school: '',
+    interestCategory: '',
   });
   const [errors, setErrors] = useState({});
 
@@ -70,6 +72,10 @@ const SignUp = () => {
       newErrors.school = '학교 구분을 선택해주세요.';
     }
 
+    if (!formData.interestCategory) {
+      newErrors.interestCategory = '관심 분야를 선택해주세요.';
+    }
+
     if (!formData.passwordConfirm) {
       newErrors.passwordConfirm = '비밀번호 확인을 입력해주세요.';
     } else if (formData.password !== formData.passwordConfirm) {
@@ -89,18 +95,27 @@ const SignUp = () => {
         console.warn('useAuthStore에 signup/register 함수가 없습니다.');
         return;
       }
-      await performSignUp({
-        name: formData.name.trim(),
-        email: formData.email,
-        birth: formData.birth,
-        school: formData.school,
-        password: formData.password,
-        
-      });
-      // TODO: 토큰 처리
+        // 회원가입 먼저 진행
+        await performSignUp({
+          name: formData.name.trim(),
+          email: formData.email,
+          birth: formData.birth,
+          school: formData.school,
+          password: formData.password,
+        });
 
-      // 성공 시 ONBOARDING_INTERESTS으로 이동
-      navigate(ROUTES.ONBOARDING_INTERESTS, { replace: true });
+        // 회원가입 성공 후 관심 분야 업데이트
+        try {
+          await meService.updateInterests({
+            interestCategory: parseInt(formData.interestCategory)
+          });
+        } catch (interestError) {
+          console.error('관심 분야 업데이트 실패:', interestError);
+          // 관심 분야 업데이트 실패해도 회원가입은 성공으로 처리
+        }
+
+        // 성공 시 홈으로 이동 (온보딩 건너뛰기)
+        navigate(ROUTES.HOME, { replace: true });
     } catch (err) {
       // 전역 store에서 error 세팅한다고 가정
       console.error('Sign up failed:', err);
@@ -162,10 +177,31 @@ const SignUp = () => {
               disabled={isLoading}
             >
               <option value="">학교 구분을 선택하세요</option>
+              <option value="초">초등학생</option>
               <option value="중">중학생</option>
               <option value="고">고등학생</option>
             </select>
             {errors.school && <span className="signup__field-error">{errors.school}</span>}
+          </div>
+
+          <div className="signup__field">
+            <label htmlFor="interestCategory" className="signup__label">관심 분야</label>
+            <select
+              id="interestCategory"
+              name="interestCategory"
+              className={`signup__input ${errors.interestCategory ? 'error' : ''}`}
+              value={formData.interestCategory}
+              onChange={handleChange}
+              disabled={isLoading}
+            >
+              <option value="">관심 분야를 선택하세요</option>
+              {INTEREST_CATEGORIES.map((category) => (
+                <option key={category.code} value={category.code}>
+                  {category.label}
+                </option>
+              ))}
+            </select>
+            {errors.interestCategory && <span className="signup__field-error">{errors.interestCategory}</span>}
           </div>
 
           <div className="signup__field">
