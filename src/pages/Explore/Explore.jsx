@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { INTEREST_LABELS } from '../../config/constants';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
-import ProgramCard from "../../components/ProgramCard.jsx";
+import ProgramCardBasic from "../../components/ProgramCardBasic.jsx";
 import './Explore.css';
 
 const EXPERIENCE_TYPE_CHIPS = [
@@ -331,12 +331,14 @@ export default function Explore() {
             </div>
           ) : (
             programs.map((p) => (
-              <ProgramCard
+              <ProgramCardBasic
                 key={p.program_id}
-                program={p}
-                isLiked={liked.has(p.program_id)}
-                onLike={toggleLike}
-                onClick={(program) => setModal({ open: true, program })}
+                title={p.programTitle || p.title}
+                organization={p.provider || p.mentor}
+                date={`${p.startDate} ~ ${p.endDate}`}
+                category={p.category || "카테고리"}
+                tags={[p.programType || "체험처", (p.price === "0" || p.price === 0) ? "무료" : "유료"]}
+                onClick={() => setModal({ open: true, program: p })}
               />
             ))
           )}

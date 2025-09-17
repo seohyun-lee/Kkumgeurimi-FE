@@ -35,9 +35,10 @@ export const ROUTES = {
   EXPLORE: '/explore',
   CAREER: '/career',
   COMMUNITY: '/community',
-  ME: '/me',
-  ME_REGISTRATIONS: '/me/registrations',
-  ME_LIKES: '/me/likes'
+  ASSISTANT: '/assistant',
+  ME: '/my',
+  ME_REGISTRATIONS: '/my/registrations',
+  ME_LIKES: '/my/likes'
 };
 
 // 1) 코드(숫자) 고정: enum처럼 사용

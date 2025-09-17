@@ -44,7 +44,7 @@ body { margin: 0; }
 
 .app-shell__header-content {
   width: 100%;
-  padding: 8px 28px 8px 28px;
+  padding: 8px 16px 8px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -104,7 +104,6 @@ body { margin: 0; }
 .app-shell__signin-btn,
 .app-shell__logout-btn {
   padding: 8px 16px;
-  border: none;
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
@@ -115,6 +114,7 @@ body { margin: 0; }
 .app-shell__signin-btn {
   background-color: #3b82f6;
   color: white;
+  border: none;
 }
 
 .app-shell__signin-btn:hover {
@@ -122,13 +122,25 @@ body { margin: 0; }
 }
 
 .app-shell__logout-btn {
-  background-color: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .app-shell__logout-btn:hover {
-  background-color: #e5e7eb;
+  background-color: #f3f4f6;
+}
+
+.app-shell__logout-icon {
+  width: 19px;
+  height: 19px;
+  filter: invert(0.4) sepia(0) saturate(0) hue-rotate(0deg) brightness(0.6) contrast(1);
 }
 
 /* 메인 콘텐츠 */

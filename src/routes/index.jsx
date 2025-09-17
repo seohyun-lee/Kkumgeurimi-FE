@@ -9,6 +9,7 @@ import SignUp from '../pages/SignUp/Sign-Up.jsx';
 import Interests from '../pages/Interests/Interests.jsx';
 import Home from '../pages/Home/Home.jsx';
 import Community from '../pages/Community/Community.jsx';
+import Assistant from '../pages/Assistant/Assistant.jsx';
 import Explore from '../pages/Explore/Explore.jsx';
 import Career from '../pages/Career/Career.jsx';
 import MyPage from '../pages/MyPage/MyPage.jsx';
@@ -46,14 +47,15 @@ export const router = createBrowserRouter([
       { path: "career", element: <Career /> },
       { path: "programs/:programId", element: <ProgramDetail /> },
       { path: "community", element: <Community /> },
-      { path: "me", element: <MyPage /> },
+      { path: "assistant", element: <Assistant /> },
+      { path: "my", element: <MyPage /> },
       // 보호 구역
       {
         element: <ProtectedLayout />,
         children: [
-          { path: "me", element: <Me /> },
-          { path: "me/registrations", element: <MeRegistrations /> },
-          { path: "me/likes", element: <MeLikes /> },
+          { path: "my/profile", element: <Me /> },
+          { path: "my/registrations", element: <MeRegistrations /> },
+          { path: "my/likes", element: <MeLikes /> },
         ],
       },
       { path: "signin", element: <Navigate to="/auth/signin" replace /> },
