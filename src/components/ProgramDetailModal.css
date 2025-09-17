@@ -1,4 +1,5 @@
-.program-detail-modal {
+/* 모달 백드롭 */
+.program-detail-modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,257 +13,278 @@
   padding: 20px;
 }
 
-.modal-content {
-  background: white;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 480px;
-  max-height: 90vh;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: flex-end;
-  padding: 20px 20px 0;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: #666;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
-  transition: background-color 0.2s;
-}
-
-.close-button:hover {
-  background-color: #f5f5f5;
-}
-
-.modal-body {
-  padding: 0 20px 20px;
-  overflow-y: auto;
-  max-height: calc(90vh - 60px);
-}
-
-.program-header {
-  margin-bottom: 20px;
-}
-
-.program-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #ff6b35;
-  margin: 0 0 8px 0;
-  line-height: 1.3;
-}
-
-.program-provider {
-  font-size: 16px;
-  color: #666;
-  margin: 0;
-}
-
-.program-description {
-  background-color: #f8f9fa;
-  padding: 16px;
+/* 모달 컨테이너 */
+.program-detail-modal {
+  background: #ffffff !important;
   border-radius: 8px;
-  margin-bottom: 24px;
-  font-size: 14px;
-  line-height: 1.6;
-  color: #333;
-}
-
-.program-info-grid {
-  display: grid;
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.info-item {
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 이미지 컨테이너 - 상단 전체 */
+.modal-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  flex-shrink: 0;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #ffffff;
+  border-radius: 8px 8px 0 0;
+}
+
+.modal-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.modal-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.info-item:last-child {
-  border-bottom: none;
-}
-
-.info-label {
-  font-size: 14px;
-  color: #666;
-  font-weight: 500;
-  min-width: 80px;
-}
-
-.info-value {
-  font-size: 14px;
-  color: #333;
-  font-weight: 600;
-  text-align: right;
-  flex: 1;
-  margin-left: 16px;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 32px;
-}
-
-.btn-apply {
-  flex: 2;
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  justify-content: center;
   color: white;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
   border: none;
-  padding: 16px 24px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.btn-apply:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
-}
-
-.btn-like {
-  flex: 1;
-  background: white;
+  font-size: 18px;
   color: #666;
-  border: 2px solid #e0e0e0;
-  padding: 16px 20px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
   cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  z-index: 10;
+  backdrop-filter: blur(4px);
 }
 
-.btn-like:hover {
-  border-color: #ffd700;
-  color: #ffd700;
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: scale(1.05);
 }
 
-.btn-like.liked {
-  background: #fff8e1;
-  border-color: #ffd700;
-  color: #ffd700;
+.modal-category {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #6b7280;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: bold;
+  backdrop-filter: blur(4px);
 }
 
-.btn-like.liked:hover {
-  background: #fff3cd;
+/* 모달 콘텐츠 */
+.modal-content {
+  padding: 0 !important;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  background: #fff !important;
+  margin: 0 !important;
+  border-radius: 0 0 8px 8px;
 }
 
-.community-section {
-  border-top: 1px solid #f0f0f0;
-  padding-top: 24px;
+.program-detail-modal__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  padding: 20px 20px 0 20px;
 }
 
-.community-header {
+.program-detail-modal__provider {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+  font-weight: 500;
+  padding: 0 20px 0 20px;
+}
+
+.program-detail-modal__date {
+  font-size: 14px;
+  color: #9ca3af;
+  margin: 0 0 16px 0;
+  padding: 0 20px 0 20px;
+}
+
+/* 태그들 */
+.program-detail-modal__tags {
   display: flex;
-  align-items: center;
   gap: 8px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+  padding: 0 20px 0 20px;
 }
 
-.community-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-}
-
-.community-count {
-  background: #ff4757;
-  color: white;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 12px;
-  min-width: 20px;
-  text-align: center;
-}
-
-.community-preview {
-  background: #f8f9fa;
+.program-detail-modal__tag {
+  background: #EFF7FF;
+  color: #278EFF;
+  padding: 6px 12px;
   border-radius: 8px;
-  padding: 16px;
-}
-
-.community-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-}
-
-.user-name {
-  font-weight: 600;
-  color: #333;
-}
-
-.user-status {
-  background: #e3f2fd;
-  color: #1976d2;
-  padding: 4px 8px;
-  border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
-.time-ago {
-  color: #999;
-  font-size: 12px;
-  margin-left: auto;
+/* 상세 정보 섹션들 */
+.program-detail-modal__details {
+  margin-bottom: 24px;
+  padding: 0 20px 0 20px;
 }
 
-/* 모바일 반응형 */
-@media (max-width: 480px) {
+.program-detail-modal__section {
+  margin-bottom: 16px;
+  padding: 0 20px 0 20px;
+}
+
+.program-detail-modal__section:last-child {
+  margin-bottom: 0;
+}
+
+
+.program-detail-modal__section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.program-detail-modal__section p {
+  font-size: 14px;
+  color: #4b5563;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 액션 버튼들 */
+.program-detail-modal__actions {
+  display: flex;
+  gap: 12px;
+  padding: 20px 20px 20px 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.program-detail-modal__like-btn {
+  width: 64px;
+  height: 56px;
+  padding: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+}
+
+.program-detail-modal__apply-btn {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.program-detail-modal__apply-btn {
+  background: #278EFF;
+  border: 1px solid #278EFF;
+  color: white;
+}
+
+.program-detail-modal__apply-btn:hover {
+  background: #1d7bef;
+  border-color: #1d7bef;
+}
+
+.heart-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 스크롤바 스타일링 */
+.program-detail-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.program-detail-modal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.program-detail-modal::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.program-detail-modal::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 반응형 */
+@media (max-width: 640px) {
+  .program-detail-modal-backdrop {
+    padding: 10px;
+  }
+  
+  .program-detail-modal {
+    max-height: 95vh;
+  }
+  
   .modal-content {
-    margin: 0;
-    border-radius: 0;
-    height: 100vh;
-    max-height: 100vh;
+    padding: 0;
   }
   
-  .modal-body {
-    max-height: calc(100vh - 60px);
+  .modal-image-container {
+    height: 180px;
   }
   
-  .action-buttons {
-    flex-direction: column;
+  .program-detail-modal__actions {
+    flex-direction: row;
+    gap: 12px;
   }
   
-  .btn-apply,
-  .btn-like {
-    flex: none;
+  .program-detail-modal__like-btn {
+    width: 64px;
+    height: 56px;
   }
   
-  .info-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-  
-  .info-value {
-    text-align: left;
-    margin-left: 0;
+  .program-detail-modal__apply-btn {
+    flex: 1;
   }
 }
