@@ -44,7 +44,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "explore", element: <Explore /> },
-      { path: "career", element: <Career /> },
+      { path: "careermap", element: <Career /> },
       { path: "programs/:programId", element: <ProgramDetail /> },
       { path: "community", element: <Community /> },
       { path: "assistant", element: <Assistant /> },
