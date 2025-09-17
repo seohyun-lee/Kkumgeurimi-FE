@@ -127,7 +127,7 @@ const SignUp = () => {
       <div className="signup__card">
         <div className="signup__header">
           <h1 className="signup__title">회원가입</h1>
-          <p className="signup__subtitle">꿈그라미에 오신 걸 환영합니다</p>
+          <p className="signup__subtitle">꿈그리미에 오신 걸 환영합니다</p>
         </div>
 
         {error && <div className="signup__error">{error}</div>}
