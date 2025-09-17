@@ -48,7 +48,7 @@ const Career = () => {
               name: '기획',
               categoryId: 1,
               size: 'large',
-              color: '#F4A261',
+              color: '#FFB562',
               x: -60,
               y: -140,
               type: 'interest'
@@ -58,7 +58,7 @@ const Career = () => {
               name: '개발',
               categoryId: 2,
               size: 'large',
-              color: '#2A9D8F',
+              color: '#F28C8C',
               x: -60,
               y: -20,
               type: 'interest'
@@ -68,7 +68,7 @@ const Career = () => {
               name: '마케팅',
               categoryId: 3,
               size: 'large',
-              color: '#E76F51',
+              color: '#6ECEDA',
               x: 60,
               y: -140,
               type: 'interest'
@@ -78,7 +78,7 @@ const Career = () => {
               name: '디자인',
               categoryId: 4,
               size: 'large',
-              color: '#8B9DC3',
+              color: '#A8D1FF',
               x: 60,
               y: -20,
               type: 'interest'
@@ -90,7 +90,7 @@ const Career = () => {
               name: 'PM 직무\n멘토링',
               parentIds: ['planning'],
               size: 'small',
-              color: '#F4C2A1',
+              color: '#FFE0B2',
               x: -120,
               y: -200,
               type: 'program'
@@ -100,7 +100,7 @@ const Career = () => {
               name: 'CJ 진로\n직업탐색 콘\n텐츠...',
               parentIds: ['planning'],
               size: 'small',
-              color: '#F4C2A1',
+              color: '#FFE0B2',
               x: 0,
               y: -200,
               type: 'program'
@@ -110,7 +110,7 @@ const Career = () => {
               name: '네이버\n직무 탐방\n데이',
               parentIds: ['development'],
               size: 'small',
-              color: '#7BC4C4',
+              color: '#FFD5D5',
               x: -120,
               y: -80,
               type: 'program'
@@ -120,7 +120,7 @@ const Career = () => {
               name: '소비자 인\n사이트 리서\n치 콘...',
               parentIds: ['marketing', 'planning'],
               size: 'small',
-              color: '#F1A091',
+              color: '#A6E3EA',
               x: 0,
               y: -80,
               type: 'program'
@@ -130,7 +130,7 @@ const Career = () => {
               name: '프그래밍\n쉽게 입문 하\n는요...',
               parentIds: ['development'],
               size: 'small',
-              color: '#7BC4C4',
+              color: '#FFD5D5',
               x: 0,
               y: 40,
               type: 'program'
@@ -140,7 +140,7 @@ const Career = () => {
               name: '그래픽\n디자인 캠프',
               parentIds: ['design'],
               size: 'small',
-              color: '#A8C4E2',
+              color: '#D0E8FF',
               x: 120,
               y: 40,
               type: 'program'
@@ -249,6 +249,17 @@ const Career = () => {
     setSelectedInterest(null);
   };
 
+  // 선택한 큰 노드에 해당하는 작은 노드 색상 반환
+  const getMinorColor = (interestId) => {
+    const colorMapping = {
+      'planning': '#FFE0B2',
+      'development': '#FFD5D5', 
+      'marketing': '#A6E3EA',
+      'design': '#D0E8FF'
+    };
+    return colorMapping[interestId] || '#FFE0B2';
+  };
+
   const getRecommendedPrograms = () => {
     return [
       {
@@ -291,8 +302,10 @@ const Career = () => {
         program.parentIds.forEach(parentId => {
           const parent = data.interests.find(interest => interest.id === parentId);
           if (parent) {
-            const isHidden = currentState === 'detail' && selectedInterest && 
-              (program.id !== selectedInterest.id && !program.parentIds.includes(selectedInterest.id) && parent.id !== selectedInterest.id);
+            const isConnected = currentState === 'detail' && selectedInterest && 
+              (program.parentIds.includes(selectedInterest.id) || parent.id === selectedInterest.id);
+            
+            const isGrayed = currentState === 'detail' && selectedInterest && !isConnected;
             
             const deltaX = program.x - parent.x;
             const deltaY = program.y - parent.y;
@@ -302,14 +315,14 @@ const Career = () => {
             connections.push(
               <div
                 key={`${parent.id}-${program.id}`}
-                className={`connection-line ${isHidden ? 'connection-hidden' : ''}`}
+                className={`connection-line ${isGrayed ? 'connection-grayed' : ''}`}
                 style={{
                   position: 'absolute',
                   left: `calc(50% + ${parent.x}px)`,
                   top: `calc(50% + ${parent.y}px)`,
                   width: `${length}px`,
                   height: '2px',
-                  backgroundColor: '#D3D3D3',
+                  backgroundColor: isGrayed ? '#D3D3D3' : '#D3D3D3',
                   transformOrigin: '0 50%',
                   transform: `rotate(${angle}deg)`,
                   opacity: 0.8,
@@ -331,20 +344,25 @@ const Career = () => {
     const allBubbles = [...data.interests, ...data.programs];
     
     return allBubbles.map(bubble => {
-      const isHidden = currentState === 'detail' && selectedInterest && 
-        (bubble.id !== selectedInterest.id && 
-         (bubble.type === 'program' ? !bubble.parentIds?.includes(selectedInterest.id) : bubble.id !== selectedInterest.id));
-      
-      const isSelected = currentState === 'detail' && selectedInterest && 
+      const isConnected = currentState === 'detail' && selectedInterest && 
         (bubble.id === selectedInterest.id || 
          (bubble.type === 'program' && bubble.parentIds?.includes(selectedInterest.id)));
+      
+      const isGrayed = currentState === 'detail' && selectedInterest && !isConnected;
+      const isSelected = currentState === 'detail' && selectedInterest && bubble.id === selectedInterest.id;
+
+      // 회색 처리될 때 사용할 색상
+      let backgroundColor = bubble.color;
+      if (isGrayed) {
+        backgroundColor = bubble.size === 'large' ? '#DDDDDD' : '#E7E7E7';
+      }
 
       return (
         <div
           key={bubble.id}
-          className={`interest-bubble bubble-${bubble.size} ${isHidden ? 'hidden' : ''} ${isSelected ? 'selected' : ''}`}
+          className={`interest-bubble bubble-${bubble.size} ${isGrayed ? 'grayed' : ''} ${isSelected ? 'selected' : ''}`}
           style={{
-            backgroundColor: bubble.color,
+            backgroundColor: backgroundColor,
             left: `calc(50% + ${bubble.x}px - ${bubble.size === 'large' ? '45px' : bubble.size === 'medium' ? '48px' : '35px'})`,
             top: `calc(50% + ${bubble.y}px - ${bubble.size === 'large' ? '45px' : bubble.size === 'medium' ? '48px' : '35px'})`
           }}
@@ -402,7 +420,10 @@ const Career = () => {
               <h1 className="interest-title">기획, 개발,<br />마케팅, 디자인</h1>
             </>
           ) : (
-            <h1>{selectedInterest?.name} 분야를 더 알아볼까요?</h1>
+            <>
+              <p className="intro-text">선택한 분야를<br />깊이 탐색해보세요</p>
+              <h1 className="interest-title">{selectedInterest?.name}</h1>
+            </>
           )}
         </div>
 
@@ -421,26 +442,43 @@ const Career = () => {
           )}
         </div>
 
-        {currentState === 'detail' && selectedInterest && (
-          <div className="detail-section active">
-            <div className="job-info">
-              <h2>{selectedInterest.title}</h2>
-              <div dangerouslySetInnerHTML={{ __html: selectedInterest.description }} />
-            </div>
 
-            <div className="mentor-section">
-              <div className="mentor-header">
-                <h3>관련 멘토</h3>
-              </div>
-              <div className="mentor-cards">
-                {renderMentors()}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
-      <section className="career__programs-section">
+      {currentState === 'detail' && selectedInterest && (
+        <section className="career__chat-section">
+          <div className="career__section-header">
+            <h2 className="career__section-title">현직자봇과 진로상담하기</h2>
+          </div>
+          <div className="career__chat-card" style={{ backgroundColor: selectedInterest?.color }}>
+            <div className="chat-card__header">
+              <div className="chat-card__avatar">
+                <img src="/mock_image_url/korean_woman_1.jpeg" alt="콘텐츠 기획자" />
+              </div>
+              <div className="chat-card__info">
+                <h3 className="chat-card__title">콘텐츠 기획자</h3>
+                <p className="chat-card__name">한지민</p>
+              </div>
+            </div>
+            <p className="chat-card__description">
+              안녕하세요! 콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하고 효과적으로 구성합니다.
+            </p>
+            <div className="chat-card__footer">
+              <button 
+                className="chat-card__button"
+                style={{ 
+                  backgroundColor: getMinorColor(selectedInterest?.id)
+                }}
+              >
+                대화하기
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {currentState === 'default' && (
+        <section className="career__programs-section">
           <div className="career__section-header">
             <h2 className="career__section-title">나에게 딱 맞는 추천 프로그램</h2>
             <span 
@@ -465,6 +503,7 @@ const Career = () => {
             ))}
           </div>
         </section>
+      )}
     </div>
   );
 };
