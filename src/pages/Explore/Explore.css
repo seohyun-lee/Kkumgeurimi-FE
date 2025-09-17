@@ -138,21 +138,18 @@ body.no-scroll { overflow: hidden; touch-action: none; overscroll-behavior: none
   overflow-wrap: anywhere;
 }
 
-/* 반응형: 작은 화면은 1열 정의 리스트 */
-@media (max-width: 420px) {
-  .info-grid {
-    grid-template-columns: 1fr;
-    row-gap: 4px;
-    padding: 10px;
-  }
-  .info-grid__key { font-size: 12px; }
-  .info-grid__val { font-size: 14px; margin-bottom: 8px; }
+/* 모바일 앱 전용 스타일 */
+.info-grid {
+  grid-template-columns: 1fr;
+  row-gap: 4px;
+  padding: 10px;
 }
-@media (max-width: 480px) {
-  .explore__header { padding: 16px; }
-  .explore__content { padding: 16px; }
-  .grid { gap: 8px; }
-}
+.info-grid__key { font-size: 12px; }
+.info-grid__val { font-size: 14px; margin-bottom: 8px; }
+
+.explore__header { padding: 16px; }
+.explore__content { padding: 16px; }
+.grid { gap: 8px; }
 
 /* ====== 필터 바 기본 (데스크톱) ====== */
 .filters--compact {

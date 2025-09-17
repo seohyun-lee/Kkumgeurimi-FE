@@ -178,41 +178,39 @@
   margin: 0 16px;
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .mypage__header {
-    padding: 16px 12px;
-  }
-  
-  .mypage__title {
-    font-size: 22px;
-  }
-  
-  .mypage__section-title {
-    padding: 0 12px;
-    font-size: 18px;
-  }
-  
-  .mypage__profile-card {
-    padding: 0 12px;
-  }
-  
-  .mypage__activity-grid {
-    padding: 0 12px;
-  }
-  
-  .mypage__programs-grid {
-    padding: 0 12px;
-  }
-  
-  .mypage__program-card {
-    width: 260px;
-  }
-  
-  .mypage__avatar {
-    width: 56px;
-    height: 56px;
-  }
+/* 모바일 앱 전용 스타일 */
+.mypage__header {
+  padding: 16px 12px;
+}
+
+.mypage__title {
+  font-size: 22px;
+}
+
+.mypage__section-title {
+  padding: 0 12px;
+  font-size: 18px;
+}
+
+.mypage__profile-card {
+  padding: 0 12px;
+}
+
+.mypage__activity-grid {
+  padding: 0 12px;
+}
+
+.mypage__programs-grid {
+  padding: 0 12px;
+}
+
+.mypage__program-card {
+  width: 260px;
+}
+
+.mypage__avatar {
+  width: 56px;
+  height: 56px;
 }
 
 /* Animation */

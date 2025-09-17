@@ -441,90 +441,74 @@
 }
 
 
-@media (max-width: 768px) {
-  .career {
-    padding-top: 16px;
-  }
-  
-  .intro-text {
-    font-size: 16px;
-  }
-  
-  .interest-title {
-    font-size: 22px;
-  }
-  
-  .interest-map {
-    height: 400px;
-    margin-bottom: 40px;
-  }
-  
-  .bubble-large {
-    width: 75px;
-    height: 75px;
-    font-size: 0.85rem;
-  }
-  
-  .bubble-small {
-    width: 60px;
-    height: 60px;
-    font-size: 0.65rem;
-  }
-
-  .job-info, .mentor-section {
-    margin: 16px 0;
-    padding: 20px;
-  }
-  
-  .container {
-    padding: 0 16px;
-  }
-  
-  .back-btn {
-    top: 70px;
-    left: 16px;
-    width: 40px;
-    height: 40px;
-    font-size: 1.125rem;
-  }
-  
-  .career__programs-section {
-    margin-top: -50px;
-  }
-  
-  
+/* 모바일 앱 전용 스타일 */
+.career {
+  padding-top: 16px;
 }
 
-@media (max-width: 480px) {
-  .career__programs-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .mentor-card {
-    flex-direction: column;
-    text-align: center;
-    gap: 12px;
-  }
-  
-  .mentor-info {
-    text-align: center;
-  }
-  
-  .interest-map {
-    height: 350px;
-    margin-bottom: 32px;
-  }
-  
-  .intro-text {
-    font-size: 15px;
-  }
-  
-  .interest-title {
-    font-size: 22px;
-  }
-  
-  .career__programs-grid {
-    padding: 0 12px;
-  }
+.intro-text {
+  font-size: 15px;
+}
+
+.interest-title {
+  font-size: 22px;
+}
+
+.interest-map {
+  height: 350px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.bubble-large {
+  width: 75px;
+  height: 75px;
+  font-size: 0.85rem;
+}
+
+.bubble-small {
+  width: 60px;
+  height: 60px;
+  font-size: 0.65rem;
+}
+
+.job-info, .mentor-section {
+  margin: 16px 0;
+  padding: 20px;
+}
+
+.container {
+  padding: 0 16px;
+}
+
+.back-btn {
+  top: 70px;
+  left: 16px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.125rem;
+}
+
+.career__programs-section {
+  margin-top: -50px;
+}
+
+.career__programs-grid {
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 12px;
+}
+
+.career__programs-grid .program-card-basic {
+  max-width: 160px;
+}
+
+.mentor-card {
+  flex-direction: column;
+  text-align: center;
+  gap: 12px;
+}
+
+.mentor-info {
+  text-align: center;
 }
