@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { authService } from '../services/auth.service.js';
-import { meService } from '../services/me.service.js';
+import { meService } from '../services/my.service.js';
 
 export const useAuthStore = create((set, get) => ({
   // 상태

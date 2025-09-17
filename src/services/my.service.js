@@ -44,9 +44,9 @@ export const meService = {
     return response.data;
   },
 
-  // 관심 분야 업데이트
-  async updateInterests(interestData) {
-    const response = await http.patch('/my/interests', interestData);
+  // 관심 분야 등록 (회원가입 시)
+  async createInterests(interestData) {
+    const response = await http.post('/my/interests', interestData);
     return response.data;
   }
 };

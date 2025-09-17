@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth.store.js';
 import { ROUTES, INTEREST_CATEGORIES } from '../../config/constants.js';
-import { meService } from '../../services/me.service.js';
+import { meService } from '../../services/my.service.js';
 import Button from '../../components/Button.jsx';
 import './Sign-Up.css';
 
@@ -104,14 +104,14 @@ const SignUp = () => {
           password: formData.password,
         });
 
-        // 회원가입 성공 후 관심 분야 업데이트
+        // 회원가입 성공 후 관심 분야 등록
         try {
-          await meService.updateInterests({
+          await meService.createInterests({
             interestCategory: parseInt(formData.interestCategory)
           });
         } catch (interestError) {
-          console.error('관심 분야 업데이트 실패:', interestError);
-          // 관심 분야 업데이트 실패해도 회원가입은 성공으로 처리
+          console.error('관심 분야 등록 실패:', interestError);
+          // 관심 분야 등록 실패해도 회원가입은 성공으로 처리
         }
 
         // 성공 시 홈으로 이동 (온보딩 건너뛰기)

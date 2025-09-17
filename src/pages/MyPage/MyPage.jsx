@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProgramCardBasic from "../../components/ProgramCardBasic";
 import { useAuthStore } from "../../store/auth.store.js";
-import { meService } from "../../services/me.service.js";
+import { meService } from "../../services/my.service.js";
 import "./MyPage.css";
 import seongnaemiImage from "../../assets/img/성나미.png";
 import programIcon from "../../assets/icons/my/program.svg";
