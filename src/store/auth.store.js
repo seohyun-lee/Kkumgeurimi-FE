@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { authService } from '../services/auth.service.js';
+import { meService } from '../services/my.service.js';
 
 export const useAuthStore = create((set, get) => ({
   // 상태
@@ -27,12 +28,25 @@ export const useAuthStore = create((set, get) => ({
     try {
       const response = await authService.login(credentials);
       
-      set({ 
-        user: { email: credentials.email }, 
-        isAuthenticated: true, 
-        isLoading: false, 
-        error: null 
-      });
+      // 로그인 성공 후 사용자 정보 가져오기
+      try {
+        const userProfile = await meService.getProfile();
+        set({ 
+          user: userProfile, 
+          isAuthenticated: true, 
+          isLoading: false, 
+          error: null 
+        });
+      } catch (profileError) {
+        console.error('Failed to fetch user profile:', profileError);
+        // 프로필 가져오기 실패해도 로그인은 성공으로 처리
+        set({ 
+          user: { email: credentials.email }, 
+          isAuthenticated: true, 
+          isLoading: false, 
+          error: null 
+        });
+      }
       
       return response;
     } catch (error) {
@@ -111,7 +125,18 @@ export const useAuthStore = create((set, get) => ({
   initialize: async () => {
     const token = authService.getCurrentToken();
     if (token) {
-      set({ isAuthenticated: true });
+      try {
+        // 토큰이 있으면 사용자 정보 가져오기
+        const userProfile = await meService.getProfile();
+        set({ 
+          user: userProfile, 
+          isAuthenticated: true 
+        });
+      } catch (error) {
+        console.error('Failed to fetch user profile on initialize:', error);
+        // 토큰은 있지만 사용자 정보 가져오기 실패 시 로그아웃
+        await get().logout();
+      }
     }
   },
 

@@ -41,6 +41,42 @@ export const ROUTES = {
   ME_LIKES: '/my/likes'
 };
 
+// 관심 분야 카테고리 (서버와 동일한 구조)
+export const INTEREST_CATEGORIES = [
+  { code: 0, label: "인문·사회과학 연구직" },
+  { code: 1, label: "자연·생명과학 연구직" },
+  { code: 2, label: "정보통신 연구개발직 및 공학기술직" },
+  { code: 3, label: "건설·채굴 연구개발직 및 공학기술직" },
+  { code: 4, label: "제조 연구개발직 및 공학기술직" },
+  { code: 5, label: "사회복지·종교직" },
+  { code: 6, label: "교육직" },
+  { code: 7, label: "법률직" },
+  { code: 8, label: "경찰·소방·교도직" },
+  { code: 9, label: "군인" },
+  { code: 10, label: "보건·의료직" },
+  { code: 11, label: "예술·디자인·방송직" },
+  { code: 12, label: "스포츠·레크리에이션직" },
+  { code: 13, label: "경호·경비직" },
+  { code: 14, label: "돌봄 서비스직(간병·육아)" },
+  { code: 15, label: "청소 및 기타 개인서비스직" },
+  { code: 16, label: "미용·예식 서비스직" },
+  { code: 17, label: "여행·숙박·오락 서비스직" },
+  { code: 18, label: "음식 서비스직" },
+  { code: 19, label: "영업·판매직" },
+  { code: 20, label: "운전·운송직" },
+  { code: 21, label: "건설·채굴직" },
+  { code: 22, label: "식품 가공·생산직" },
+  { code: 23, label: "인쇄·목재·공예 및 기타 설치·정비·생산직" },
+  { code: 24, label: "제조 단순직" },
+  { code: 25, label: "기계 설치·정비·생산직" },
+  { code: 26, label: "금속·재료 설치·정비·생산직(판금·단조·주조·용접·도장 등)" },
+  { code: 27, label: "전기·전자 설치·정비·생산직" },
+  { code: 28, label: "정보통신 설치·정비직" },
+  { code: 29, label: "화학·환경 설치·정비·생산직" },
+  { code: 30, label: "섬유·의복 생산직" },
+  { code: 31, label: "농림어업직" }
+];
+
 // 1) 코드(숫자) 고정: enum처럼 사용
 export const INTEREST_CODES = Object.freeze({
   HUM_SOC_RESEARCH: 0,

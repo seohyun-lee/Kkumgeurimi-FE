@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProgramCardBasic from "../../components/ProgramCardBasic";
+import { useAuthStore } from "../../store/auth.store.js";
+import { meService } from "../../services/my.service.js";
 import "./MyPage.css";
 import seongnaemiImage from "../../assets/img/성나미.png";
 import programIcon from "../../assets/icons/my/program.svg";
@@ -9,38 +11,62 @@ import thumbupIcon from "../../assets/icons/my/thumbup.svg";
 
 export default function MyPage() {
   // 목업 데이터로 하드코딩
-  const [user] = useState({
-    name: "성나미",
-    email: "donggeurami@naver.com",
-    imageUrl: seongnaemiImage
-  });
+  const { user: authUser } = useAuthStore();
+  const [joinedPrograms, setJoinedPrograms] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [joinedPrograms] = useState([
-    {
-      programId: 1,
-      title: "프론트엔드 개발자 취업 준비반",
-      mentor: "김멘토",
-      category: "개발",
-      startDate: "2024-01-15",
-      endDate: "2024-03-15",
-      price: 299000,
-      backgroundColor: "#FF6B6B",
-      emoji: "💻",
-      description: "React, Vue.js 등 현대적인 프론트엔드 기술을 배우고 취업에 성공할 수 있도록 도와드립니다."
-    },
-    {
-      programId: 2,
-      title: "UX/UI 디자인 기초 과정",
-      mentor: "이디자이너",
-      category: "디자인",
-      startDate: "2024-02-01",
-      endDate: "2024-04-01",
-      price: 399000,
-      backgroundColor: "#4ECDC4",
-      emoji: "🎨",
-      description: "사용자 경험과 인터페이스 디자인의 기본 원리를 배우고 실무에 적용할 수 있는 능력을 기릅니다."
-    }
-  ]);
+  const user = {
+    name: authUser?.name || "성나미",
+    email: authUser?.email || "donggeurami@naver.com",
+    imageUrl: authUser?.imageUrl || seongnaemiImage,
+    phone: authUser?.phone || "",
+    address: authUser?.address || "",
+    school: authUser?.school || "",
+    career: authUser?.career || ""
+  };
+
+  useEffect(() => {
+    const fetchJoinedPrograms = async () => {
+      try {
+        setIsLoading(true);
+        const programs = await meService.getRegistrations();
+        setJoinedPrograms(programs || []);
+      } catch (error) {
+        console.error('참여 프로그램 조회 실패:', error);
+        // 실패 시 목업 데이터 사용
+        setJoinedPrograms([
+          {
+            programId: 1,
+            title: "프론트엔드 개발자 취업 준비반",
+            mentor: "김멘토",
+            category: "개발",
+            startDate: "2024-01-15",
+            endDate: "2024-03-15",
+            price: 299000,
+            backgroundColor: "#FF6B6B",
+            emoji: "💻",
+            description: "React, Vue.js 등 현대적인 프론트엔드 기술을 배우고 취업에 성공할 수 있도록 도와드립니다."
+          },
+          {
+            programId: 2,
+            title: "UX/UI 디자인 기초 과정",
+            mentor: "이디자이너",
+            category: "디자인",
+            startDate: "2024-02-01",
+            endDate: "2024-04-01",
+            price: 399000,
+            backgroundColor: "#4ECDC4",
+            emoji: "🎨",
+            description: "사용자 경험과 인터페이스 디자인의 기본 원리를 배우고 실무에 적용할 수 있는 능력을 기릅니다."
+          }
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchJoinedPrograms();
+  }, []);
 
   const [likedPrograms] = useState([
     {
