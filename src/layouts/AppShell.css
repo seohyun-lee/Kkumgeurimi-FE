@@ -23,6 +23,12 @@ body { margin: 0; }
   padding-top: env(safe-area-inset-top, 0);
   display: block;
 }
+
+/* 진로맵 페이지에서 투명 헤더 */
+.app-shell__header--transparent {
+  background-color: transparent;
+  backdrop-filter: none;
+}
 .app-shell__bottomnav { 
   display: block;
   position: fixed;
@@ -160,5 +166,10 @@ body { margin: 0; }
   background:transparent;
   border-radius:0;
   box-shadow:none;
+}
+
+/* 진로맵 페이지 메인 */
+.app-shell__main--careermap {
+  padding-top: env(safe-area-inset-top, 0); /* 상단 세이프 에리어만 유지 */
 }
 

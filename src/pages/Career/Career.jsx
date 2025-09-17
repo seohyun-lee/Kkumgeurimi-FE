@@ -4,6 +4,7 @@ import { careerService } from '../../services/career.service.js';
 import { authService } from '../../services/auth.service.js';
 import { getLabelByCode } from '../../config/constants.js';
 import { useAuthStore } from '../../store/auth.store.js';
+import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
 import './Career.css';
 
 // 멘토와 관심사 매핑
@@ -28,28 +29,123 @@ const Career = () => {
     programs: [],
     mentors: []
   });
+  const [showAllPrograms, setShowAllPrograms] = useState(false);
   
   const { isAuthenticated } = useAuthStore();
 
-  // API 데이터로 버블 생성
+  // 목업 데이터로 버블 생성
   useEffect(() => {
     const loadCareerData = async () => {
       try {
         setLoading(true);
         
-        // 토큰을 authService에서 직접 가져오기
-        const token = authService.getCurrentToken();
-        
-        console.log("🔐 Career 컴포넌트에서 토큰 확인:", {
-          token: token ? `토큰 있음: ${token.substring(0, 10)}...` : "토큰 없음",
-          tokenType: typeof token,
-          tokenLength: token ? token.length : 0,
-          isAuthenticated
-        });
-        
-        // API에서 버블 데이터 생성 (토큰 전달)
-        const bubbleData = await careerService.generateBubbleData(token);
-        console.log("🎯 생성된 버블 데이터:", bubbleData);
+        // 수학적 충돌 방지를 고려한 노드 배치
+        const mockBubbleData = {
+          interests: [
+            {
+              id: 'planning',
+              name: '기획',
+              categoryId: 1,
+              size: 'large',
+              color: '#F4A261',
+              x: -60,
+              y: -140,
+              type: 'interest'
+            },
+            {
+              id: 'development',
+              name: '개발',
+              categoryId: 2,
+              size: 'large',
+              color: '#2A9D8F',
+              x: -60,
+              y: -20,
+              type: 'interest'
+            },
+            {
+              id: 'marketing',
+              name: '마케팅',
+              categoryId: 3,
+              size: 'large',
+              color: '#E76F51',
+              x: 60,
+              y: -140,
+              type: 'interest'
+            },
+            {
+              id: 'design',
+              name: '디자인',
+              categoryId: 4,
+              size: 'large',
+              color: '#8B9DC3',
+              x: 60,
+              y: -20,
+              type: 'interest'
+            }
+          ],
+          programs: [
+            {
+              id: 'pm-program',
+              name: 'PM 직무\n멘토링',
+              parentIds: ['planning'],
+              size: 'small',
+              color: '#F4C2A1',
+              x: -120,
+              y: -200,
+              type: 'program'
+            },
+            {
+              id: 'cj-program',
+              name: 'CJ 진로\n직업탐색 콘\n텐츠...',
+              parentIds: ['planning'],
+              size: 'small',
+              color: '#F4C2A1',
+              x: 0,
+              y: -200,
+              type: 'program'
+            },
+            {
+              id: 'biotech-program',
+              name: '네이버\n직무 탐방\n데이',
+              parentIds: ['development'],
+              size: 'small',
+              color: '#7BC4C4',
+              x: -120,
+              y: -80,
+              type: 'program'
+            },
+            {
+              id: 'side-project',
+              name: '소비자 인\n사이트 리서\n치 콘...',
+              parentIds: ['marketing', 'planning'],
+              size: 'small',
+              color: '#F1A091',
+              x: 0,
+              y: -80,
+              type: 'program'
+            },
+            {
+              id: 'program-design',
+              name: '프그래밍\n쉽게 입문 하\n는요...',
+              parentIds: ['development'],
+              size: 'small',
+              color: '#7BC4C4',
+              x: 0,
+              y: 40,
+              type: 'program'
+            },
+            {
+              id: 'graphic-design',
+              name: '그래픽\n디자인 캠프',
+              parentIds: ['design'],
+              size: 'small',
+              color: '#A8C4E2',
+              x: 120,
+              y: 40,
+              type: 'program'
+            }
+          ]
+        };
         
         // 멘토 데이터 추가
         const mentors = getMentorsForCareer().map(mentor => ({
@@ -58,19 +154,17 @@ const Career = () => {
         }));
         
         setData({
-          interests: bubbleData.interests.map(interest => ({
+          interests: mockBubbleData.interests.map(interest => ({
             ...interest,
             title: generateJobTitle(interest.categoryId),
-            description: generateJobDescription(interest.categoryId),
-            background: `bg-category-${interest.categoryId}`
+            description: generateJobDescription(interest.categoryId)
           })),
-          programs: bubbleData.programs,
+          programs: mockBubbleData.programs,
           mentors
         });
         
       } catch (error) {
         console.error("Career 데이터 로딩 실패:", error);
-        // 에러 시 빈 데이터로 설정
         setData({ interests: [], programs: [], mentors: [] });
       } finally {
         setLoading(false);
@@ -154,15 +248,95 @@ const Career = () => {
     setSelectedInterest(null);
   };
 
+  const getRecommendedPrograms = () => {
+    return [
+      {
+        title: "'공간인간' 유현준 교수와 함께 하는 진로콘서트",
+        organization: "서구진로교육지원센터",
+        date: "2025-08-06 ~ 2025-12-31",
+        category: "카테고리",
+        tags: ["체험처", "무료"]
+      },
+      {
+        title: "공간인간 유현준 교수와 함께 하는 진로콘서트",
+        organization: "서구진로교육지원센터",
+        date: "2025-08-06 ~ 2025-12-31",
+        category: "카테고리",
+        tags: ["체험처", "무료"]
+      },
+      {
+        title: "AI 개발자 멘토링 프로그램",
+        organization: "테크 아카데미",
+        date: "2025-09-01 ~ 2025-11-30",
+        category: "IT개발",
+        tags: ["멘토링", "유료"]
+      },
+      {
+        title: "마케팅 전략 수립 및 실행",
+        organization: "비즈니스 인사이트",
+        date: "2025-10-15 ~ 2025-12-15",
+        category: "마케팅",
+        tags: ["전략", "실무"]
+      }
+    ];
+  };
+
+  // CSS 기반 연결선 (더 안정적)
+  const renderConnections = () => {
+    const connections = [];
+    
+    data.programs.forEach(program => {
+      if (program.parentIds && program.parentIds.length > 0) {
+        program.parentIds.forEach(parentId => {
+          const parent = data.interests.find(interest => interest.id === parentId);
+          if (parent) {
+            const isHidden = currentState === 'detail' && selectedInterest && 
+              (program.id !== selectedInterest.id && !program.parentIds.includes(selectedInterest.id) && parent.id !== selectedInterest.id);
+            
+            const deltaX = program.x - parent.x;
+            const deltaY = program.y - parent.y;
+            const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+            
+            connections.push(
+              <div
+                key={`${parent.id}-${program.id}`}
+                className={`connection-line ${isHidden ? 'connection-hidden' : ''}`}
+                style={{
+                  position: 'absolute',
+                  left: `calc(50% + ${parent.x}px)`,
+                  top: `calc(50% + ${parent.y}px)`,
+                  width: `${length}px`,
+                  height: '2px',
+                  backgroundColor: '#D3D3D3',
+                  transformOrigin: '0 50%',
+                  transform: `rotate(${angle}deg)`,
+                  opacity: 0.8,
+                  zIndex: 1,
+                  pointerEvents: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+              />
+            );
+          }
+        });
+      }
+    });
+    
+    return connections;
+  };
+
   const renderBubbles = () => {
     const allBubbles = [...data.interests, ...data.programs];
     
     return allBubbles.map(bubble => {
       const isHidden = currentState === 'detail' && selectedInterest && 
-        (bubble.id !== selectedInterest.id && bubble.parentId !== selectedInterest.id);
+        (bubble.id !== selectedInterest.id && 
+         (bubble.type === 'program' ? !bubble.parentIds?.includes(selectedInterest.id) : bubble.id !== selectedInterest.id));
       
       const isSelected = currentState === 'detail' && selectedInterest && 
-        (bubble.id === selectedInterest.id || bubble.parentId === selectedInterest.id);
+        (bubble.id === selectedInterest.id || 
+         (bubble.type === 'program' && bubble.parentIds?.includes(selectedInterest.id)));
 
       return (
         <div
@@ -170,8 +344,8 @@ const Career = () => {
           className={`interest-bubble bubble-${bubble.size} ${isHidden ? 'hidden' : ''} ${isSelected ? 'selected' : ''}`}
           style={{
             backgroundColor: bubble.color,
-            left: `calc(50% + ${bubble.x}px - ${bubble.size === 'large' ? '75px' : bubble.size === 'medium' ? '50px' : '35px'})`,
-            top: `calc(50% + ${bubble.y}px - ${bubble.size === 'large' ? '75px' : bubble.size === 'medium' ? '50px' : '35px'})`
+            left: `calc(50% + ${bubble.x}px - ${bubble.size === 'large' ? '45px' : bubble.size === 'medium' ? '48px' : '35px'})`,
+            top: `calc(50% + ${bubble.y}px - ${bubble.size === 'large' ? '45px' : bubble.size === 'medium' ? '48px' : '35px'})`
           }}
           onClick={() => bubble.type === 'interest' && selectInterest(bubble.id)}
           title={bubble.fullTitle || bubble.name}
@@ -223,9 +397,8 @@ const Career = () => {
         <div className="header">
           {currentState === 'default' ? (
             <>
-              <h1>나의 진로맵</h1>
-              <p>나만의 관심사는</p>
-              <h2>{data.interests.map(i => i.name).join(', ')}</h2>
+              <p className="intro-text">성나미님의 관심사는</p>
+              <h1 className="interest-title">기획, 개발,<br />마케팅, 디자인</h1>
             </>
           ) : (
             <h1>{selectedInterest?.name} 분야를 더 알아볼까요?</h1>
@@ -238,7 +411,12 @@ const Career = () => {
               아직 체험한 프로그램이 없습니다.
             </div>
           ) : (
-            renderBubbles()
+            <>
+              {/* CSS 연결선 */}
+              {renderConnections()}
+              {/* 버블 노드 */}
+              {renderBubbles()}
+            </>
           )}
         </div>
 
@@ -260,31 +438,30 @@ const Career = () => {
           </div>
         )}
 
-        <div className="programs-section">
-          <h2>
-            {selectedInterest 
-              ? `${selectedInterest.title} 관련 추천 프로그램`
-              : '나에게 딱 맞는 추천 프로그램'
-            }
-          </h2>
-          <div className="program-cards">
-            <div className="program-card">
-              <div className="program-icon" style={{ background: '#74b9ff' }}>🤖</div>
-              <h3>AI 개발자 멘토링</h3>
-              <p>AI 개발자가 어떻게 일하는지 멘토에게 직접 들어보세요</p>
-            </div>
-            <div className="program-card">
-              <div className="program-icon" style={{ background: '#fd79a8' }}>🎨</div>
-              <h3>프론트엔드 개발자 멘토링</h3>
-              <p>프론트엔드 개발자가 어떻게 일하는지 배워요</p>
-            </div>
-            <div className="program-card">
-              <div className="program-icon" style={{ background: '#fdcb6e' }}>📝</div>
-              <h3>PM 직무 멘토링</h3>
-              <p>프로덕트 매니저의 실무를 경험해보세요</p>
-            </div>
+        <section className="career__programs-section">
+          <div className="career__section-header">
+            <h2 className="career__section-title">나에게 딱 맞는 추천 프로그램</h2>
+            <span 
+              className="career__section-more"
+              onClick={() => setShowAllPrograms(!showAllPrograms)}
+            >
+              {showAllPrograms ? '접기' : '전체 보기 >'}
+            </span>
           </div>
-        </div>
+          <div className="career__programs-grid">
+            {getRecommendedPrograms().slice(0, showAllPrograms ? 4 : 2).map((program, index) => (
+              <ProgramCardBasic
+                key={index}
+                title={program.title}
+                organization={program.organization}
+                date={program.date}
+                category={program.category}
+                tags={program.tags}
+                onClick={() => {}}
+              />
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

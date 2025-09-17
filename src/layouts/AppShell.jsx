@@ -29,11 +29,12 @@ const AppShell = () => {
   };
 
   const isHome = pathname === ROUTES.HOME;
+  const isCareerMap = pathname === '/careermap';
 
   return (
   <div className="app-shell">
     {/* 헤더 */}
-    <header className="app-shell__header">
+    <header className={`app-shell__header ${isCareerMap ? 'app-shell__header--transparent' : ''}`}>
       <div className="app-shell__header-content">
         <div className="app-shell__logo">
           {pathname === ROUTES.HOME ? (
@@ -57,7 +58,7 @@ const AppShell = () => {
     </header>
 
     {/* 메인 */}
-    <main className={`app-shell__main app-shell__main--home}`}>
+    <main className={`app-shell__main ${isHome ? 'app-shell__main--home' : ''} ${isCareerMap ? 'app-shell__main--careermap' : ''}`}>
       <Outlet />
     </main>
 
