@@ -6,9 +6,9 @@
 
 /* Section Titles */
 .mypage__section-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
-  color: #212529;
+  color: #1e293b;
   margin: 0;
 }
 
@@ -22,10 +22,12 @@
 
 .mypage__section-more {
   color: #767676;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: bold;
   cursor: pointer;
   transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
 .mypage__section-more:hover {
@@ -188,7 +190,7 @@
   
   .mypage__section-title {
     padding: 0 12px;
-    font-size: 16px;
+    font-size: 18px;
   }
   
   .mypage__profile-card {

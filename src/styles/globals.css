@@ -18,7 +18,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: #f9fafb;
   color: #111827;
 }
@@ -107,6 +107,7 @@ textarea {
   border-radius: 6px;
   padding: 8px 12px;
   font-size: 16px;
+  font-family: var(--font-pretendard);
   transition: border-color 0.2s ease;
 }
 
@@ -117,13 +118,19 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-/* Inter 폰트 변수 적용 */
+/* Pretendard 폰트 변수 적용 */
 :root {
-  --font-inter: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-pretendard: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-brand: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-* {
-  font-family: var(--font-inter);
+*, *::before, *::after {
+  font-family: var(--font-pretendard);
+}
+
+/* 입력 요소들도 Pretendard 적용 */
+input, button, textarea, select {
+  font-family: var(--font-pretendard);
 }
 
 /* 유틸리티 클래스 */

@@ -1,7 +1,7 @@
 * { box-sizing: border-box; }
 
 .career {
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* font-family는 globals.css에서 전역 관리 */
   min-height: 100vh;
   overflow-x: hidden;
   transition: all 0.3s ease;
@@ -36,21 +36,21 @@
 }
 
 .career .intro-text {
-  font-size: 16px !important;
+  font-size: 16px;
   color: #64748b;
   margin-bottom: 4px;
-  font-weight: bold !important;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  font-weight: bold;
+  /* font-family는 globals.css에서 전역 관리 */
 }
 
 .career .interest-title {
-  font-size: 26px !important;
+  font-size: 26px;
   color: #1e293b;
   margin: 0;
-  font-weight: 700 !important;
+  font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  /* font-family는 globals.css에서 전역 관리 */
 }
 
 .header p {
@@ -97,7 +97,7 @@
   position: relative;
   width: 100%;
   height: 600px;
-  margin-bottom: 56px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -110,13 +110,13 @@
 }
 
 .connection-hidden {
-  opacity: 0 !important;
+  opacity: 0;
   transition: all 0.3s ease;
 }
 
 .interest-bubble {
   position: absolute;
-  border-radius: 50% !important;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -152,11 +152,11 @@
 }
 
 .bubble-large {
-  width: 90px !important;
-  height: 90px !important;
+  width: 90px;
+  height: 90px;
   font-size: 1.0rem;
   font-weight: 700;
-  border-radius: 50% !important;
+  border-radius: 50%;
 }
 
 .bubble-medium {
@@ -167,12 +167,12 @@
 }
 
 .bubble-small {
-  width: 70px !important;
-  height: 70px !important;
+  width: 70px;
+  height: 70px;
   font-size: 0.7rem;
   font-weight: 500;
   line-height: 1.2;
-  border-radius: 50% !important;
+  border-radius: 50%;
 }
 
 .detail-section {
@@ -321,31 +321,32 @@
 
 .career__programs-section {
   background: white;
-  padding: 16px 0;
-  margin-top: 8px;
+  margin-top: -180px;
+  margin-bottom: 40px;
 }
 
 .career__section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  padding: 0 16px;
+  margin: 0 20px 20px;
 }
 
 .career__section-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
-  color: #212529;
+  color: #1e293b;
   margin: 0;
 }
 
 .career__section-more {
   color: #767676;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: bold;
   cursor: pointer;
   transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
 .career__section-more:hover {
@@ -376,7 +377,7 @@
   }
   
   .interest-title {
-    font-size: 22px !important;
+    font-size: 22px;
   }
   
   .interest-map {
@@ -414,16 +415,10 @@
   }
   
   .career__programs-section {
-    margin-top: 8px;
+    margin-top: -50px;
   }
   
-  .career__section-header {
-    padding: 0 16px;
-  }
   
-  .career__programs-grid {
-    padding: 0 20px;
-  }
 }
 
 @media (max-width: 480px) {
@@ -452,7 +447,7 @@
   }
   
   .interest-title {
-    font-size: 22px !important;
+    font-size: 22px;
   }
   
   .career__programs-grid {

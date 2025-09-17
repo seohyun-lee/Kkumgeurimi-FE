@@ -47,14 +47,14 @@
 /* 카테고리 - 우측 상단 */
 .program-card-basic__category {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 6px;
+  right: 6px;
   background: rgba(255, 255, 255, 0.9);
   color: #6b7280;
-  padding: 6px 10px;
+  padding: 4px 8px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 400;
+  font-size: 10px;
+  font-weight: 500;
   z-index: 2;
 }
 

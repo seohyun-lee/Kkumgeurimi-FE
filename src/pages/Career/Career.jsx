@@ -5,6 +5,7 @@ import { authService } from '../../services/auth.service.js';
 import { getLabelByCode } from '../../config/constants.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
+import showAllIcon from '../../assets/icons/showall.svg';
 import './Career.css';
 
 // 멘토와 관심사 매핑
@@ -437,15 +438,17 @@ const Career = () => {
             </div>
           </div>
         )}
+      </div>
 
-        <section className="career__programs-section">
+      <section className="career__programs-section">
           <div className="career__section-header">
             <h2 className="career__section-title">나에게 딱 맞는 추천 프로그램</h2>
             <span 
               className="career__section-more"
               onClick={() => setShowAllPrograms(!showAllPrograms)}
             >
-              {showAllPrograms ? '접기' : '전체 보기 >'}
+              {showAllPrograms ? '접기' : '더보기'}
+              <img src={showAllIcon} alt="더보기" style={{ marginLeft: '4px', width: '10px', height: '10px' }} />
             </span>
           </div>
           <div className="career__programs-grid">
@@ -462,7 +465,6 @@ const Career = () => {
             ))}
           </div>
         </section>
-      </div>
     </div>
   );
 };
