@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getMentorsForCareer } from '../../data/mentors.js';
 import { careerService } from '../../services/career.service.js';
 import { authService } from '../../services/auth.service.js';
@@ -6,6 +7,7 @@ import { getLabelByCode } from '../../config/constants.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
 import showAllIcon from '../../assets/icons/showall.svg';
+import backIcon from '../../assets/icons/back.svg';
 import './Career.css';
 
 // 멘토와 관심사 매핑
@@ -33,6 +35,8 @@ const Career = () => {
   const [showAllPrograms, setShowAllPrograms] = useState(false);
   
   const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // 목업 데이터로 버블 생성
   useEffect(() => {
@@ -175,6 +179,18 @@ const Career = () => {
     loadCareerData();
   }, [isAuthenticated]);
 
+  // URL 파라미터 확인하여 초기 상태 설정
+  useEffect(() => {
+    const interestId = searchParams.get('interest');
+    if (interestId && data.interests.length > 0) {
+      const interest = data.interests.find(i => i.id === interestId);
+      if (interest) {
+        setSelectedInterest(interest);
+        setCurrentState('detail');
+      }
+    }
+  }, [searchParams, data.interests]);
+
   // 카테고리 ID를 기반으로 직업 제목 생성
   const generateJobTitle = (categoryId) => {
     const jobTitles = {
@@ -241,12 +257,14 @@ const Career = () => {
     if (interest) {
       setSelectedInterest(interest);
       setCurrentState('detail');
+      setSearchParams({ interest: interestId });
     }
   };
 
   const resetToDefault = () => {
     setCurrentState('default');
     setSelectedInterest(null);
+    setSearchParams({});
   };
 
   // 선택한 큰 노드에 해당하는 작은 노드 색상 반환
@@ -408,10 +426,6 @@ const Career = () => {
 
   return (
     <div className={`career ${currentState === 'detail' ? 'detail-mode' : ''}`}>
-      {currentState === 'detail' && (
-        <button className="back-btn" onClick={resetToDefault}>←</button>
-      )}
-      
       <div className="container">
         <div className="header">
           {currentState === 'default' ? (
