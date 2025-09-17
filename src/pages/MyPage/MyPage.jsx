@@ -44,27 +44,29 @@ export default function MyPage() {
         setJoinedPrograms([
           {
             programId: 1,
-            title: "프론트엔드 개발자 취업 준비반",
-            mentor: "김멘토",
-            category: "개발",
+            title: "프로덕트 매니저 실무 체험",
+            mentor: "라인플러스",
+            category: "기획",
             startDate: "2024-01-15",
             endDate: "2024-03-15",
-            price: 299000,
-            backgroundColor: "#FF6B6B",
-            emoji: "💻",
-            description: "React, Vue.js 등 현대적인 프론트엔드 기술을 배우고 취업에 성공할 수 있도록 도와드립니다."
+            price: 0,
+            backgroundColor: "#667eea",
+            emoji: "📋",
+            imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center",
+            description: "실제 프로덕트 개발 과정에서 PM의 역할을 체험하고 기획 역량을 키우는 프로그램입니다."
           },
           {
             programId: 2,
-            title: "UX/UI 디자인 기초 과정",
-            mentor: "이디자이너",
-            category: "디자인",
+            title: "비즈니스 모델 설계 워크샵",
+            mentor: "삼성전자",
+            category: "전략기획",
             startDate: "2024-02-01",
             endDate: "2024-04-01",
-            price: 399000,
+            price: 50000,
             backgroundColor: "#4ECDC4",
-            emoji: "🎨",
-            description: "사용자 경험과 인터페이스 디자인의 기본 원리를 배우고 실무에 적용할 수 있는 능력을 기릅니다."
+            emoji: "💡",
+            imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop&crop=center",
+            description: "스타트업부터 대기업까지, 다양한 비즈니스 모델을 분석하고 직접 설계해보는 실무형 워크샵입니다."
           }
         ]);
       } finally {
@@ -78,39 +80,39 @@ export default function MyPage() {
   const [likedProgramsData] = useState([
     {
       programId: 3,
-      title: "데이터 사이언스 입문",
-      mentor: "박데이터",
-      category: "데이터",
+      title: "서비스 기획 실무 멘토링",
+      mentor: "토스",
+      category: "서비스기획",
       startDate: "2024-03-01",
       endDate: "2024-05-01",
-      price: 499000,
+      price: 0,
       backgroundColor: "#45B7D1",
-      emoji: "📊",
-      description: "Python을 활용한 데이터 분석과 머신러닝의 기초를 배우는 과정입니다."
+      emoji: "📱",
+      description: "현직 서비스 기획자와 1:1 멘토링을 통해 실무 기획 역량을 키우는 프로그램입니다."
     },
     {
       programId: 4,
-      title: "마케팅 전략 수립",
-      mentor: "최마케터",
-      category: "마케팅",
+      title: "스타트업 창업 기획 캠프",
+      mentor: "스파크랩",
+      category: "창업기획",
       startDate: "2024-04-01",
       endDate: "2024-06-01",
-      price: 349000,
+      price: 80000,
       backgroundColor: "#96CEB4",
-      emoji: "📈",
-      description: "디지털 마케팅의 핵심 전략과 실행 방법을 체계적으로 학습합니다."
+      emoji: "🚀",
+      description: "아이디어부터 사업계획서 작성까지, 창업의 전 과정을 기획 관점에서 학습합니다."
     },
     {
       programId: 5,
-      title: "창업 아이디어 발굴 및 검증",
-      mentor: "정창업가",
-      category: "창업",
+      title: "콘텐츠 기획자 양성 과정",
+      mentor: "CJ ENM",
+      category: "콘텐츠기획",
       startDate: "2024-05-01",
       endDate: "2024-07-01",
-      price: 599000,
+      price: 120000,
       backgroundColor: "#FFEAA7",
-      emoji: "🚀",
-      description: "창업 아이디어를 발굴하고 시장 검증을 통해 사업화 가능성을 높이는 방법을 배웁니다."
+      emoji: "📝",
+      description: "유튜브, 인스타그램 등 다양한 플랫폼의 콘텐츠를 기획하고 제작하는 방법을 배웁니다."
     }
   ]);
 
@@ -255,7 +257,11 @@ export default function MyPage() {
                 organization={p.mentor}
                 date={`${p.startDate} ~ ${p.endDate}`}
                 category={p.category || "카테고리"}
-                tags={["체험처", "무료"]}
+                tags={[
+                  p.category === "전략기획" || p.category === "창업기획" ? "체험처" : "체험처",
+                  p.price === 0 ? "무료" : "유료"
+                ]}
+                imageUrl={p.imageUrl}
                 onClick={() => handleProgramClick(p)}
               />
             ))

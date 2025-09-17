@@ -7,7 +7,7 @@ export const CATEGORY_MAPPING = {
   1: '과학기술',
   2: 'IT개발', 
   11: '예술디자인',
-  12: '체육',
+  12: '체육레저',
   18: '서비스업',
   29: '환경에너지'
 };
@@ -27,13 +27,13 @@ export const CATEGORY_DETAILS = {
     description: '소프트웨어와 시스템을 개발하여 디지털 혁신을 이끄는 전문가'
   },
   11: { 
-    name: '예술디자인', 
+    name: '예술디자', 
     color: '#fd79a8', 
     jobTitle: '예술 디자이너',
     description: '창의적인 아이디어로 아름다운 작품과 디자인을 만드는 전문가'
   },
   12: { 
-    name: '체육', 
+    name: '체육레저', 
     color: '#fdcb6e', 
     jobTitle: '체육 지도사',
     description: '건강한 신체 활동을 통해 사람들의 삶의 질을 향상시키는 전문가'
@@ -45,7 +45,7 @@ export const CATEGORY_DETAILS = {
     description: '고객의 만족과 편의를 위해 다양한 서비스를 제공하는 전문가'
   },
   29: { 
-    name: '환경에너지', 
+    name: '환경에너', 
     color: '#00cec9', 
     jobTitle: '환경에너지 전문가',
     description: '지속가능한 미래를 위해 환경과 에너지 문제를 해결하는 전문가'

@@ -100,58 +100,30 @@ const Home = () => {
     }
   ];
 
-  // 인기 프로그램 목업 데이터 (Career 페이지와 동일한 구조)
+  // 인기 프로그램 목업 데이터 (기획자 꿈나무를 위한 프로그램)
   const popularPrograms = [
     {
       programId: "home-prog-001",
-      programTitle: "천연 방향제 만들기 체험",
-      provider: "청소년과학관",
-      objective: "에센셜 오일과 안전한 재료로 나만의 향을 조합해 방향제를 만들어요",
+      programTitle: "서비스 기획자 직무 체험",
+      provider: "네이버 커넥트재단",
+      objective: "실제 서비스 기획 프로세스를 체험하고 사용자 니즈 분석부터 기획서 작성까지",
       targetAudience: "중고등학생",
       programType: 1,
       startDate: "2025-08-06",
       endDate: "2025-12-31",
-      relatedMajor: "화학공학",
+      relatedMajor: "경영학",
       costType: "FREE",
       price: null,
-      imageUrl: null,
+      imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center",
       eligibleRegion: "전국",
-      venueRegion: "청소년과학관",
-      operateCycle: "주 2회",
-      interestCategory: 1, // 과학기술
+      venueRegion: "네이버 본사",
+      operateCycle: "월 2회",
+      interestCategory: 18, // 서비스업
       programDetail: {
         programDetailId: "home-detail-001",
-        description: "화학의 기초 원리를 이해하고 천연 재료로 방향제를 만드는 체험 활동입니다.",
-        requiredHours: "총 2시간",
-        availHours: "주말 오후 2-4시",
-        capacity: 20,
-        targetSchoolType: "중학교, 고등학교",
-        levelInfo: "중학생, 고등학생"
-      },
-      tags: ["체험처", "무료"]
-    },
-    {
-      programId: "home-prog-002",
-      programTitle: "게임개발 첫걸음",
-      provider: "인디게임랩",
-      objective: "블록 코딩으로 캐릭터를 움직이고, 간단한 나만의 게임을 완성해요",
-      targetAudience: "중고등학생",
-      programType: 2,
-      startDate: "2025-08-10",
-      endDate: "2025-12-31",
-      relatedMajor: "컴퓨터공학",
-      costType: "FREE",
-      price: null,
-      imageUrl: null,
-      eligibleRegion: "전국",
-      venueRegion: "인디게임랩",
-      operateCycle: "주 1회",
-      interestCategory: 2, // IT개발
-      programDetail: {
-        programDetailId: "home-detail-002",
-        description: "게임 개발의 기초부터 실제 게임 제작까지 체험할 수 있는 프로그램입니다.",
-        requiredHours: "총 3시간",
-        availHours: "토요일 오후 1-4시",
+        description: "현직 서비스 기획자와 함께 실제 앱 서비스를 기획해보는 체험형 프로그램입니다.",
+        requiredHours: "총 6시간",
+        availHours: "토요일 오전 10시-오후 4시",
         capacity: 15,
         targetSchoolType: "중학교, 고등학교",
         levelInfo: "중학생, 고등학생"
@@ -159,60 +131,88 @@ const Home = () => {
       tags: ["체험처", "무료"]
     },
     {
-      programId: "home-prog-003",
-      programTitle: "영화감독 체험",
-      provider: "영화창작스튜디오",
-      objective: "짧은 이야기로 촬영·연출·편집까지, 한 편의 미니 영화 만들기",
+      programId: "home-prog-002",
+      programTitle: "마케팅 전략 수립 워크샵",
+      provider: "카카오 임팩트",
+      objective: "브랜드 분석부터 캠페인 기획까지, 마케팅의 전 과정을 경험해보세요",
       targetAudience: "중고등학생",
       programType: 1,
-      startDate: "2025-08-15",
+      startDate: "2025-08-10",
       endDate: "2025-12-31",
-      relatedMajor: "영상학",
+      relatedMajor: "마케팅학",
       costType: "PAID",
-      price: "50,000원",
-      imageUrl: null,
+      price: "30,000원",
+      imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop&crop=center",
       eligibleRegion: "서울, 경기",
-      venueRegion: "영화창작스튜디오",
-      operateCycle: "월 2회",
-      interestCategory: 11, // 예술디자인
+      venueRegion: "카카오 판교오피스",
+      operateCycle: "주 1회",
+      interestCategory: 18, // 서비스업
       programDetail: {
-        programDetailId: "home-detail-003",
-        description: "영화 제작의 전 과정을 체험하며 창작 능력을 기르는 프로그램입니다.",
+        programDetailId: "home-detail-002",
+        description: "실제 브랜드 사례를 분석하고 마케팅 캠페인을 직접 기획해보는 실무형 프로그램입니다.",
         requiredHours: "총 4시간",
-        availHours: "일요일 오전 10시-오후 2시",
-        capacity: 12,
+        availHours: "일요일 오후 1-5시",
+        capacity: 20,
         targetSchoolType: "중학교, 고등학교",
         levelInfo: "중학생, 고등학생"
       },
       tags: ["체험처", "유료"]
     },
     {
+      programId: "home-prog-003",
+      programTitle: "스타트업 창업 기획 체험",
+      provider: "D.CAMP",
+      objective: "아이디어 발굴부터 비즈니스 모델 설계까지, 창업 기획의 A to Z",
+      targetAudience: "중고등학생",
+      programType: 1,
+      startDate: "2025-08-15",
+      endDate: "2025-12-31",
+      relatedMajor: "창업학",
+      costType: "FREE",
+      price: null,
+      imageUrl: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=300&fit=crop&crop=center",
+      eligibleRegion: "전국",
+      venueRegion: "D.CAMP 강남",
+      operateCycle: "월 1회",
+      interestCategory: 18, // 서비스업
+      programDetail: {
+        programDetailId: "home-detail-003",
+        description: "실제 창업가들과 함께 아이디어를 구체화하고 사업 계획을 세워보는 프로그램입니다.",
+        requiredHours: "총 8시간",
+        availHours: "토요일 오전 9시-오후 5시",
+        capacity: 12,
+        targetSchoolType: "고등학교",
+        levelInfo: "고등학생"
+      },
+      tags: ["체험처", "무료"]
+    },
+    {
       programId: "home-prog-004",
-      programTitle: "로봇공학자 체험",
-      provider: "메이커스페이스",
-      objective: "센서로 반응하는 로봇을 조립하고 간단한 코딩으로 미션 수행",
+      programTitle: "UX/UI 기획 온라인 부트캠프",
+      provider: "디자인컴퍼니",
+      objective: "사용자 경험 설계와 인터페이스 기획을 통해 디지털 서비스 기획 역량 키우기",
       targetAudience: "중고등학생",
       programType: 2,
       startDate: "2025-08-20",
       endDate: "2025-12-31",
-      relatedMajor: "기계공학",
-      costType: "FREE",
-      price: null,
-      imageUrl: null,
+      relatedMajor: "디자인학",
+      costType: "PAID",
+      price: "50,000원",
+      imageUrl: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=400&h=300&fit=crop&crop=center",
       eligibleRegion: "전국",
-      venueRegion: "메이커스페이스",
-      operateCycle: "주 1회",
-      interestCategory: 1, // 과학기술
+      venueRegion: "온라인 진행",
+      operateCycle: "주 2회",
+      interestCategory: 11, // 예술디자인
       programDetail: {
         programDetailId: "home-detail-004",
-        description: "로봇 공학의 기초를 배우고 직접 로봇을 제작하는 체험 프로그램입니다.",
-        requiredHours: "총 3시간",
-        availHours: "토요일 오후 2-5시",
-        capacity: 18,
+        description: "디자인 씽킹부터 프로토타이핑까지, UX/UI 기획의 전 과정을 온라인으로 학습합니다.",
+        requiredHours: "총 12시간",
+        availHours: "화요일, 목요일 오후 7-10시",
+        capacity: 25,
         targetSchoolType: "중학교, 고등학교",
         levelInfo: "중학생, 고등학생"
       },
-      tags: ["체험처", "무료"]
+      tags: ["온라인", "유료"]
     }
   ];
 
@@ -221,8 +221,8 @@ const Home = () => {
     { 
       id: 1,
       avatar: '아', 
-      name: '아린', 
-      grade: '초6',
+      name: '오즈짱', 
+      grade: '중2',
       story: 'DNA 실험이 너무 신기해서 과학 일기를 쓰기 시작했어요. 다음엔 실험 동아리에도 참여해 보려고요!',
       program: 'DNA 화학 과학실험'
     },
@@ -485,6 +485,7 @@ const Home = () => {
               date={`${program.startDate} ~ ${program.endDate}`}
               category={getCategoryName(program.interestCategory)}
               tags={program.tags}
+              imageUrl={program.imageUrl}
               onClick={() => handleProgramClick(program)}
             />
           ))}

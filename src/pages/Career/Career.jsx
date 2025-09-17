@@ -278,27 +278,27 @@ const Career = () => {
     return [
       {
         programId: "prog-001",
-        programTitle: "'공간인간' 유현준 교수와 함께 하는 진로콘서트",
-        provider: "서구진로교육지원센터",
-        objective: "건축의 기초부터 실제 설계까지 체험할 수 있는 진로 탐색 프로그램",
+        programTitle: "카카오 서비스 기획자와 함께하는 진로콘서트",
+        provider: "카카오 임팩트",
+        objective: "실제 서비스 기획 과정을 체험하고 기획자의 역할과 필요 역량을 이해하는 프로그램",
         targetAudience: "중고등학생",
         programType: 1,
         startDate: "2025-08-06",
         endDate: "2025-12-31",
-        relatedMajor: "건축학",
+        relatedMajor: "경영학",
         costType: "FREE",
         price: null,
-        imageUrl: null,
-        eligibleRegion: "서구 거주자",
-        venueRegion: "서구진로교육지원센터",
+        imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center",
+        eligibleRegion: "전국",
+        venueRegion: "카카오 판교오피스",
         operateCycle: "월 2회",
-        interestCategory: 11, // 예술 디자이너
+        interestCategory: 18, // 서비스업
         programDetail: {
           programDetailId: "detail-001",
-          description: "건축가의 시각으로 공간을 이해하고 설계하는 방법을 배웁니다.",
-          requiredHours: "총 40시간",
-          availHours: "주중 오후 2-6시",
-          capacity: 30,
+          description: "현직 서비스 기획자가 실제 업무 과정을 소개하고 함께 간단한 서비스를 기획해봅니다.",
+          requiredHours: "총 6시간",
+          availHours: "토요일 오전 10시-오후 4시",
+          capacity: 20,
           targetSchoolType: "중학교, 고등학교",
           levelInfo: "중학생, 고등학생"
         },
@@ -306,47 +306,35 @@ const Career = () => {
       },
       {
         programId: "prog-002", 
-        programTitle: "AI 개발자 멘토링 프로그램",
-        provider: "테크 아카데미",
-        objective: "현직 AI 개발자와 함께하는 실무 중심 멘토링",
+        programTitle: "스타트업 창업 기획 온라인 부트캠프",
+        provider: "D.CAMP",
+        objective: "아이디어 발굴부터 사업계획서 작성까지 창업 기획의 전 과정을 온라인으로 학습",
         targetAudience: "고등학생",
         programType: 2,
         startDate: "2025-09-01",
         endDate: "2025-11-30",
-        relatedMajor: "컴퓨터공학",
+        relatedMajor: "창업학",
         costType: "PAID",
-        price: "150,000원",
-        imageUrl: null,
+        price: "80,000원",
+        imageUrl: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=300&fit=crop&crop=center",
         eligibleRegion: "전국",
-        venueRegion: "온라인 + 강남 테크센터",
-        operateCycle: "주 1회",
-        interestCategory: 2, // IT 개발자
+        venueRegion: "온라인 진행",
+        operateCycle: "주 2회",
+        interestCategory: 18, // 서비스업
         programDetail: {
           programDetailId: "detail-002",
-          description: "Python, 머신러닝 기초부터 실제 프로젝트까지 진행합니다.",
-          requiredHours: "총 60시간",
-          availHours: "토요일 오전 9시-오후 6시",
-          capacity: 20,
+          description: "실제 창업가와 함께 아이디어를 구체화하고 비즈니스 모델을 설계하는 온라인 프로그램입니다.",
+          requiredHours: "총 20시간",
+          availHours: "화요일, 목요일 오후 7-10시",
+          capacity: 25,
           targetSchoolType: "고등학교",
           levelInfo: "고등학생"
         },
-        tags: ["멘토링", "유료"]
+        tags: ["온라인", "유료"]
       }
     ];
   };
 
-  // 카테고리 ID를 카테고리 이름으로 변환
-  const getCategoryName = (categoryId) => {
-    const categoryMapping = {
-      1: '과학기술',
-      2: 'IT개발',
-      11: '예술디자인',
-      12: '체육',
-      18: '서비스업',
-      29: '환경에너지'
-    };
-    return categoryMapping[categoryId] || '기타';
-  };
 
   // 모달 관련 함수들
   const handleProgramClick = (program) => {
@@ -577,6 +565,7 @@ const Career = () => {
                 date={`${program.startDate} ~ ${program.endDate}`}
                 category={getCategoryName(program.interestCategory)}
                 tags={program.tags}
+                imageUrl={program.imageUrl}
                 onClick={() => handleProgramClick(program)}
               />
             ))}
