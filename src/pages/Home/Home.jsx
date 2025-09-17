@@ -371,7 +371,7 @@ const Home = () => {
         </div>
         
         <div className="popular-programs-grid">
-          {popularPrograms.map((program) => (
+          {popularPrograms.slice(0, 4).map((program) => (
             <ProgramCardBasic
               key={program.id}
               title={program.title}

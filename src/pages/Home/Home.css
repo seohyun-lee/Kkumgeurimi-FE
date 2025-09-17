@@ -536,10 +536,15 @@ body {
 
 .popular-programs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
   padding: 0 20px;
   justify-items: center;
+}
+
+.popular-programs-grid .program-card-basic {
+  width: 100%;
+  max-width: 180px;
 }
 
 .popular-program-card {
