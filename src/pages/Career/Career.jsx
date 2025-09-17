@@ -179,17 +179,20 @@ const Career = () => {
     loadCareerData();
   }, [isAuthenticated]);
 
-  // URL 파라미터 확인하여 초기 상태 설정
   useEffect(() => {
     const interestId = searchParams.get('interest');
+    
     if (interestId && data.interests.length > 0) {
       const interest = data.interests.find(i => i.id === interestId);
       if (interest) {
         setSelectedInterest(interest);
         setCurrentState('detail');
       }
+    } else if (!interestId && currentState === 'detail') {
+      setCurrentState('default');
+      setSelectedInterest(null);
     }
-  }, [searchParams, data.interests]);
+  }, [searchParams, data.interests, currentState]);
 
   // 카테고리 ID를 기반으로 직업 제목 생성
   const generateJobTitle = (categoryId) => {

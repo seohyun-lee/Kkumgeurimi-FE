@@ -20,7 +20,6 @@ const AppShell = () => {
     navigate(ROUTES.HOME);
   };
 
-  // 뒤로가기 버튼 핸들러
   const handleBackToCareer = () => {
     setSearchParams({});
   };
