@@ -12,40 +12,157 @@ const Community = () => {
     {
       id: 1,
       category: '진로·적성',
-      title: '제목',
-      content: '자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.자유롭게 이야기해보세요.',
-      author: '고1학생',
-      date: '2025.09.13',
-      likes: 21,
-      comments: 12,
-      views: 78,
-      hashtag: '#해시태그',
+      title: 'IT 진로에 관심있는데 어떤 프로그램 추천하시나요?',
+      content: '안녕하세요! 고2 학생입니다. 최근에 프로그래밍에 관심이 생겨서 IT 쪽으로 진로를 생각하고 있어요. 혹시 경험해보신 프로그램이나 추천할만한 것들이 있을까요? 특히 코딩 입문자도 들을 수 있는 것들로요!',
+      author: '꿈나무22',
+      date: '2025.09.16',
+      likes: 34,
+      comments: 18,
+      views: 156,
+      hashtag: '#IT #프로그래밍 #진로고민',
       imageUrl: null
     },
     {
       id: 2,
-      category: '자유소통',
-      title: '제목',
-      content: '고등학생들의 일상 이야기',
-      author: '고2학생',
-      date: '2025.09.13',
-      likes: 21,
-      comments: 12,
-      views: 78,
-      hashtag: '#해시태그',
+      category: '체험후기',
+      title: '청소년 창업 멘토링 프로그램 후기 (강추!)',
+      content: '지난달에 참여했던 청소년 창업 멘토링 프로그램 너무 좋았어요! 실제 창업가분들이 와서 강의해주시고, 팀 프로젝트도 하고... 비즈니스 모델 만들어보는 것도 재밌었습니다. 창업에 관심있으신 분들께 진짜 추천드려요!',
+      author: '스타트업드림',
+      date: '2025.09.15',
+      likes: 42,
+      comments: 23,
+      views: 203,
+      hashtag: '#창업 #멘토링 #체험후기',
       imageUrl: null
     },
     {
       id: 3,
-      category: '고민상담',
-      title: '제목',
-      content: '진로 고민에 대한 조언 부탁드려요',
-      author: '고2학생',
+      category: '진로·적성',
+      title: '의대 vs 간호대... 진로 선택 도움 부탁드려요',
+      content: '고3인데 아직도 의대와 간호대 사이에서 고민이 많아요. 둘 다 의료 분야긴 하지만 너무 다르잖아요ㅠㅠ 혹시 관련 프로그램 참여해보신 분 있나요? 병원 체험이나 의료진 멘토링 같은 거 있으면 정말 도움이 될 것 같아요.',
+      author: '미래의사',
+      date: '2025.09.14',
+      likes: 28,
+      comments: 31,
+      views: 142,
+      hashtag: '#의대 #간호대 #진로선택',
+      imageUrl: null
+    },
+    {
+      id: 4,
+      category: '자유소통',
+      title: '진로 박람회 같이 갈 사람 구해요~',
+      content: '다음주 토요일에 COEX에서 하는 청소년 진로 박람회 혼자 가기 심심해서요ㅎㅎ 같이 가실 분 있나요? 특히 미디어, 예술 쪽에 관심있으신 분이면 더 좋을 것 같아요! 댓글 달아주세요~',
+      author: '아트러버',
       date: '2025.09.13',
-      likes: 21,
+      likes: 15,
       comments: 12,
-      views: 78,
-      hashtag: '#해시태그',
+      views: 89,
+      hashtag: '#진로박람회 #같이가요 #미디어예술',
+      imageUrl: null
+    },
+    {
+      id: 5,
+      category: '고민상담',
+      title: '부모님과 진로 의견이 달라서 스트레스에요...',
+      content: '저는 디자인 쪽에 관심이 많은데 부모님은 안정적인 직업을 원하세요. 그래서 요즘 진로 상담 프로그램을 찾아보고 있는데 부모님이랑 같이 들을 수 있는 것도 있을까요? 객관적인 조언을 들어보고 싶어요.',
+      author: '디자인꿈나무',
+      date: '2025.09.12',
+      likes: 67,
+      comments: 45,
+      views: 234,
+      hashtag: '#진로상담 #부모님갈등 #디자인',
+      imageUrl: null
+    },
+    {
+      id: 6,
+      category: '체험후기',
+      title: '한국잡월드 직업체험 다녀왔어요!',
+      content: '친구들과 한국잡월드에 다녀왔는데 생각보다 너무 재밌었어요! 특히 방송국 PD 체험이랑 요리사 체험이 인상깊었습니다. 직업을 직접 체험해볼 수 있어서 진로에 대해 더 구체적으로 생각해볼 수 있었어요. 추천!',
+      author: '체험러',
+      date: '2025.09.11',
+      likes: 38,
+      comments: 16,
+      views: 167,
+      hashtag: '#한국잡월드 #직업체험 #PD #요리사',
+      imageUrl: null
+    },
+    {
+      id: 7,
+      category: '진로·적성',
+      title: '심리학과 vs 사회복지학과 진로 프로그램 추천',
+      content: '사람을 도와주는 일에 관심이 많아서 심리학과나 사회복지학과를 생각하고 있어요. 혹시 이 분야 관련 진로 프로그램이나 멘토링 참여해보신 분 계신가요? 실제로 어떤 일을 하는지 궁금해요!',
+      author: '도움이되고싶어',
+      date: '2025.09.10',
+      likes: 29,
+      comments: 19,
+      views: 198,
+      hashtag: '#심리학 #사회복지 #멘토링',
+      imageUrl: null
+    },
+    {
+      id: 8,
+      category: '자유소통',
+      title: '진로 적성검사 결과가 매번 달라요 ㅠㅠ',
+      content: '여러 사이트에서 진로 적성검사를 해봤는데 결과가 매번 달라서 혼란스러워요... 혹시 정확하고 믿을만한 진로 검사나 상담 프로그램 아시는 분 있나요? 돈을 내더라도 제대로 된 걸로 받아보고 싶어요.',
+      author: '혼란중',
+      date: '2025.09.09',
+      likes: 52,
+      comments: 27,
+      views: 301,
+      hashtag: '#적성검사 #진로상담 #추천',
+      imageUrl: null
+    },
+    {
+      id: 9,
+      category: '체험후기',
+      title: '대학교 전공체험 프로그램 정말 도움됐어요',
+      content: '서울대에서 하는 고교생 전공체험 프로그램에 참여했는데 진짜 좋았어요! 실제 대학 강의도 들어보고 선배들이랑 이야기도 나누고... 전공에 대한 막연한 생각이 구체적으로 바뀌었어요. 각 대학교마다 이런 프로그램들이 있더라고요.',
+      author: '대학탐방러',
+      date: '2025.09.08',
+      likes: 71,
+      comments: 33,
+      views: 278,
+      hashtag: '#대학체험 #전공탐색 #서울대',
+      imageUrl: null
+    },
+    {
+      id: 10,
+      category: '고민상담',
+      title: '문과인데 이공계로 전향하고 싶어요',
+      content: '고2 문과생인데 최근에 데이터 사이언스에 관심이 생겼어요. 근데 수학을 너무 못해서... 혹시 비슷한 경험 있으신 분이나 관련 진로 프로그램 아시는 분 계신가요? 늦지 않았을까요?',
+      author: '데이터꿈나무',
+      date: '2025.09.07',
+      likes: 44,
+      comments: 38,
+      views: 189,
+      hashtag: '#문과 #이공계전향 #데이터사이언스',
+      imageUrl: null
+    },
+    {
+      id: 11,
+      category: '진로·적성',
+      title: '교사가 되고 싶은데 어떤 준비를 해야 할까요?',
+      content: '초등학교 선생님이 되는 게 꿈이에요! 교육대학교 입시 준비도 해야 하고... 혹시 교사 체험 프로그램이나 교육 관련 봉사활동 추천해주실 수 있나요? 미리 경험해보고 싶어서요.',
+      author: '미래선생님',
+      date: '2025.09.06',
+      likes: 36,
+      comments: 24,
+      views: 145,
+      hashtag: '#교사 #교육대 #봉사활동',
+      imageUrl: null
+    },
+    {
+      id: 12,
+      category: '자유소통',
+      title: '온라인 진로 프로그램도 효과가 있을까요?',
+      content: '요즘 코로나 때문에 온라인으로 하는 진로 프로그램들이 많더라고요. 직접 만나서 하는 것보다 효과가 떨어질까 봐 걱정인데... 온라인 프로그램 참여해보신 분들 후기 좀 들려주세요!',
+      author: '온라인러닝',
+      date: '2025.09.05',
+      likes: 22,
+      comments: 15,
+      views: 167,
+      hashtag: '#온라인 #진로프로그램 #후기',
       imageUrl: null
     }
   ]);
@@ -83,29 +200,77 @@ const Community = () => {
     };
   }, [currentView]);
 
-  const comments = [
-    {
-      id: 1,
-      author: '고1학생',
-      content: '댓글댓글댓글댓글댓글댓글',
-      date: '2025.09.13',
-      isAuthor: false
-    },
-    {
-      id: 2,
-      author: '고2학생 (글쓴이)',
-      content: '댓글댓글댓글댓글댓글댓글',
-      date: '2025.09.13',
-      isAuthor: true
-    },
-    {
-      id: 3,
-      author: '고1학생',
-      content: '댓글댓글댓글댓글댓글댓글',
-      date: '2025.09.13',
-      isAuthor: false
-    }
-  ];
+  const getCommentsForPost = (postId) => {
+    const commentsByPost = {
+      1: [
+        { id: 1, author: '코딩초보', content: '저도 똑같은 고민이에요! 혹시 어떤 프로그램 찾으셨나요?', date: '2025.09.16', isAuthor: false },
+        { id: 2, author: '개발자선배', content: '네이버 커넥트재단에서 하는 부스트캠프 추천드려요! 무료고 정말 좋아요', date: '2025.09.16', isAuthor: false },
+        { id: 3, author: '꿈나무22 (글쓴이)', content: '@개발자선배 오 정보 감사합니다! 찾아볼게요', date: '2025.09.16', isAuthor: true },
+        { id: 4, author: 'IT전공생', content: '삼성 주니어 SW 아카데미도 좋더라고요. 고등학생도 신청 가능해요!', date: '2025.09.16', isAuthor: false }
+      ],
+      2: [
+        { id: 1, author: '창업꿈나무', content: '저도 이 프로그램 관심있어요! 혹시 어떻게 신청하셨나요?', date: '2025.09.15', isAuthor: false },
+        { id: 2, author: '스타트업드림 (글쓴이)', content: '@창업꿈나무 청소년활동진흥원 홈페이지에서 신청했어요!', date: '2025.09.15', isAuthor: true },
+        { id: 3, author: '비즈니스맨', content: '실제로 창업하신 분들 이야기 들을 수 있어서 좋겠네요!', date: '2025.09.15', isAuthor: false }
+      ],
+      3: [
+        { id: 1, author: '의대생선배', content: '둘 다 좋은 분야에요! 먼저 병원 봉사활동 해보시는 걸 추천드려요', date: '2025.09.14', isAuthor: false },
+        { id: 2, author: '간호학과생', content: '간호대 재학생인데 질문 있으면 언제든 물어보세요!', date: '2025.09.14', isAuthor: false },
+        { id: 3, author: '미래의사 (글쓴이)', content: '@의대생선배 @간호학과생 감사합니다! 혹시 DM 가능할까요?', date: '2025.09.14', isAuthor: true },
+        { id: 4, author: '메디컬드림', content: '저도 같은 고민이에요ㅠㅠ 의료진 멘토링 프로그램 찾아보고 있어요', date: '2025.09.14', isAuthor: false }
+      ],
+      4: [
+        { id: 1, author: '미디어꿈나무', content: '저도 관심있어요! 연락처 남겨주세요~', date: '2025.09.13', isAuthor: false },
+        { id: 2, author: '예술학도', content: 'COEX 박람회 매년 가는데 정말 볼 게 많아요!', date: '2025.09.13', isAuthor: false },
+        { id: 3, author: '아트러버 (글쓴이)', content: '@미디어꿈나무 DM 보내드릴게요!', date: '2025.09.13', isAuthor: true }
+      ],
+      5: [
+        { id: 1, author: '같은상황', content: '저도 완전 같은 상황이에요... 부모님 설득이 어려워요ㅠ', date: '2025.09.12', isAuthor: false },
+        { id: 2, author: '디자이너', content: '청소년상담복지센터에서 가족상담도 해줘요! 추천드려요', date: '2025.09.12', isAuthor: false },
+        { id: 3, author: '진로상담사', content: '워크넷 진로상담에서 부모님과 함께 상담 받을 수 있어요', date: '2025.09.12', isAuthor: false },
+        { id: 4, author: '디자인꿈나무 (글쓴이)', content: '모두 좋은 정보 감사합니다! 꼭 활용해볼게요', date: '2025.09.12', isAuthor: true }
+      ],
+      6: [
+        { id: 1, author: '직업체험러', content: '저도 가보고 싶었는데 정보 감사해요!', date: '2025.09.11', isAuthor: false },
+        { id: 2, author: '방송꿈나무', content: 'PD 체험 어떠셨나요? 자세히 알고 싶어요!', date: '2025.09.11', isAuthor: false },
+        { id: 3, author: '체험러 (글쓴이)', content: '@방송꿈나무 실제 방송 제작 과정을 체험해볼 수 있어서 좋았어요!', date: '2025.09.11', isAuthor: true }
+      ],
+      7: [
+        { id: 1, author: '심리학도', content: '심리학과 재학생입니다! 궁금한 점 있으면 물어보세요', date: '2025.09.10', isAuthor: false },
+        { id: 2, author: '사복과선배', content: '사회복지학과도 정말 보람찬 전공이에요~ 실습 기회가 많아요', date: '2025.09.10', isAuthor: false },
+        { id: 3, author: '도움이되고싶어 (글쓴이)', content: '선배님들 감사합니다! 더 자세한 이야기 듣고 싶어요', date: '2025.09.10', isAuthor: true }
+      ],
+      8: [
+        { id: 1, author: '검사전문가', content: '커리어넷의 진로심리검사 추천드려요! 무료이고 정확해요', date: '2025.09.09', isAuthor: false },
+        { id: 2, author: '상담받은사람', content: '한국고용정보원에서 하는 검사가 가장 신뢰도 높더라고요', date: '2025.09.09', isAuthor: false },
+        { id: 3, author: '혼란중 (글쓴이)', content: '좋은 정보들 감사합니다! 하나씩 다 해볼게요', date: '2025.09.09', isAuthor: true }
+      ],
+      9: [
+        { id: 1, author: '대학준비생', content: '우와 부럽네요! 어떻게 신청하셨나요?', date: '2025.09.08', isAuthor: false },
+        { id: 2, author: '서울대생', content: '저희 학교 프로그램 참여해주셔서 감사해요! 도움이 되셨다니 기뻐요', date: '2025.09.08', isAuthor: false },
+        { id: 3, author: '대학탐방러 (글쓴이)', content: '@대학준비생 각 대학교 홈페이지에서 신청 받아요! @서울대생 정말 감사했습니다', date: '2025.09.08', isAuthor: true }
+      ],
+      10: [
+        { id: 1, author: '문과출신개발자', content: '저도 문과에서 개발자로 전향했어요! 충분히 가능해요', date: '2025.09.07', isAuthor: false },
+        { id: 2, author: '수학쌤', content: '수학은 기초부터 차근차근 하면 돼요! 포기하지 마세요', date: '2025.09.07', isAuthor: false },
+        { id: 3, author: '데이터꿈나무 (글쓴이)', content: '@문과출신개발자 정말요? 어떻게 공부하셨나요?', date: '2025.09.07', isAuthor: true },
+        { id: 4, author: '코딩부트캠프', content: '문과생 대상 데이터 분석 입문 과정도 있어요!', date: '2025.09.07', isAuthor: false }
+      ],
+      11: [
+        { id: 1, author: '교대생', content: '교대 재학생이에요! 봉사활동은 꼭 해보시길 추천드려요', date: '2025.09.06', isAuthor: false },
+        { id: 2, author: '초등쌤', content: '현직 초등교사입니다. 아이들과의 소통이 가장 중요해요!', date: '2025.09.06', isAuthor: false },
+        { id: 3, author: '미래선생님 (글쓴이)', content: '현직 선생님 의견까지! 정말 감사합니다', date: '2025.09.06', isAuthor: true }
+      ],
+      12: [
+        { id: 1, author: '온라인참여자', content: '온라인도 오프라인만큼 좋더라고요! 집중만 잘하면 돼요', date: '2025.09.05', isAuthor: false },
+        { id: 2, author: '줌피로', content: '저는 온라인이 더 편하던데요~ 시간도 절약되고', date: '2025.09.05', isAuthor: false },
+        { id: 3, author: '온라인러닝 (글쓴이)', content: '다들 긍정적이네요! 신청해볼 용기가 생겼어요', date: '2025.09.05', isAuthor: true }
+      ]
+    };
+    return commentsByPost[postId] || [];
+  };
+
+  const comments = selectedPost ? getCommentsForPost(selectedPost.id) : [];
 
   const handleLike = (postId, e) => {
     e.stopPropagation(); // 게시글 클릭 방지
