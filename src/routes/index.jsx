@@ -8,7 +8,7 @@ import SignIn from '../pages/SignIn/SignIn.jsx';
 import SignUp from '../pages/SignUp/Sign-Up.jsx';
 import Interests from '../pages/Interests/Interests.jsx';
 import Home from '../pages/Home/Home.jsx';
-import Assistant from '../pages/Assistant/Assistant.jsx';
+import Community from '../pages/Community/Community.jsx';
 import Explore from '../pages/Explore/Explore.jsx';
 import Career from '../pages/Career/Career.jsx';
 import MyPage from '../pages/MyPage/MyPage.jsx';
@@ -45,7 +45,7 @@ export const router = createBrowserRouter([
       { path: "explore", element: <Explore /> },
       { path: "career", element: <Career /> },
       { path: "programs/:programId", element: <ProgramDetail /> },
-      { path: "assistant", element: <Assistant /> },
+      { path: "community", element: <Community /> },
       { path: "me", element: <MyPage /> },
       // 보호 구역
       {
