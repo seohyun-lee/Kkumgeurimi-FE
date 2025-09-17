@@ -5,6 +5,7 @@ import { useAuthStore } from '../store/auth.store';
 import { ROUTES } from '../config/constants';
 import { NAV_ITEMS } from '../config/nav';
 import BottomNavigation from '../components/BottomNavigation/BottomNavigation.jsx'
+import logoutIcon from '../assets/icons/logout.svg';
 import './AppShell.css';
 
 const AppShell = () => {
@@ -45,7 +46,9 @@ const AppShell = () => {
 
         <div className="app-shell__actions">
           {isAuthenticated ? (
-            <button className="app-shell__logout-btn" onClick={handleLogout}>로그아웃</button>
+            <button className="app-shell__logout-btn" onClick={handleLogout}>
+              <img src={logoutIcon} alt="로그아웃" className="app-shell__logout-icon" />
+            </button>
           ) : (
             <button className="app-shell__signin-btn" onClick={() => navigate(ROUTES.SIGNIN)}>로그인</button>
           )}

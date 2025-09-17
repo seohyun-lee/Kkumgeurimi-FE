@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import ProgramCard from "../../components/ProgramCard";
+import ProgramCardBasic from "../../components/ProgramCardBasic";
 import "./MyPage.css";
+import seongnaemiImage from "../../assets/img/성나미.png";
+import programIcon from "../../assets/icons/my/program.svg";
+import likeIcon from "../../assets/icons/my/like.svg";
+import mypostIcon from "../../assets/icons/my/mypost.svg";
+import thumbupIcon from "../../assets/icons/my/thumbup.svg";
 
 export default function MyPage() {
   // 목업 데이터로 하드코딩
   const [user] = useState({
-    name: "김동이",
-    email: "user@example.com",
-    imageUrl: null
+    name: "성나미",
+    email: "donggeurami@naver.com",
+    imageUrl: seongnaemiImage
   });
 
   const [joinedPrograms] = useState([
@@ -78,9 +83,11 @@ export default function MyPage() {
 
   return (
     <div className="mypage">
-      <header className="mypage__header">
-        <h1 className="mypage__title">내 정보</h1>
-        <div className="mypage__profile">
+      <section className="mypage__profile-section">
+        <div className="mypage__section-header">
+          <h2 className="mypage__section-title">내 정보</h2>
+        </div>
+        <div className="mypage__profile-card">
           <div className="mypage__avatar">
             {user.imageUrl ? (
               <img src={user.imageUrl} alt={user.name} />
@@ -88,35 +95,69 @@ export default function MyPage() {
               <div className="avatar-placeholder">🙂</div>
             )}
           </div>
-          <div className="mypage__info">
+          <div className="mypage__profile-info">
             <div className="mypage__name">{user.name}</div>
             <div className="mypage__email">{user.email}</div>
           </div>
         </div>
-      </header>
+      </section>
 
-      <section className="mypage__section">
-        <h2>참여 프로그램</h2>
-        <div className="mypage__grid">
-          {joinedPrograms.length > 0 ? (
-            joinedPrograms.map((p) => (
-              <ProgramCard key={p.programId} program={p} isLiked={false} />
-            ))
-          ) : (
-            <p className="mypage__empty">아직 참여한 프로그램이 없습니다.</p>
-          )}
+      <section className="mypage__activity-section">
+        <div className="mypage__section-header">
+          <h2 className="mypage__section-title">나의 활동</h2>
+        </div>
+        <div className="mypage__activity-grid">
+          <div className="mypage__activity-item">
+            <div className="mypage__activity-icon">
+              <img src={programIcon} alt="참여 프로그램" />
+            </div>
+            <div className="mypage__activity-text">참여 프로그램 내역</div>
+            <div className="mypage__activity-arrow">›</div>
+          </div>
+          <div className="mypage__activity-item">
+            <div className="mypage__activity-icon">
+              <img src={likeIcon} alt="찜한 프로그램" />
+            </div>
+            <div className="mypage__activity-text">찜한 프로그램 내역</div>
+            <div className="mypage__activity-arrow">›</div>
+          </div>
+          <div className="mypage__activity-item">
+            <div className="mypage__activity-icon">
+              <img src={mypostIcon} alt="나의 꿈터 글" />
+            </div>
+            <div className="mypage__activity-text">나의 꿈터 글</div>
+            <div className="mypage__activity-arrow">›</div>
+          </div>
+          <div className="mypage__activity-item">
+            <div className="mypage__activity-icon">
+              <img src={thumbupIcon} alt="공감한 꿈터 글" />
+            </div>
+            <div className="mypage__activity-text">공감한 꿈터 글</div>
+            <div className="mypage__activity-arrow">›</div>
+          </div>
         </div>
       </section>
 
-      <section className="mypage__section">
-        <h2>찜한 프로그램</h2>
-        <div className="mypage__grid">
-          {likedPrograms.length > 0 ? (
-            likedPrograms.map((p) => (
-              <ProgramCard key={p.programId} program={p} isLiked={true} />
+      <section className="mypage__programs-section">
+        <div className="mypage__section-header">
+          <h2 className="mypage__section-title">참여 예정 프로그램</h2>
+          <span className="mypage__section-more">전체 보기></span>
+        </div>
+        <div className="mypage__programs-grid">
+          {joinedPrograms.length > 0 ? (
+            joinedPrograms.slice(0, 2).map((p) => (
+              <ProgramCardBasic
+                key={p.programId}
+                title={p.title}
+                organization={p.mentor}
+                date={`${p.startDate} ~ ${p.endDate}`}
+                category={p.category || "카테고리"}
+                tags={["체험처", "무료"]}
+                onClick={() => {}}
+              />
             ))
           ) : (
-            <p className="mypage__empty">찜한 프로그램이 없습니다.</p>
+            <p className="mypage__empty">아직 참여한 프로그램이 없습니다.</p>
           )}
         </div>
       </section>

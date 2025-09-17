@@ -70,12 +70,21 @@ body.community-write-view .app-shell__main {
 }
 
 .community__header-action {
-  color: #3b82f6;
+  color: #BFBFBF;
   font-size: 16px;
   font-weight: 500;
   background: none;
   border: none;
   cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.community__header-action:hover {
+  color: var(--brand-blue-500);
+}
+
+.community__header-action.active {
+  color: var(--brand-blue-500);
 }
 
 .community__back-button {

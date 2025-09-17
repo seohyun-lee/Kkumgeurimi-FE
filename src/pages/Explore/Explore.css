@@ -24,7 +24,7 @@
 .sort { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: .8rem; background: #fff; }
 
 /* Grid & Card */
-.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 16px; margin-bottom: 40px; justify-items: center; }
 .card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.08); cursor: pointer; transition: .2s; position: relative; }
 .card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.12); }
 

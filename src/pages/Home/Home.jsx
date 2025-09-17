@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
+import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
 import './Home.css';
 
 const Home = () => {
@@ -366,29 +367,20 @@ const Home = () => {
       <section className="home__section">
         <div className="home__section-header">
           <h2 className="home__section-title">이번 주 인기 프로그램</h2>
-          <a href="#" className="home__section-more">더보기 &gt;</a>
+          <span className="home__section-more">전체 보기 ></span>
         </div>
         
         <div className="popular-programs-grid">
           {popularPrograms.map((program) => (
-            <div 
-              key={program.id} 
-              className="popular-program-card"
-              onClick={() => handleProgramClick(program.title)}
-            >
-              <div className="home__program-image">
-                <div className="home__category-tag">카테고리</div>
-              </div>
-              <div className="home__program-info">
-                <h4 className="program-title">{program.title}</h4>
-                <p className="program-subtitle">{program.company}</p>
-                <p className="program-date">2025-08-06 ~ 2025-12-31</p>
-                <div className="home__program-tags">
-                  <span className="tag">{program.level}</span>
-                  <span className="tag free">무료</span>
-                </div>
-              </div>
-            </div>
+            <ProgramCardBasic
+              key={program.id}
+              title={program.title}
+              organization={program.company}
+              date="2025-08-06 ~ 2025-12-31"
+              category="카테고리"
+              tags={[program.level, "무료"]}
+              onClick={() => handleProgramClick(program)}
+            />
           ))}
         </div>
       </section>
@@ -423,7 +415,7 @@ const Home = () => {
       <section className="home__section">
         <div className="home__section-header">
           <h2 className="home__section-title">커뮤니티 인기글</h2>
-          <a href="#" className="home__section-more">더보기 &gt;</a>
+          <span className="home__section-more">전체 보기 ></span>
         </div>
         
         <div className="home__success-stories">

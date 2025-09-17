@@ -48,14 +48,14 @@ export const router = createBrowserRouter([
       { path: "programs/:programId", element: <ProgramDetail /> },
       { path: "community", element: <Community /> },
       { path: "assistant", element: <Assistant /> },
-      { path: "me", element: <MyPage /> },
+      { path: "my", element: <MyPage /> },
       // 보호 구역
       {
         element: <ProtectedLayout />,
         children: [
-          { path: "me", element: <Me /> },
-          { path: "me/registrations", element: <MeRegistrations /> },
-          { path: "me/likes", element: <MeLikes /> },
+          { path: "my/profile", element: <Me /> },
+          { path: "my/registrations", element: <MeRegistrations /> },
+          { path: "my/likes", element: <MeLikes /> },
         ],
       },
       { path: "signin", element: <Navigate to="/auth/signin" replace /> },

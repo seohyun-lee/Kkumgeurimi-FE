@@ -272,7 +272,7 @@ const Community = () => {
           </button>
           <h1 className="community__header-title">글쓰기</h1>
           <button 
-            className="community__header-action"
+            className={`community__header-action ${newPost.title.trim() && newPost.content.trim() ? 'active' : ''}`}
             onClick={handleWritePost}
           >
             완료
