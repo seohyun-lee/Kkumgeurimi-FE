@@ -27,8 +27,8 @@
 
 /* Header */
 .explore__header { background: #fff; border-bottom: 1px solid #eee; padding: 20px; }
-.header__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.header__title { font-size: 1.4rem; font-weight: 700; }
+.header__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.header__title { font-size: 1.1rem; font-weight: 700; }
 .header__icon { color: #666; font-size: 1.2rem; }
 
 /* 검색바 */
@@ -91,7 +91,7 @@
 }
 
 .filters-header {
-  padding: 8px 20px;
+  padding: 2px 20px;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
@@ -112,7 +112,6 @@
   color: #6b7280;
   cursor: pointer;
   display: flex;
-  align-items: center;
   gap: 8px;
   font-size: 14px;
   font-weight: 500;
@@ -441,7 +440,7 @@ body.no-scroll { overflow: hidden; touch-action: none; overscroll-behavior: none
 
 .explore__header { padding: 16px; }
 .explore__content { padding: 16px; }
-.grid { gap: 8px; }
+.grid { gap: 16px; }
 
 /* ====== 필터 바 기본 (데스크톱) ====== */
 .filters--compact {
@@ -451,7 +450,7 @@ body.no-scroll { overflow: hidden; touch-action: none; overscroll-behavior: none
 .filters__row{
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* 최소 160px 유지 */
-  gap:12px;
+  gap: 12px;
   align-items:start;
 }
 

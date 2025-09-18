@@ -40,8 +40,8 @@
 .career .intro-text {
   font-size: 15px;
   color: #64748b;
-  margin-bottom: 4px;
-  font-weight: bold;
+  margin-bottom: 10px;
+  font-weight: 400;
   /* font-family는 globals.css에서 전역 관리 */
 }
 
@@ -74,8 +74,8 @@
   position: relative;
   width: 100%;
   height: 380px;
-  margin-top: 60px; /* intro와의 간격 */
-  margin-bottom: 40px;
+  margin-top: 80px; /* intro와의 간격 */
+  margin-bottom: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -139,7 +139,7 @@
 /* Chat Section */
 .career__chat-section {
   background: white;
-  margin-top: -180px;
+  margin-top: -50px;
   margin-bottom: 40px;
 }
 
