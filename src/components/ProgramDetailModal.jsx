@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './ProgramDetailModal.css';
 import { getCategoryName } from '../utils/category.js';
 import likeIcon from '../assets/icons/my/like.svg';
@@ -12,7 +12,9 @@ const ProgramDetailModal = ({
   onApply,
   isLiked = false
 }) => {
-  if (!isOpen || !program) return null;
+  const [showOverlay, setShowOverlay] = useState(false);
+  const modalContentRef = useRef(null);
+  const imageRef = useRef(null);
 
 
   const handleBackdropClick = (e) => {
@@ -29,11 +31,27 @@ const ProgramDetailModal = ({
     onApply?.(program);
   };
 
+const handleScroll = useCallback((e) => {
+    const scrollTop = e.target.scrollTop;
+    setShowOverlay(scrollTop > 30);
+  }, []);
+
+useEffect(() => {
+    const modalContent = modalContentRef.current;
+    if (modalContent && isOpen) {
+      modalContent.addEventListener('scroll', handleScroll);
+      return () => {
+        modalContent.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [isOpen, handleScroll]);
+
+  if (!isOpen || !program) return null;
+
   return (
     <div className="program-detail-modal-backdrop" onClick={handleBackdropClick}>
       <div className="program-detail-modal">
-        {/* 이미지 영역 */}
-        <div className="modal-image-container">
+        <div className="modal-image-container" ref={imageRef}>
           {program.imageUrl ? (
             <img src={program.imageUrl} alt={program.programTitle} />
           ) : (
@@ -42,51 +60,63 @@ const ProgramDetailModal = ({
             </div>
           )}
           
+{showOverlay && (
+            <div className="modal-image-overlay">
+              <div className="modal-overlay-content">
+                <h2 className="modal-overlay-title">
+                  {program.programTitle}
+                </h2>
+                
+                <p className="modal-overlay-provider">
+                  {program.provider}
+                </p>
+
+                <div className="modal-overlay-date">
+                  {program.startDate && program.endDate 
+                    ? `${program.startDate} ~ ${program.endDate}`
+                    : program.date
+                  }
+                </div>
+              </div>
+            </div>
+          )}
+          
           <button className="modal-close-btn" onClick={onClose}>✕</button>
         </div>
 
-        {/* 콘텐츠 영역 */}
-        <div className="modal-content">
-          <h2 className="program-detail-modal__title">
-            {program.programTitle}
-          </h2>
-          
-          <p className="program-detail-modal__provider">
-            {program.provider}
-          </p>
+        <div className="modal-content" ref={modalContentRef}>
+{!showOverlay && (
+            <>
+              <h2 className="program-detail-modal__title">
+                {program.programTitle}
+              </h2>
+              
+              <p className="program-detail-modal__provider">
+                {program.provider}
+              </p>
 
-          <div className="program-detail-modal__date">
-            {program.startDate && program.endDate 
-              ? `${program.startDate} ~ ${program.endDate}`
-              : program.date
-            }
-          </div>
+              <div className="program-detail-modal__date">
+                {program.startDate && program.endDate 
+                  ? `${program.startDate} ~ ${program.endDate}`
+                  : program.date
+                }
+              </div>
+            </>
+          )}
 
-          {/* 태그들 - 중복 제거 */}
-          <div className="program-detail-modal__tags">
-            {program.tags && program.tags.filter(tag => 
-              tag !== '무료' && 
-              tag !== '유료' && 
-              tag !== '중고등학생' && 
-              tag !== '고등학생' &&
-              tag !== '중학생' &&
-              tag !== '체험처'
-            ).map((tag, index) => (
-              <span key={index} className="program-detail-modal__tag">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          {/* 프로그램 상세 정보 */}
           <div className="program-detail-modal__details">
-            {/* 분야 카테고리 */}
             <div className="program-detail-modal__section">
               <h3>분야</h3>
               <p>{getCategoryName(program.interestCategory) || '미분류'}</p>
             </div>
 
-            {/* program_detail 엔티티 필드들 */}
+            {program.tags && program.tags.includes('현장견학형') && (
+              <div className="program-detail-modal__section">
+                <h3>프로그램 유형</h3>
+                <p>현장견학형</p>
+              </div>
+            )}
+
             {program.programDetail?.description && (
               <div className="program-detail-modal__section">
                 <h3>목표</h3>
@@ -115,12 +145,6 @@ const ProgramDetailModal = ({
               </div>
             )}
 
-            {program.programDetail?.targetSchoolType && (
-              <div className="program-detail-modal__section">
-                <h3>대상 학교 유형</h3>
-                <p>{program.programDetail.targetSchoolType}</p>
-              </div>
-            )}
 
             {program.programDetail?.levelInfo && (
               <div className="program-detail-modal__section">
@@ -129,7 +153,36 @@ const ProgramDetailModal = ({
               </div>
             )}
 
-            {/* program 엔티티 필드들 */}
+            <div className="program-detail-modal__section">
+              <h3>추가 정보</h3>
+              <p>이 프로그램은 학생들의 진로 탐색과 체험을 위한 다양한 활동을 제공합니다.</p>
+            </div>
+
+            <div className="program-detail-modal__section">
+              <h3>준비물</h3>
+              <p>필요한 준비물은 프로그램 신청 시 개별 안내드립니다.</p>
+            </div>
+
+            <div className="program-detail-modal__section">
+              <h3>문의사항</h3>
+              <p>프로그램 관련 문의사항이 있으시면 언제든지 연락주세요.</p>
+            </div>
+
+            <div className="program-detail-modal__section">
+              <h3>안전 수칙</h3>
+              <p>프로그램 참여 시 안전 수칙을 반드시 지켜주세요. 모든 참가자는 안전한 환경에서 체험할 수 있도록 최선을 다하겠습니다.</p>
+            </div>
+
+            <div className="program-detail-modal__section">
+              <h3>준비사항</h3>
+              <p>프로그램 참여 전 필요한 준비사항들을 미리 확인해주세요. 편안한 복장과 필수 준비물을 챙겨오시기 바랍니다.</p>
+            </div>
+
+            <div className="program-detail-modal__section">
+              <h3>참가 후기</h3>
+              <p>이전 참가자들의 후기를 확인해보세요. 실제 체험담을 통해 프로그램에 대한 더 자세한 정보를 얻을 수 있습니다.</p>
+            </div>
+
             {program.relatedMajor && (
               <div className="program-detail-modal__section">
                 <h3>체험 직무/학과</h3>
@@ -158,7 +211,6 @@ const ProgramDetailModal = ({
               </div>
             )}
 
-            {/* 참가비 - 무료/유료 모두 표시 */}
             <div className="program-detail-modal__section">
               <h3>참가비</h3>
               <p>
@@ -170,7 +222,6 @@ const ProgramDetailModal = ({
             </div>
           </div>
 
-          {/* 액션 버튼들 */}
           <div className="program-detail-modal__actions">
             <button 
               className={`program-detail-modal__like-btn ${isLiked ? 'liked' : ''}`}

@@ -51,6 +51,47 @@
   border-radius: 8px 8px 0 0;
 }
 
+/* 이미지 오버레이 */
+.modal-image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+  padding: 20px;
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal-overlay-content {
+  color: white;
+}
+
+.modal-overlay-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.modal-overlay-provider {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 8px 0;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.modal-overlay-date {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
 .modal-image-container img {
   width: 100%;
   height: 100%;
@@ -111,7 +152,7 @@
 
 /* 모달 콘텐츠 */
 .modal-content {
-  padding: 0 !important;
+  padding: 20px 20px 0 20px !important;
   flex: 1;
   overflow-y: auto !important;
   overflow-x: hidden !important;
@@ -120,6 +161,7 @@
   background: #fff !important;
   margin: 0 !important;
   border-radius: 0 0 8px 8px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .program-detail-modal__title {
@@ -128,7 +170,7 @@
   color: #111827;
   margin: 0 0 8px 0;
   line-height: 1.4;
-  padding: 20px 20px 0 20px;
+  padding: 0;
 }
 
 .program-detail-modal__provider {
@@ -136,15 +178,16 @@
   color: #6b7280;
   margin: 0 0 8px 0;
   font-weight: 500;
-  padding: 0 20px 0 20px;
+  padding: 0;
 }
 
 .program-detail-modal__date {
   font-size: 14px;
   color: #9ca3af;
   margin: 0 0 16px 0;
-  padding: 0 20px 0 20px;
+  padding: 0;
 }
+
 
 /* 태그들 */
 .program-detail-modal__tags {
@@ -283,6 +326,34 @@
 
 .modal-image-container {
   height: 180px;
+}
+
+.modal-image-overlay {
+  padding: 16px;
+}
+
+.modal-overlay-title {
+  font-size: 18px;
+}
+
+.modal-overlay-provider {
+  font-size: 13px;
+}
+
+.modal-overlay-date {
+  font-size: 13px;
+}
+
+.program-detail-modal__title {
+  font-size: 18px;
+}
+
+.program-detail-modal__provider {
+  font-size: 13px;
+}
+
+.program-detail-modal__date {
+  font-size: 13px;
 }
 
 .program-detail-modal__actions {
