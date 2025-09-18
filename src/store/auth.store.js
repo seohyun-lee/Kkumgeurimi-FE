@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { authService } from '../services/auth.service.js';
 import { meService } from '../services/my.service.js';
+import { AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../config/constants.js';
 
 export const useAuthStore = create((set, get) => ({
   // 상태
@@ -8,6 +9,7 @@ export const useAuthStore = create((set, get) => ({
   isAuthenticated: false,
   isLoading: false,
   error: null,
+  initialized: false, // 초기화 여부 추가
 
   // 토큰 getter
   get token() {
@@ -123,20 +125,52 @@ export const useAuthStore = create((set, get) => ({
 
   // 초기화 (앱 시작 시 호출)
   initialize: async () => {
+    const { initialized } = get();
+    if (initialized) {
+      console.log('[Auth Store] Already initialized, skipping...');
+      return;
+    }
+
+    console.log('[Auth Store] Starting initialization...');
     const token = authService.getCurrentToken();
+    console.log('[Auth Store] Token found:', !!token);
+
     if (token) {
-      try {
-        // 토큰이 있으면 사용자 정보 가져오기
-        const userProfile = await meService.getProfile();
-        set({ 
-          user: userProfile, 
-          isAuthenticated: true 
-        });
-      } catch (error) {
-        console.error('Failed to fetch user profile on initialize:', error);
-        // 토큰은 있지만 사용자 정보 가져오기 실패 시 로그아웃
-        await get().logout();
-      }
+      console.log('[Auth Store] Token found - setting authenticated state');
+      // 토큰이 있으면 일단 로그인 상태로 설정
+      set({
+        user: null, // 사용자 정보는 필요할 때만 가져옴
+        isAuthenticated: true,
+        isLoading: false,
+        initialized: true
+      });
+    } else {
+      console.log('[Auth Store] No token found, setting unauthenticated state');
+      // 토큰이 없으면 인증되지 않은 상태로 설정
+      set({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        initialized: true
+      });
+    }
+  },
+
+  // 사용자 프로필 가져오기 (필요할 때만 호출)
+  fetchUserProfile: async () => {
+    const { user, isAuthenticated } = get();
+    if (!isAuthenticated || user) {
+      return; // 이미 프로필이 있거나 인증되지 않은 경우 스킵
+    }
+
+    try {
+      console.log('[Auth Store] Fetching user profile...');
+      const userProfile = await meService.getProfile();
+      console.log('[Auth Store] User profile fetched successfully:', userProfile);
+      set({ user: userProfile });
+    } catch (error) {
+      console.warn('[Auth Store] Failed to fetch user profile:', error);
+      // 프로필 가져오기 실패해도 로그인 상태는 유지
     }
   },
 

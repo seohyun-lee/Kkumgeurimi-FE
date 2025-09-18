@@ -22,12 +22,21 @@ export const authService = {
 
   // 로그인
   async login(credentials) {
+    console.log('[Auth Service] Attempting login...');
     const response = await http.post('/auth/login', credentials);
     const { accessToken } = response.data;
-    
+
+    console.log('[Auth Service] Login successful, storing token...');
+    console.log('[Auth Service] Token key:', AUTH_TOKEN_KEY);
+    console.log('[Auth Service] Token value:', accessToken);
+
     // 토큰을 로컬 스토리지에 저장
     localStorage.setItem(AUTH_TOKEN_KEY, accessToken);
-    
+
+    // 저장 후 확인
+    const storedToken = localStorage.getItem(AUTH_TOKEN_KEY);
+    console.log('[Auth Service] Token stored successfully:', !!storedToken);
+
     return response.data;
   },
 
@@ -68,7 +77,10 @@ export const authService = {
 
   // 현재 토큰 확인
   getCurrentToken() {
-    return localStorage.getItem(AUTH_TOKEN_KEY);
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
+    console.log('[Auth Service] getCurrentToken called, token exists:', !!token);
+    console.log('[Auth Service] Using token key:', AUTH_TOKEN_KEY);
+    return token;
   },
 
   // 로그인 상태 확인

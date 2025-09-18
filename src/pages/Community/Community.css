@@ -5,7 +5,6 @@
   max-width: 390px;
   margin: 0 auto;
   background: #f8fafc;
-  min-height: 100vh;
 }
 
 /* Hide navigation in detail view */
@@ -142,7 +141,7 @@ body.community-write-view .app-shell__main {
 
 .community__post-item {
   background: white;
-  padding: 8px 16px;
+  padding: 12px 16px;
   border-bottom: 1px solid #f3f4f6;
   cursor: pointer;
 }
@@ -223,19 +222,7 @@ body.community-write-view .app-shell__main {
   border: none;
   cursor: pointer;
   border-radius: 16px;
-  color: #9ca3af;
-}
-
-.community__action-button:hover {
-  background: #f3f4f6;
-}
-
-.community__action-button--liked {
-  color: #3b82f6;
-}
-
-.community__action-button--liked:hover {
-  background: #dbeafe;
+  color: #41a5ec;
 }
 
 .community__action-info {
@@ -291,16 +278,19 @@ body.community-write-view .app-shell__main {
   border: none;
   outline: none;
   color: #1f2937;
+  font-family: 'Pretendard';
   margin-bottom: 16px;
   /* font-family는 globals.css에서 전역 관리 */
 }
 
 .community__write-title::placeholder {
   color: #9ca3af;
+  font-family: 'Pretendard';
 }
 
 .community__write-content {
   width: 100%;
+  font-family: 'Pretendard';
   flex: 1;
   border: none;
   outline: none;
@@ -538,6 +528,12 @@ body.community-write-view .app-shell__main {
   border: none;
   cursor: pointer;
   color: #9ca3af;
+  transition: transform 0.2s ease;
+}
+
+/* 좋아요 버튼만 특별한 색상 */
+.community__detail-action:first-child {
+  color: #41a5ec;
 }
 
 .community__detail-action-icon {
@@ -546,23 +542,16 @@ body.community-write-view .app-shell__main {
   margin-right: 4px;
 }
 
-.community__detail-action-icon--liked {
-  color: #3b82f6;
-  fill: currentColor;
-}
 
 .community__detail-action-text {
   font-size: 12px;
-}
-
-.community__detail-action-text--liked {
-  color: #3b82f6;
 }
 
 /* Comments */
 .community__comments {
   background: white;
   margin-top: 8px;
+  border-top: 1px solid #fff;
 }
 
 .community__comment {
@@ -596,6 +585,22 @@ body.community-write-view .app-shell__main {
   font-size: 14px;
   font-weight: 400;
   color: #374151;
+}
+
+.community__comment-delete {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 16px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
 }
 
 /* Comment Input */
@@ -758,11 +763,6 @@ body.community-write-view .app-shell__main {
   .community__category-tab {
     padding: 6px 12px;
     font-size: 13px;
-  }
-  
-  .community__write-button-container {
-    right: 12px;
-    bottom: 20px;
   }
 }
 
