@@ -3,7 +3,7 @@ import { AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../config/constants';
 
 // Axios 인스턴스 생성
 const http = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ http.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
         if (refreshToken) {
-          const response = await axios.post('/api/auth/refresh', {
+          const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/refresh`, {
             refreshToken
           });
           

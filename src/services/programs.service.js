@@ -33,8 +33,10 @@ export const programsService = {
   async getUpcoming() {
     try {
       const response = await http.get('/programs/upcoming');
+      console.log('API 응답:', response.data);
       return response.data;
     } catch (error) {
+      console.error('API 호출 실패:', error);
       console.warn('API 호출 실패, 더미 데이터 사용:', error.message);
       // API가 없을 때 더미 데이터 반환
       return dummyPrograms;

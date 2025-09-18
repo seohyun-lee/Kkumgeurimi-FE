@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { INTEREST_CATEGORIES } from '../../config/constants';
@@ -71,6 +71,7 @@ function SelectFilter({ label, value, onChange, options }) {
 }
 
 function SelectedFilters({ filters, onClearKey, onReset }) {
+function SelectedFilters({ filters, onClearKey }) {
   const labelByValue = (options, v) =>
     options.find(o => o.value === v)?.label ?? v;
 
@@ -208,7 +209,7 @@ export default function Explore() {
     fetchPrograms();
   };
 
-  const fetchPrograms = async () => {
+  const fetchPrograms = useCallback(async () => {
     setLoading(true);
     try {
       const response = await programsService.searchPrograms({
@@ -241,17 +242,17 @@ export default function Explore() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, sortBy, page, itemsPerPage]);
 
   // 페이지나 정렬이 변경될 때만 API 호출 (필터는 수동 검색)
   useEffect(() => {
     fetchPrograms();
-  }, [sortBy, page]);
+  }, [sortBy, page, fetchPrograms]);
 
   // 초기 로드
   useEffect(() => {
     fetchPrograms();
-  }, []);
+  }, [fetchPrograms]);
 
   const resetFilters = () => {
     setFilters(DEFAULT_FILTERS);
@@ -439,10 +440,10 @@ export default function Explore() {
             />
           </div>
         )}
-      </div>
-    </header>
+        </div>
+      </header>
 
-      <section className="explore__content">
+    <section className="explore__content">
         <div className="content__top">
           <div className="results">
             {loading ? '검색 중...' : `전체 ${totalElements}개`}

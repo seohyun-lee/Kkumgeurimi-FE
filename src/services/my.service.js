@@ -3,44 +3,44 @@ import http from './http.js';
 export const meService = {
   // 내 프로필 조회
   async getProfile() {
-    const response = await http.get('/me');
+    const response = await http.get('/my');
     return response.data;
   },
 
   // 프로필 수정
   async updateProfile(profileData) {
-    const response = await http.patch('/me', profileData);
+    const response = await http.patch('/my', profileData);
     return response.data;
   },
 
   // 회원탈퇴
   async deleteAccount() {
-    const response = await http.delete('/me');
+    const response = await http.delete('/my');
     return response.data;
   },
 
   // 내 신청 목록 조회
   async getRegistrations(status = null) {
     const params = status ? { status } : {};
-    const response = await http.get('/me/programs/registrations', { params });
+    const response = await http.get('/my/programs/registrations', { params });
     return response.data;
   },
 
   // 내 찜 목록 조회
   async getLikes() {
-    const response = await http.get('/me/programs/likes');
+    const response = await http.get('/my/programs/likes');
     return response.data;
   },
 
   // 내 진로 정보 조회
   async getCareer() {
-    const response = await http.get('/me/career');
+    const response = await http.get('/my/career');
     return response.data;
   },
 
   // 진로 정보 수정
   async updateCareer(careerData) {
-    const response = await http.patch('/me/career', careerData);
+    const response = await http.patch('/my/career', careerData);
     return response.data;
   },
 

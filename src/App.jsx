@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { router } from './routes/index.jsx';
@@ -18,12 +18,30 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const { initialize } = useAuthStore();
+  const { initialize, isLoading } = useAuthStore();
 
-  useEffect(() => {
-    // 앱 시작 시 인증 상태 초기화
+  const initializeAuth = useCallback(() => {
     initialize();
   }, [initialize]);
+
+  useEffect(() => {
+    // 앱 시작 시 인증 상태 초기화 (한 번만)
+    initializeAuth();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontSize: '18px'
+      }}>
+        로딩 중...
+      </div>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

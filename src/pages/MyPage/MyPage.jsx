@@ -36,37 +36,35 @@ export default function MyPage() {
     const fetchJoinedPrograms = async () => {
       try {
         setIsLoading(true);
-        const programs = await meService.getRegistrations();
+        const programs = await programsService.getUpcoming();
         setJoinedPrograms(programs || []);
       } catch (error) {
-        console.error('참여 프로그램 조회 실패:', error);
+        console.error('참여 예정 프로그램 조회 실패:', error);
         // 실패 시 목업 데이터 사용
         setJoinedPrograms([
           {
             programId: 1,
-            title: "프로덕트 매니저 실무 체험",
-            mentor: "라인플러스",
-            category: "기획",
+            programTitle: "프로덕트 매니저 실무 체험",
+            provider: "라인플러스",
+            programTypeLabel: "체험처",
             startDate: "2024-01-15",
             endDate: "2024-03-15",
-            price: 0,
-            backgroundColor: "#667eea",
-            emoji: "📋",
+            costType: "FREE",
             imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center",
-            description: "실제 프로덕트 개발 과정에서 PM의 역할을 체험하고 기획 역량을 키우는 프로그램입니다."
+            venueRegion: "서울",
+            interestCategoryLabel: "기획"
           },
           {
             programId: 2,
-            title: "비즈니스 모델 설계 워크샵",
-            mentor: "삼성전자",
-            category: "전략기획",
+            programTitle: "비즈니스 모델 설계 워크샵",
+            provider: "삼성전자",
+            programTypeLabel: "워크샵",
             startDate: "2024-02-01",
             endDate: "2024-04-01",
-            price: 50000,
-            backgroundColor: "#4ECDC4",
-            emoji: "💡",
+            costType: "PAID",
             imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop&crop=center",
-            description: "스타트업부터 대기업까지, 다양한 비즈니스 모델을 분석하고 직접 설계해보는 실무형 워크샵입니다."
+            venueRegion: "서울",
+            interestCategoryLabel: "전략기획"
           }
         ]);
       } finally {
@@ -121,19 +119,19 @@ export default function MyPage() {
     // 프로그램 데이터를 Career/Home과 동일한 구조로 변환
     const transformedProgram = {
       programId: program.programId || program.id,
-      programTitle: program.title,
-      provider: program.mentor || program.provider,
+      programTitle: program.programTitle || program.title,
+      provider: program.provider || program.mentor,
       objective: program.description || '프로그램 설명이 없습니다.',
       targetAudience: '중고등학생',
       programType: 1,
       startDate: program.startDate,
       endDate: program.endDate,
-      relatedMajor: program.category || '기타',
-      costType: 'FREE',
+      relatedMajor: program.interestCategoryLabel || program.category || '기타',
+      costType: program.costType || 'FREE',
       price: null,
       imageUrl: program.imageUrl || null,
       eligibleRegion: '전국',
-      venueRegion: program.mentor || '미정',
+      venueRegion: program.venueRegion || program.mentor || '미정',
       operateCycle: '주 1회',
       interestCategory: 1, // 기본값
       programDetail: {
@@ -145,7 +143,7 @@ export default function MyPage() {
         targetSchoolType: '중학교, 고등학교',
         levelInfo: '중학생, 고등학생'
       },
-      tags: ['체험처', '무료']
+      tags: [program.programTypeLabel || '체험처', program.costType === 'FREE' ? '무료' : '유료']
     };
     setSelectedProgram(transformedProgram);
     setIsModalOpen(true);
@@ -253,20 +251,20 @@ export default function MyPage() {
             joinedPrograms.slice(0, 2).map((p) => (
               <ProgramCardBasic
                 key={p.programId}
-                title={p.title}
-                organization={p.mentor}
+                title={p.programTitle || p.title}
+                organization={p.provider || p.mentor}
                 date={`${p.startDate} ~ ${p.endDate}`}
-                category={p.category || "카테고리"}
+                category={p.interestCategoryLabel || p.category || "카테고리"}
                 tags={[
-                  p.category === "전략기획" || p.category === "창업기획" ? "체험처" : "체험처",
-                  p.price === 0 ? "무료" : "유료"
+                  p.programTypeLabel || "체험처",
+                  p.costType === "FREE" ? "무료" : "유료"
                 ]}
                 imageUrl={p.imageUrl}
                 onClick={() => handleProgramClick(p)}
               />
             ))
           ) : (
-            <p className="mypage__empty">아직 참여한 프로그램이 없습니다.</p>
+            <p className="mypage__empty">아직 참여 예정인 프로그램이 없습니다.</p>
           )}
         </div>
       </section>
