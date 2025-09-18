@@ -64,23 +64,22 @@ const ProgramDetailModal = ({
 
 const handleScroll = useCallback((e) => {
     const scrollTop = e.target.scrollTop;
-    console.log('스크롤:', scrollTop, 'showOverlay:', scrollTop > 30);
     setShowOverlay(scrollTop > 30);
   }, []);
 
 useEffect(() => {
     const modalContent = modalContentRef.current;
     if (modalContent && isOpen) {
-      modalContent.addEventListener('scroll', handleScroll);
-      return () => {
-        modalContent.removeEventListener('scroll', handleScroll);
-      };
+      // 스크롤 위치 초기화
+      modalContent.scrollTop = 0;
     }
-  }, [isOpen, handleScroll]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen && programId) {
       fetchProgramDetail(programId);
+      // 모달이 열릴 때마다 오버레이 상태 초기화
+      setShowOverlay(false);
     }
   }, [isOpen, programId]);
 
@@ -149,7 +148,11 @@ useEffect(() => {
           <button className="modal-close-btn" onClick={onClose}>✕</button>
         </div>
 
-        <div className="modal-content" ref={modalContentRef}>
+        <div 
+          className="modal-content" 
+          ref={modalContentRef}
+          onScroll={handleScroll}
+        >
 {!showOverlay && (
             <>
               <h2 className="program-detail-modal__title">
