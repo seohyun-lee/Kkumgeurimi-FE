@@ -240,16 +240,18 @@
 /* 액션 버튼들 */
 .program-detail-modal__actions {
   display: flex;
-  gap: 20px;
-  padding: 16px 16px 16px 16px;
+  gap: 12px;
+  padding: 16px 4px 16px 4px;
   border-top: 1px solid #e5e7eb;
   flex-shrink: 0;
   background: #fff;
   margin-top: auto;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .program-detail-modal__like-btn {
-  width: 10px;
+  width: 30px;
   height: 50px;
   padding: 0;
   border-radius: 8px;
@@ -279,9 +281,15 @@
   color: white;
 }
 
-.program-detail-modal__apply-btn:hover {
+.program-detail-modal__apply-btn:hover:not(:disabled) {
   background: #1d7bef;
   border-color: #1d7bef;
+}
+
+.program-detail-modal__apply-btn:disabled {
+  background: #9ca3af;
+  border-color: #9ca3af;
+  cursor: not-allowed;
 }
 
 .heart-icon {

@@ -12,7 +12,7 @@ const Home = () => {
   const { isAuthenticated } = useAuthStore();
   const [activeGradeTab, setActiveGradeTab] = useState('중1-2');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProgram, setSelectedProgram] = useState(null);
+  const [selectedProgramId, setSelectedProgramId] = useState(null);
 
 
   // 개인화 추천 프로그램 조회 (로그인한 경우만)
@@ -291,13 +291,13 @@ const Home = () => {
   };
 
   const handleProgramClick = (program) => {
-    setSelectedProgram(program);
+    setSelectedProgramId(program.id);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedProgram(null);
+    setSelectedProgramId(null);
   };
 
   const handleLikeProgram = async (program) => {
@@ -553,10 +553,9 @@ const Home = () => {
       <ProgramDetailModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        program={selectedProgram}
+        programId={selectedProgramId}
         onLike={handleLikeProgram}
         onApply={handleApplyProgram}
-        isLiked={selectedProgram ? likedPrograms.has(selectedProgram.id) : false}
       />
     </div>
   );

@@ -7,15 +7,36 @@ import heartEmptyIcon from '../assets/icons/heart_empty.svg';
 const ProgramDetailModal = ({ 
   isOpen, 
   onClose, 
-  program,
+  programId,
   onLike,
-  onApply,
-  isLiked = false
+  onApply
 }) => {
   const [showOverlay, setShowOverlay] = useState(false);
+  const [program, setProgram] = useState(null);
+  const [loading, setLoading] = useState(false);
   const modalContentRef = useRef(null);
   const imageRef = useRef(null);
 
+
+  // API 호출 함수
+  const fetchProgramDetail = async (id) => {
+    if (!id) return;
+    
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/programs/${id}`);
+      if (!response.ok) {
+        throw new Error('프로그램 정보를 가져올 수 없습니다.');
+      }
+      const data = await response.json();
+      setProgram(data);
+    } catch (error) {
+      console.error('프로그램 상세 정보 로딩 실패:', error);
+      setProgram(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -31,8 +52,19 @@ const ProgramDetailModal = ({
     onApply?.(program);
   };
 
+  // 대상학년 표시 형식 변경 (초, 중, 고 → 초등학생, 중학생, 고등학생)
+  const formatTargetAudience = (audience) => {
+    if (!audience) return '미정';
+    return audience
+      .replace('초', '초등학생')
+      .replace('중', '중학생')
+      .replace('고', '고등학생')
+      .replace(',', ', ');
+  };
+
 const handleScroll = useCallback((e) => {
     const scrollTop = e.target.scrollTop;
+    console.log('스크롤:', scrollTop, 'showOverlay:', scrollTop > 30);
     setShowOverlay(scrollTop > 30);
   }, []);
 
@@ -46,7 +78,40 @@ useEffect(() => {
     }
   }, [isOpen, handleScroll]);
 
-  if (!isOpen || !program) return null;
+  useEffect(() => {
+    if (isOpen && programId) {
+      fetchProgramDetail(programId);
+    }
+  }, [isOpen, programId]);
+
+  if (!isOpen) return null;
+
+  if (loading) {
+    return (
+      <div className="program-detail-modal-backdrop" onClick={handleBackdropClick}>
+        <div className="program-detail-modal">
+          <div style={{ padding: '40px', textAlign: 'center' }}>
+            <div>로딩 중...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!program) {
+    return (
+      <div className="program-detail-modal-backdrop" onClick={handleBackdropClick}>
+        <div className="program-detail-modal">
+          <div style={{ padding: '40px', textAlign: 'center' }}>
+            <div>프로그램 정보를 불러올 수 없습니다.</div>
+            <button onClick={onClose} style={{ marginTop: '20px', padding: '10px 20px' }}>
+              닫기
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="program-detail-modal-backdrop" onClick={handleBackdropClick}>
@@ -60,7 +125,7 @@ useEffect(() => {
             </div>
           )}
           
-{showOverlay && (
+          {showOverlay && (
             <div className="modal-image-overlay">
               <div className="modal-overlay-content">
                 <h2 className="modal-overlay-title">
@@ -106,82 +171,42 @@ useEffect(() => {
 
           <div className="program-detail-modal__details">
             <div className="program-detail-modal__section">
-              <h3>분야</h3>
-              <p>{getCategoryName(program.interestCategory) || '미분류'}</p>
+              <h3>카테고리</h3>
+              <p>{program.interestCategoryLabel || '미분류'}</p>
             </div>
 
-            {program.tags && program.tags.includes('현장견학형') && (
-              <div className="program-detail-modal__section">
-                <h3>프로그램 유형</h3>
-                <p>현장견학형</p>
-              </div>
-            )}
+            <div className="program-detail-modal__section">
+              <h3>프로그램 유형</h3>
+              <p>{program.programTypeLabel || '미정'}</p>
+            </div>
 
-            {program.programDetail?.description && (
-              <div className="program-detail-modal__section">
-                <h3>목표</h3>
-                <p>{program.programDetail.description}</p>
-              </div>
-            )}
-
-            {program.programDetail?.requiredHours && (
-              <div className="program-detail-modal__section">
-                <h3>체험 이수 시간</h3>
-                <p>{program.programDetail.requiredHours}</p>
-              </div>
-            )}
-
-            {program.programDetail?.availHours && (
-              <div className="program-detail-modal__section">
-                <h3>체험 가능 시간</h3>
-                <p>{program.programDetail.availHours}</p>
-              </div>
-            )}
-
-            {program.programDetail?.capacity && (
-              <div className="program-detail-modal__section">
-                <h3>모집 인원</h3>
-                <p>{program.programDetail.capacity}명</p>
-              </div>
-            )}
-
-
-            {program.programDetail?.levelInfo && (
+            {program.targetAudience && (
               <div className="program-detail-modal__section">
                 <h3>대상 학년</h3>
-                <p>{program.programDetail.levelInfo}</p>
+                <p>{formatTargetAudience(program.targetAudience)}</p>
               </div>
             )}
 
-            <div className="program-detail-modal__section">
-              <h3>추가 정보</h3>
-              <p>이 프로그램은 학생들의 진로 탐색과 체험을 위한 다양한 활동을 제공합니다.</p>
-            </div>
+            {program.object && (
+              <div className="program-detail-modal__section">
+                <h3>목표</h3>
+                <p>{program.object}</p>
+              </div>
+            )}
 
-            <div className="program-detail-modal__section">
-              <h3>준비물</h3>
-              <p>필요한 준비물은 프로그램 신청 시 개별 안내드립니다.</p>
-            </div>
+            {program.requiredHours && (
+              <div className="program-detail-modal__section">
+                <h3>체험 이수 시간</h3>
+                <p>{program.requiredHours}</p>
+              </div>
+            )}
 
-            <div className="program-detail-modal__section">
-              <h3>문의사항</h3>
-              <p>프로그램 관련 문의사항이 있으시면 언제든지 연락주세요.</p>
-            </div>
-
-            <div className="program-detail-modal__section">
-              <h3>안전 수칙</h3>
-              <p>프로그램 참여 시 안전 수칙을 반드시 지켜주세요. 모든 참가자는 안전한 환경에서 체험할 수 있도록 최선을 다하겠습니다.</p>
-            </div>
-
-            <div className="program-detail-modal__section">
-              <h3>준비사항</h3>
-              <p>프로그램 참여 전 필요한 준비사항들을 미리 확인해주세요. 편안한 복장과 필수 준비물을 챙겨오시기 바랍니다.</p>
-            </div>
-
-            <div className="program-detail-modal__section">
-              <h3>참가 후기</h3>
-              <p>이전 참가자들의 후기를 확인해보세요. 실제 체험담을 통해 프로그램에 대한 더 자세한 정보를 얻을 수 있습니다.</p>
-            </div>
+            {program.availHours && (
+              <div className="program-detail-modal__section">
+                <h3>체험 가능 시간</h3>
+                <p>{program.availHours}</p>
+              </div>
+            )}
 
             {program.relatedMajor && (
               <div className="program-detail-modal__section">
@@ -214,9 +239,9 @@ useEffect(() => {
             <div className="program-detail-modal__section">
               <h3>참가비</h3>
               <p>
-                {program.costType === 'FREE' 
+                {program.price === '0' || program.price === '무료'
                   ? '무료' 
-                  : program.price || '유료 (금액 미정)'
+                  : program.price ? `${parseInt(program.price).toLocaleString()}원` : '금액 미정'
                 }
               </p>
             </div>
@@ -224,11 +249,11 @@ useEffect(() => {
 
           <div className="program-detail-modal__actions">
             <button 
-              className={`program-detail-modal__like-btn ${isLiked ? 'liked' : ''}`}
+              className={`program-detail-modal__like-btn ${program.likedByMe ? 'liked' : ''}`}
               onClick={handleLikeClick}
             >
               <img 
-                src={isLiked ? likeIcon : heartEmptyIcon} 
+                src={program.likedByMe ? likeIcon : heartEmptyIcon} 
                 alt="찜하기" 
                 className="heart-icon"
               />
@@ -237,8 +262,9 @@ useEffect(() => {
             <button 
               className="program-detail-modal__apply-btn"
               onClick={handleApplyClick}
+              disabled={program.registeredByMe}
             >
-              신청하기
+              {program.registeredByMe ? '신청 완료' : '신청하기'}
             </button>
           </div>
         </div>

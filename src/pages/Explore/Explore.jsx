@@ -167,7 +167,7 @@ export default function Explore() {
 
   const [page, setPage] = useState(1);
   const [liked, setLiked] = useState(() => new Set());
-  const [modal, setModal] = useState({ open: false, program: null });
+  const [modal, setModal] = useState({ open: false, programId: null });
 
   const { data: likedProgramsData } = useQuery({
     queryKey: ['liked-programs'],
@@ -260,39 +260,11 @@ export default function Explore() {
   };
 
   const handleProgramClick = (program) => {
-    const transformedProgram = {
-      programId: program.programId,
-      programTitle: program.programTitle,
-      provider: program.provider,
-      objective: '프로그램 목표 설명',
-      targetAudience: '중고등학생',
-      programType: 1,
-      startDate: program.startDate,
-      endDate: program.endDate,
-      relatedMajor: program.interestCategoryLabel,
-      costType: program.costType,
-      price: program.costType === 'PAID' ? '가격 문의' : null,
-      imageUrl: program.imageUrl,
-      eligibleRegion: '전국',
-      venueRegion: program.venueRegion,
-      operateCycle: '주 1회',
-      interestCategory: 18,
-      programDetail: {
-        programDetailId: `detail-${program.programId}`,
-        description: '프로그램 상세 설명입니다.',
-        requiredHours: '총 6시간',
-        availHours: '주말 오후',
-        capacity: 20,
-        targetSchoolType: '중학교, 고등학교',
-        levelInfo: '중학생, 고등학생'
-      },
-      tags: [program.programTypeLabel, program.costType === 'FREE' ? '무료' : '유료']
-    };
-    setModal({ open: true, program: transformedProgram });
+    setModal({ open: true, programId: program.programId });
   };
 
   const handleCloseModal = () => {
-    setModal({ open: false, program: null });
+    setModal({ open: false, programId: null });
   };
 
   const handleLikeProgram = async (program) => {
@@ -505,10 +477,9 @@ export default function Explore() {
       <ProgramDetailModal
         isOpen={modal.open}
         onClose={handleCloseModal}
-        program={modal.program}
+        programId={modal.programId}
         onLike={handleLikeProgram}
         onApply={handleApplyProgram}
-        isLiked={modal.program ? liked.has(modal.program.programId) : false}
       />
     </div>
   );
