@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../config/constants.js';
 import { chatService } from '../../services/chat.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
@@ -43,12 +43,11 @@ const DEMO_BOTS = getMentorsForAssistant();
 
 export default function Assistant() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuthStore();
-  const [mode, setMode] = useState('selector'); // 'selector' | 'chat'
   const [currentBot, setCurrentBot] = useState(null);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [selectedBotIndex, setSelectedBotIndex] = useState(null);
 
   const [messages, dispatch] = useReducer(messagesReducer, []);
   const listRef = useRef(null);
@@ -63,27 +62,33 @@ export default function Assistant() {
   };
   useEffect(scrollToBottom, [messages, isTyping]);
 
-  /** 봇 선택 */
-  const selectBot = (bot, index) => {
-    setSelectedBotIndex(index);
-    setCurrentBot({
-      ...bot,
-      initial: bot.name.charAt(0),
-    });
-    setMode('chat');
-    // 초기화 메시지
-    dispatch({
-      type: 'RESET',
-      payload: [
-        {
-          id: msgId(),
-          type: 'bot',
-          content: `안녕하세요! 저는 ${bot.name}입니다. ${bot.description} 무엇을 도와드릴까요?`,
-          createdAt: Date.now(),
-        },
-      ],
-    });
-  };
+  /** 초기화 - Career에서 전달된 봇 정보로 설정 */
+  useEffect(() => {
+    const botInfo = location.state;
+    if (botInfo) {
+      const bot = {
+        name: botInfo.botName,
+        job: botInfo.botJob,
+        description: botInfo.botDescription,
+        avatar: '/mock_image_url/korean_woman_1.jpeg', // 기본 아바타
+        initial: botInfo.botName.charAt(0),
+      };
+      setCurrentBot(bot);
+
+      // 초기 메시지
+      dispatch({
+        type: 'RESET',
+        payload: [
+          {
+            id: msgId(),
+            type: 'bot',
+            content: `안녕하세요! 저는 ${botInfo.botJob} ${bot.name}입니다. ${bot.description} 무엇을 도와드릴까요?`,
+            createdAt: Date.now(),
+          },
+        ],
+      });
+    }
+  }, [location.state]);
 
   /** 액션 라우팅 */
   const navigateToFeature = (feature) => {
@@ -124,7 +129,7 @@ export default function Assistant() {
       // 실제 채팅 API 호출
       const response = await chatService.sendMessage({
         query: userText,
-        profession: currentBot?.name || '학생',
+        profession: location.state?.profession || currentBot?.name || '학생',
         userId: user?.id || null
       });
 
@@ -161,46 +166,13 @@ export default function Assistant() {
 
   return (
     <div className="assistant">
-      {mode === 'selector' && (
-        <section className="assistant__selector" aria-label="봇 선택">
-          <header className="selector__header">
-            <h1 className="selector__title">AI 어시스턴트</h1>
-            <p className="selector__subtitle">대화할 챗봇을 선택하세요</p>
-          </header>
-
-          <ul className="selector__list">
-            {DEMO_BOTS.map((b, index) => (
-              <li key={b.name}>
-                <div className="selector__item">
-                  <div className="selector__avatar">
-                    <img src={b.avatar} alt={b.name} />
-                  </div>
-                  <div className="selector__info">
-                    <h4 className="selector__name">{b.name}</h4>
-                    <p className="selector__desc">{b.description}</p>
-                  </div>
-                  <button
-                    type="button"
-                    className="selector__chat-btn"
-                    onClick={() => selectBot(b, index)}
-                    aria-label={`${b.name}과 대화 시작`}
-                  >
-                    대화하기
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {mode === 'chat' && currentBot && (
+      {currentBot && (
         <section className="assistant__chat" aria-label="채팅 화면">
           <header className="chat__header">
-            <button 
-              type="button" 
-              className="chat__back" 
-              onClick={() => setMode('selector')} 
+            <button
+              type="button"
+              className="chat__back"
+              onClick={() => navigate(-1)}
               aria-label="뒤로가기"
             >
               ←
@@ -211,7 +183,7 @@ export default function Assistant() {
               </div>
               <div>
                 <div className="chat__name">{currentBot.name}</div>
-                <div className="chat__description">{currentBot.description}</div>
+                <div className="chat__description">{currentBot.job}</div>
               </div>
             </div>
           </header>

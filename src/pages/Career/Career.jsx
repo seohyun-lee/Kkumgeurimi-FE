@@ -531,11 +531,19 @@ const Career = () => {
               안녕하세요! 콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하고 효과적으로 구성합니다.
             </p>
             <div className="chat-card__footer">
-              <button 
+              <button
                 className="chat-card__button"
-                style={{ 
+                style={{
                   backgroundColor: getMinorColor(selectedInterest?.id)
                 }}
+                onClick={() => navigate('/assistant', {
+                  state: {
+                    botName: '한지민',
+                    botJob: '콘텐츠 기획자',
+                    botDescription: '콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하고 효과적으로 구성합니다.',
+                    profession: selectedInterest?.name || '기획자'
+                  }
+                })}
               >
                 대화하기
               </button>
