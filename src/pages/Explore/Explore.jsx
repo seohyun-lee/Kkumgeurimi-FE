@@ -1,94 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { INTEREST_LABELS } from '../../config/constants';
+import { INTEREST_CATEGORIES } from '../../config/constants';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCardBasic from "../../components/ProgramCardBasic.jsx";
 import ProgramDetailModal from "../../components/ProgramDetailModal.jsx";
-import { getCategoryName } from '../../utils/category.js';
 import './Explore.css';
 
-const PROGRAM_TYPE_CHIPS = [
-  { value: "all", label: "전체" },
-  { value: "0", label: "현장직업체험형" },
-  { value: "1", label: "직업실무체험형" },
-  { value: "2", label: "현장견학형" },
-  { value: "3", label: "학과체험형" },
-  { value: "4", label: "캠프형" },
-  { value: "5", label: "강연형" },
-  { value: "6", label: "대화형" },
+const PROGRAM_TYPE_OPTIONS = [
+  { value: "", label: "전체" },
+  { value: "0", label: "진로체험" },
+  { value: "1", label: "현장견학" },
+  { value: "2", label: "워크샵" },
+  { value: "3", label: "세미나" },
+  { value: "4", label: "캠프" },
+  { value: "5", label: "인턴십" },
+  { value: "6", label: "기타" },
 ];
 
-const COST_TYPE_CHIPS = [
-  { value: "all", label: "전체" },
+const COST_TYPE_OPTIONS = [
+  { value: "", label: "전체" },
   { value: "FREE", label: "무료" },
   { value: "PAID", label: "유료" },
 ];
 
-const INTEREST_CATEGORY_CHIPS = [
-  { value: "all", label: "전체" },
-  { value: "0", label: "인문사회" },
-  { value: "1", label: "자연생명" },
-  { value: "2", label: "정보통신" },
-  { value: "3", label: "건설채굴" },
-  { value: "4", label: "제조공학" },
-  { value: "5", label: "사회복지" },
-  { value: "6", label: "교육" },
-  { value: "7", label: "법률" },
-  { value: "8", label: "경찰소방" },
-  { value: "9", label: "군인" },
-  { value: "10", label: "보건의료" },
-  { value: "11", label: "예술디자인" },
-  { value: "12", label: "스포츠" },
-  { value: "13", label: "경호경비" },
-  { value: "14", label: "돌봄서비스" },
-  { value: "15", label: "청소서비스" },
-  { value: "16", label: "미용예식" },
-  { value: "17", label: "여행숙박" },
-  { value: "18", label: "음식서비스" },
-  { value: "19", label: "영업판매" },
-  { value: "20", label: "운전운송" },
-  { value: "21", label: "건설채굴" },
-  { value: "22", label: "식품가공" },
-  { value: "23", label: "인쇄목재" },
-  { value: "24", label: "제조단순" },
-  { value: "25", label: "기계정비" },
-  { value: "26", label: "금속재료" },
-  { value: "27", label: "전기전자" },
-  { value: "28", label: "정보통신" },
-  { value: "29", label: "화학환경" },
-  { value: "30", label: "섬유의복" },
-  { value: "31", label: "농림어업" },
+const TARGET_AUDIENCE_OPTIONS = [
+  { value: "", label: "전체" },
+  { value: "중", label: "중학생" },
+  { value: "고", label: "고등학생" },
 ];
 
-const TARGET_AUDIENCE_CHIPS = [
-  { value: "all", label: "전체" },
-  { value: "중학생", label: "중학생" },
-  { value: "고등학생", label: "고등학생" }
+const SORT_OPTIONS = [
+  { value: "LATEST", label: "최신순" },
+  { value: "POPULAR", label: "인기순" },
+  { value: "DEADLINE", label: "마감임박순" },
 ];
 
-// 현재 날짜를 동적으로 설정
-const getCurrentDate = () => {
+const getDefaultDates = () => {
   const today = new Date();
-  return today.toISOString().split('T')[0]; 
-};
+  const threeMonthsLater = new Date(today);
+  threeMonthsLater.setMonth(today.getMonth() + 3);
 
-const getEndDate = () => {
-  const today = new Date();
-  const endDate = new Date(today);
-  endDate.setMonth(endDate.getMonth() + 4); // 4개월 후
-  return endDate.toISOString().split('T')[0];
+  return {
+    startDate: today.toISOString().split('T')[0],
+    endDate: threeMonthsLater.toISOString().split('T')[0]
+  };
 };
 
 const DEFAULT_FILTERS = {
-  interestCategory: 'all',
-  programType: 'all',
-  costType: 'all',
-  startDate: getCurrentDate(),
-  endDate: getEndDate(),
-  targetAudience: 'all',
-  keyword: ''
+  interestCategory: '',
+  programType: '',
+  costType: '',
+  targetAudience: '',
+  keyword: '',
+  ...getDefaultDates(),
 };
 
 function SelectFilter({ label, value, onChange, options }) {
@@ -108,36 +74,40 @@ function SelectedFilters({ filters, onClearKey, onReset }) {
   const labelByValue = (options, v) =>
     options.find(o => o.value === v)?.label ?? v;
 
+  const defaults = getDefaultDates();
   const entries = [
-    filters.interestCategory !== 'all' && {
-      key: 'interestCategory',
-      label: '관심분야',
-      value: labelByValue(INTEREST_CATEGORY_CHIPS, filters.interestCategory),
-    },
-    filters.programType !== 'all' && {
-      key: 'programType',
-      label: '프로그램유형',
-      value: labelByValue(PROGRAM_TYPE_CHIPS, filters.programType),
-    },
-    filters.costType !== 'all' && {
-      key: 'costType',
-      label: '비용',
-      value: labelByValue(COST_TYPE_CHIPS, filters.costType),
-    },
-    filters.targetAudience !== 'all' && {
-      key: 'targetAudience',
-      label: '대상',
-      value: labelByValue(TARGET_AUDIENCE_CHIPS, filters.targetAudience),
-    },
     filters.keyword && {
       key: 'keyword',
-      label: '키워드',
+      label: '검색어',
       value: filters.keyword,
     },
-    ((filters.startDate !== DEFAULT_FILTERS.startDate) ||
-     (filters.endDate !== DEFAULT_FILTERS.endDate)) && {
+    filters.interestCategory && {
+      key: 'interestCategory',
+      label: '관심분야',
+      value: labelByValue(
+        INTEREST_CATEGORIES.map(cat => ({ value: cat.code.toString(), label: cat.label })),
+        filters.interestCategory
+      ),
+    },
+    filters.programType && {
+      key: 'programType',
+      label: '프로그램유형',
+      value: labelByValue(PROGRAM_TYPE_OPTIONS, filters.programType),
+    },
+    filters.costType && {
+      key: 'costType',
+      label: '비용',
+      value: labelByValue(COST_TYPE_OPTIONS, filters.costType),
+    },
+    filters.targetAudience && {
+      key: 'targetAudience',
+      label: '대상',
+      value: labelByValue(TARGET_AUDIENCE_OPTIONS, filters.targetAudience),
+    },
+    ((filters.startDate !== defaults.startDate) ||
+     (filters.endDate !== defaults.endDate)) && {
       key: 'date',
-      label: '체험일',
+      label: '체험기간',
       value: `${filters.startDate} ~ ${filters.endDate}`,
     },
   ].filter(Boolean);
@@ -158,27 +128,46 @@ function SelectedFilters({ filters, onClearKey, onReset }) {
           </button>
         </span>
       ))}
-      <button className="sf-clearall" onClick={onReset}>전체 초기화</button>
     </div>
   );
 }
 
 export default function Explore() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { isAuthenticated } = useAuthStore();
 
-  const initialCat = searchParams.get('cat') || 'all';
-
-  const [filters, setFilters] = useState({
-    ...DEFAULT_FILTERS,
-    interestCategory: initialCat,
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
+  const [sortBy, setSortBy] = useState('LATEST');
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(() => {
+    return localStorage.getItem('explore-filters-expanded') !== 'false';
   });
 
-  const [sortBy, setSortBy] = useState('LATEST');
-  const [page, setPage] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProgram, setSelectedProgram] = useState(null);
-  const [likedPrograms, setLikedPrograms] = useState(new Set());
+  // URL 쿼리 파라미터에서 필터 상태 복원 및 페이지 이동 시 상태 유지
+  useEffect(() => {
+    const params = Object.fromEntries(searchParams);
+    if (Object.keys(params).length > 0) {
+      setFilters(prev => ({ ...prev, ...params }));
+    }
+  }, [searchParams]);
+
+  // 필터 변경 시 URL 업데이트로 상태 유지
+  useEffect(() => {
+    const params = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && value !== '') {
+        params.set(key, value);
+      }
+    });
+
+    const newUrl = params.toString() ? `?${params.toString()}` : '';
+    if (newUrl !== window.location.search) {
+      window.history.replaceState({}, '', `${window.location.pathname}${newUrl}`);
+    }
+  }, [filters]);
+
+  const [page, setPage] = useState(1);
+  const [liked, setLiked] = useState(() => new Set());
+  const [modal, setModal] = useState({ open: false, program: null });
 
   const { data: likedProgramsData } = useQuery({
     queryKey: ['liked-programs'],
@@ -190,7 +179,7 @@ export default function Explore() {
   useEffect(() => {
     if (likedProgramsData && Array.isArray(likedProgramsData)) {
       const likedIds = new Set(likedProgramsData.map(program => program.programId || program.program_id || program.id));
-      setLikedPrograms(likedIds);
+      setLiked(likedIds);
     }
   }, [likedProgramsData]);
 
@@ -200,36 +189,45 @@ export default function Explore() {
   const [loading, setLoading] = useState(false);
   const itemsPerPage = 10;
 
-  const handleChangeCategory = (cat) => {
-    setFilters((f) => ({ ...f, interestCategory: cat }));
-    setPage(0);
-    const next = new URLSearchParams(searchParams);
-    if (cat === 'all') next.delete('cat');
-    else next.set('cat', cat);
-    setSearchParams(next, { replace: true });
+  // 필터 확장/축소 상태 토글
+  const toggleFiltersExpanded = () => {
+    const newState = !isFiltersExpanded;
+    setIsFiltersExpanded(newState);
+    localStorage.setItem('explore-filters-expanded', String(newState));
+  };
+
+  // 필터 변경 핸들러
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+    setPage(1);
+  };
+
+  // 검색 핸들러
+  const handleSearch = () => {
+    setPage(1);
+    fetchPrograms();
   };
 
   const fetchPrograms = async () => {
     setLoading(true);
     try {
       const response = await programsService.searchPrograms({
-        interestCategory: filters.interestCategory,
-        programType: filters.programType,
-        costType: filters.costType,
+        interestCategory: filters.interestCategory || undefined,
+        programType: filters.programType || undefined,
+        costType: filters.costType || undefined,
+        targetAudience: filters.targetAudience || undefined,
+        keyword: filters.keyword || undefined,
         startDate: filters.startDate,
         endDate: filters.endDate,
-        targetAudience: filters.targetAudience === 'all' ? undefined : filters.targetAudience,
-        keyword: filters.keyword,
         sortBy,
         page,
         size: itemsPerPage
       });
-      
+
       setPrograms(response.content || []);
       setTotalPages(response.totalPages || 1);
       setTotalElements(response.totalElements || 0);
-      
-      // 백엔드는 1-based 페이징을 사용하므로 프론트엔드는 0-based로 변환
+
       console.log('백엔드 응답 페이지 정보:', {
         pageNumber: response.pageNumber,
         totalPages: response.totalPages,
@@ -244,32 +242,21 @@ export default function Explore() {
       setLoading(false);
     }
   };
-  
-  // 검색 버튼을 눌렀을 때만 API 호출
-  const applyFilters = () => {
-    setPage(0);
-    fetchPrograms();
-  };
 
-  // 초기 로드 시 검색
+  // 페이지나 정렬이 변경될 때만 API 호출 (필터는 수동 검색)
+  useEffect(() => {
+    fetchPrograms();
+  }, [sortBy, page]);
+
+  // 초기 로드
   useEffect(() => {
     fetchPrograms();
   }, []);
 
-  // 페이지 변경 시에만 API 호출
-  useEffect(() => {
-    if (page > 0) {
-      fetchPrograms();
-    }
-  }, [page]);
-  
   const resetFilters = () => {
-    setFilters({ ...DEFAULT_FILTERS, interestCategory: 'all', targetAudience: 'all' });
-    setPage(0);
-    const next = new URLSearchParams(searchParams);
-    next.delete('cat');
-    setSearchParams(next, { replace: true });
-    fetchPrograms(); // 리셋 후 바로 검색
+    setFilters(DEFAULT_FILTERS);
+    setPage(1);
+    setTimeout(() => fetchPrograms(), 0);
   };
 
   const handleProgramClick = (program) => {
@@ -301,27 +288,25 @@ export default function Explore() {
       },
       tags: [program.programTypeLabel, program.costType === 'FREE' ? '무료' : '유료']
     };
-    setSelectedProgram(transformedProgram);
-    setIsModalOpen(true);
+    setModal({ open: true, program: transformedProgram });
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProgram(null);
+    setModal({ open: false, program: null });
   };
 
   const handleLikeProgram = async (program) => {
     try {
-      if (likedPrograms.has(program.programId)) {
+      if (liked.has(program.programId)) {
         await programsService.unlikeProgram(program.programId);
-        setLikedPrograms(prev => {
+        setLiked(prev => {
           const newSet = new Set(prev);
           newSet.delete(program.programId);
           return newSet;
         });
       } else {
         await programsService.likeProgram(program.programId);
-        setLikedPrograms(prev => {
+        setLiked(prev => {
           const newSet = new Set(prev);
           newSet.add(program.programId);
           return newSet;
@@ -336,7 +321,7 @@ export default function Explore() {
     alert(`${program.programTitle} 프로그램에 신청합니다!`);
     handleCloseModal();
   };
-  
+
   return (
     <div className="explore">
       <header className="explore__header">
@@ -345,85 +330,115 @@ export default function Explore() {
           <i className="fas fa-search header__icon" aria-hidden="true" />
         </div>
 
-      <div className="filters filters--compact">
-        <div className="filters__row">
-            <label className="selectfilter">
-              <span className="selectfilter__label">키워드</span>
-              <input
-                type="text"
-                className="selectfilter__input"
-                placeholder="프로그램명 검색"
-                value={filters.keyword}
-                onChange={(e) => setFilters((f) => ({ ...f, keyword: e.target.value }))}
-              />
-            </label>
-            
-          <SelectFilter
-              label="관심분야"
-              value={filters.interestCategory}
-              onChange={(v) => setFilters((f) => ({ ...f, interestCategory: v }))}
-              options={INTEREST_CATEGORY_CHIPS}
-            />
-            
-          <SelectFilter
-              label="프로그램유형"
-              value={filters.programType}
-              onChange={(v) => setFilters((f) => ({ ...f, programType: v }))}
-              options={PROGRAM_TYPE_CHIPS}
-            />
-            
-          <SelectFilter
-            label="비용"
-              value={filters.costType}
-              onChange={(v) => setFilters((f) => ({ ...f, costType: v }))}
-              options={COST_TYPE_CHIPS}
-            />
-            
-            <SelectFilter
-              label="대상"
-              value={filters.targetAudience}
-              onChange={(v) => setFilters((f) => ({ ...f, targetAudience: v }))}
-              options={TARGET_AUDIENCE_CHIPS}
-            />
-            
-          <label className="selectfilter selectfilter--date">
-            <span className="selectfilter__label">체험일</span>
-            <div className="date">
-              <input
-                type="date"
-                className="date__input"
-                value={filters.startDate}
-                onChange={(e) => setFilters((f) => ({ ...f, startDate: e.target.value }))}
-              />
-              <span>→</span>
-              <input
-                type="date"
-                className="date__input"
-                value={filters.endDate}
-                onChange={(e) => setFilters((f) => ({ ...f, endDate: e.target.value }))}
-              />
-            </div>
-          </label>
-
-          <div className="filters__actions">
-            <button className="btn btn--search" onClick={applyFilters}>검색</button>
-          </div>
+        {/* 검색바 */}
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="프로그램명, 기관명, 관련 전공으로 검색"
+            value={filters.keyword}
+            onChange={(e) => handleFilterChange('keyword', e.target.value)}
+            className="search-input"
+          />
+          <button className="search-button" onClick={handleSearch}>
+            <svg className="community__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="11" cy="11" r="8" strokeWidth="2"/>
+              <path d="M21 21L16.65 16.65" strokeWidth="2"/>
+            </svg>
+          </button>
         </div>
 
-        <SelectedFilters
-          filters={filters}
-            onClearKey={(key) => {
-              if (key === 'date') {
-                setFilters(f => ({ ...f, startDate: DEFAULT_FILTERS.startDate, endDate: DEFAULT_FILTERS.endDate }));
-              } else if (key === 'keyword') {
-                setFilters(f => ({ ...f, [key]: '' }));
-              } else {
-                setFilters(f => ({ ...f, [key]: 'all' }));
-              }
-              setPage(0);
-            }}
-          onReset={resetFilters}
-        />
+      {/* 필터 섹션 */}
+      <div className="filters-section">
+        <div className="filters-header">
+          <h3>필터</h3>
+          <button
+            className="toggle-filters-btn"
+            onClick={toggleFiltersExpanded}
+            aria-expanded={isFiltersExpanded}
+          >
+            {isFiltersExpanded ? '접기' : '펼치기'}
+            <i className={`fas fa-chevron-${isFiltersExpanded ? 'up' : 'down'}`} />
+          </button>
+        </div>
+
+        {isFiltersExpanded && (
+          <div className="filters filters--expanded">
+            <div className="filters__row">
+              <SelectFilter
+                label="관심분야"
+                value={filters.interestCategory}
+                onChange={(v) => handleFilterChange('interestCategory', v)}
+                options={[
+                  { value: '', label: '전체' },
+                  ...INTEREST_CATEGORIES.map(cat => ({ value: cat.code.toString(), label: cat.label })),
+                ]}
+              />
+              <SelectFilter
+                label="프로그램 유형"
+                value={filters.programType}
+                onChange={(v) => handleFilterChange('programType', v)}
+                options={PROGRAM_TYPE_OPTIONS}
+              />
+              <SelectFilter
+                label="비용"
+                value={filters.costType}
+                onChange={(v) => handleFilterChange('costType', v)}
+                options={COST_TYPE_OPTIONS}
+              />
+              <SelectFilter
+                label="대상"
+                value={filters.targetAudience}
+                onChange={(v) => handleFilterChange('targetAudience', v)}
+                options={TARGET_AUDIENCE_OPTIONS}
+              />
+            </div>
+
+            <div className="filters__row filters__row--date">
+              <label className="selectfilter selectfilter--date">
+                <span className="selectfilter__label">체험 기간</span>
+                <div className="date">
+                  <input
+                    type="date"
+                    className="date__input"
+                    value={filters.startDate}
+                    onChange={(e) => handleFilterChange('startDate', e.target.value)}
+                  />
+                  <span>~</span>
+                  <input
+                    type="date"
+                    className="date__input"
+                    value={filters.endDate}
+                    onChange={(e) => handleFilterChange('endDate', e.target.value)}
+                  />
+                </div>
+              </label>
+            </div>
+
+            <div className="filters__actions">
+              <button className="btn btn--reset" onClick={resetFilters}>초기화</button>
+              <button className="btn btn--apply" onClick={handleSearch}>필터 적용</button>
+            </div>
+
+            {/* 선택된 필터 배지 */}
+            <SelectedFilters
+              filters={filters}
+              onClearKey={(key) => {
+                if (key === 'date') {
+                  const defaults = getDefaultDates();
+                  setFilters(prev => ({
+                    ...prev,
+                    startDate: defaults.startDate,
+                    endDate: defaults.endDate
+                  }));
+                } else {
+                  setFilters(prev => ({ ...prev, [key]: '' }));
+                }
+                setPage(1);
+              }}
+              onReset={resetFilters}
+            />
+          </div>
+        )}
       </div>
     </header>
 
@@ -432,10 +447,10 @@ export default function Explore() {
           <div className="results">
             {loading ? '검색 중...' : `전체 ${totalElements}개`}
           </div>
-          <select className="sort" value={sortBy} onChange={(e) => { setSortBy(e.target.value); setPage(0); fetchPrograms(); }}>
-            <option value="LATEST">최신순</option>
-            <option value="POPULAR">인기순</option>
-            <option value="DEADLINE">마감임박순</option>
+          <select className="sort" value={sortBy} onChange={(e) => { setSortBy(e.target.value); setPage(1); }}>
+            {SORT_OPTIONS.map(option => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
           </select>
         </div>
 
@@ -451,9 +466,9 @@ export default function Explore() {
           ) : (
             programs.map((p) => (
               <ProgramCardBasic
-                key={p.programId}
-                title={p.programTitle}
-                organization={p.provider}
+                key={p.programId || p.program_id || p.id}
+                title={p.programTitle || p.title}
+                organization={p.provider || p.mentor}
                 date={`${p.startDate} ~ ${p.endDate}`}
                 category={p.interestCategoryLabel}
                 tags={[p.programTypeLabel, p.costType === 'FREE' ? '무료' : '유료']}
@@ -466,22 +481,21 @@ export default function Explore() {
 
         {totalPages > 1 && (
           <nav className="pagination" aria-label="페이지네이션">
-            <button className="page nav" disabled={page <= 0} onClick={() => setPage((v) => Math.max(0, v - 1))}>
+            <button className="page nav" disabled={page <= 1} onClick={() => setPage((v) => Math.max(1, v - 1))}>
               <span className="nav__arrow">‹</span>
             </button>
-          
+
             {Array.from({ length: totalPages }).slice(Math.max(0, page - 2), Math.min(totalPages, page + 3)).map((_, i) => {
               const first = Math.max(0, page - 2);
-              const pageNum = first + i;
-              const displayNum = pageNum + 1;
+              const pageNum = first + i + 1;
               return (
                 <button key={pageNum} className={`page ${pageNum === page ? 'active' : ''}`} onClick={() => setPage(pageNum)}>
-                  {displayNum}
+                  {pageNum}
                 </button>
               );
             })}
-          
-            <button className="page nav" disabled={page >= totalPages - 1} onClick={() => setPage((v) => Math.min(totalPages - 1, v + 1))}>
+
+            <button className="page nav" disabled={page >= totalPages} onClick={() => setPage((v) => Math.min(totalPages, v + 1))}>
               <span className="nav__arrow">›</span>
             </button>
           </nav>
@@ -489,14 +503,13 @@ export default function Explore() {
       </section>
 
       <ProgramDetailModal
-        isOpen={isModalOpen}
+        isOpen={modal.open}
         onClose={handleCloseModal}
-        program={selectedProgram}
+        program={modal.program}
         onLike={handleLikeProgram}
         onApply={handleApplyProgram}
-        isLiked={selectedProgram ? likedPrograms.has(selectedProgram.programId) : false}
+        isLiked={modal.program ? liked.has(modal.program.programId) : false}
       />
     </div>
   );
 }
-

@@ -172,18 +172,17 @@ export const programsService = {
     interestCategory,
     programType,
     costType,
+    targetAudience,
+    keyword,
     startDate,
     endDate,
-    sortBy,
-    page = 0,
-    size = 10,
-    targetAudience,
-    keyword
+    sortBy = 'LATEST',
+    page = 1,
+    size = 10
   } = {}) {
     const params = new URLSearchParams();
-    
-    // 필수 페이징 파라미터 (백엔드는 1-based 페이징)
-    params.append('page', (page + 1).toString());
+
+    params.append('page', page.toString());
     params.append('size', size.toString());
     
     // 선택적 필터 파라미터 (값이 있고 'all'이 아닐 때만 추가)
@@ -319,14 +318,14 @@ export const programsService = {
       }
       
       // 프로그램 타입 필터링
-      if (programType !== 'all') {
+      if (programType && programType !== 'all') {
         filteredPrograms = filteredPrograms.filter(p => p.programTypeLabel === programType);
       }
-      
+
       // 비용 필터링
-      if (costType === 'free') {
+      if (costType === 'FREE') {
         filteredPrograms = filteredPrograms.filter(p => p.costType === 'FREE');
-      } else if (costType === 'paid') {
+      } else if (costType === 'PAID') {
         filteredPrograms = filteredPrograms.filter(p => p.costType === 'PAID');
       }
 
