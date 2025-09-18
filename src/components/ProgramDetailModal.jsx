@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './ProgramDetailModal.css';
 import { getCategoryName } from '../utils/category.js';
+import { useProgramModal } from '../contexts/ProgramModalContext.jsx';
 import likeIcon from '../assets/icons/my/like.svg';
 import heartEmptyIcon from '../assets/icons/heart_empty.svg';
 
@@ -39,6 +40,26 @@ const ProgramDetailModal = ({
     }
   };
 
+  // 프로그램 상태만 업데이트하는 함수
+  const updateProgramStatus = (id) => {
+    if (!id || !program) return;
+    
+    const isLiked = likedPrograms.has(id);
+    const isRegistered = registeredPrograms.has(id);
+    
+    console.log('상태 강제 업데이트:', { 
+      programId: id, 
+      contextLiked: isLiked,
+      contextRegistered: isRegistered 
+    });
+    
+    setProgram(prev => ({
+      ...prev,
+      likedByMe: isLiked,
+      registeredByMe: isRegistered
+    }));
+  };
+
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -66,10 +87,10 @@ const ProgramDetailModal = ({
       }));
       
       setShowSuccessPopup(true);
-      // 3초 후 팝업 자동 닫기
+      // 2초 후 팝업 자동 닫기
       setTimeout(() => {
         setShowSuccessPopup(false);
-      }, 3000);
+      }, 2000);
     }
   };
 
@@ -98,11 +119,48 @@ useEffect(() => {
 
   useEffect(() => {
     if (isOpen && programId) {
-      fetchProgramDetail(programId);
+      if (!program || program.programId !== programId) {
+        // 새로운 프로그램이거나 처음 열 때만 전체 데이터 로드
+        fetchProgramDetail(programId);
+      } else {
+        // 같은 프로그램을 다시 열 때는 상태만 업데이트
+        updateProgramStatus(programId);
+      }
       // 모달이 열릴 때마다 오버레이 상태 초기화
       setShowOverlay(false);
+    } else if (!isOpen) {
+      // 모달이 닫힐 때는 프로그램 데이터를 유지 (상태만 업데이트하기 위해)
+      setShowSuccessPopup(false);
     }
   }, [isOpen, programId]);
+
+  // Context에서 찜/신청 상태 가져오기
+  const { likedPrograms, registeredPrograms } = useProgramModal();
+  
+  // 프로그램 데이터와 Context 상태 동기화
+  useEffect(() => {
+    if (program && program.programId) {
+      const isLiked = likedPrograms.has(program.programId);
+      const isRegistered = registeredPrograms.has(program.programId);
+      
+      // Context 상태가 API 데이터와 다를 때만 업데이트
+      if (program.likedByMe !== isLiked || program.registeredByMe !== isRegistered) {
+        console.log('상태 동기화:', { 
+          programId: program.programId, 
+          apiLiked: program.likedByMe, 
+          contextLiked: isLiked,
+          apiRegistered: program.registeredByMe, 
+          contextRegistered: isRegistered 
+        });
+        
+        setProgram(prev => ({
+          ...prev,
+          likedByMe: isLiked,
+          registeredByMe: isRegistered
+        }));
+      }
+    }
+  }, [program?.programId, program?.likedByMe, program?.registeredByMe, likedPrograms, registeredPrograms]);
 
   if (!isOpen) return null;
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import ProgramDetailModal from '../components/ProgramDetailModal';
 import { programsService } from '../services/programs.service';
 
@@ -17,6 +17,7 @@ export const ProgramModalProvider = ({ children }) => {
   const [programId, setProgramId] = useState(null);
   const [likedPrograms, setLikedPrograms] = useState(new Set());
   const [registeredPrograms, setRegisteredPrograms] = useState(new Set());
+  const [initialized, setInitialized] = useState(false);
 
   const openModal = (id) => {
     setProgramId(id);
@@ -28,6 +29,27 @@ export const ProgramModalProvider = ({ children }) => {
     setProgramId(null);
   };
 
+  // localStorage에서 초기 상태 로드
+  useEffect(() => {
+    try {
+      const savedLiked = localStorage.getItem('likedPrograms');
+      const savedRegistered = localStorage.getItem('registeredPrograms');
+      
+      if (savedLiked) {
+        const likedIds = JSON.parse(savedLiked);
+        setLikedPrograms(new Set(likedIds));
+      }
+      
+      if (savedRegistered) {
+        const registeredIds = JSON.parse(savedRegistered);
+        setRegisteredPrograms(new Set(registeredIds));
+      }
+    } catch (error) {
+      console.warn('localStorage에서 상태 로드 실패:', error);
+    }
+    setInitialized(true);
+  }, []);
+
   // 찜하기 기능
   const handleLike = async (program) => {
     try {
@@ -38,6 +60,8 @@ export const ProgramModalProvider = ({ children }) => {
         setLikedPrograms(prev => {
           const newSet = new Set(prev);
           newSet.delete(program.programId);
+          // localStorage에 저장
+          localStorage.setItem('likedPrograms', JSON.stringify([...newSet]));
           return newSet;
         });
       } else {
@@ -45,12 +69,16 @@ export const ProgramModalProvider = ({ children }) => {
         setLikedPrograms(prev => {
           const newSet = new Set(prev);
           newSet.add(program.programId);
+          // localStorage에 저장
+          localStorage.setItem('likedPrograms', JSON.stringify([...newSet]));
           return newSet;
         });
       }
+      
+      return { success: true, isLiked: !isCurrentlyLiked };
     } catch (error) {
       console.error('프로그램 찜하기 실패:', error);
-      // TODO: 사용자에게 에러 메시지 표시
+      return { success: false, error: error.message };
     }
   };
 
@@ -64,6 +92,8 @@ export const ProgramModalProvider = ({ children }) => {
         setRegisteredPrograms(prev => {
           const newSet = new Set(prev);
           newSet.delete(program.programId);
+          // localStorage에 저장
+          localStorage.setItem('registeredPrograms', JSON.stringify([...newSet]));
           return newSet;
         });
       } else {
@@ -71,6 +101,8 @@ export const ProgramModalProvider = ({ children }) => {
         setRegisteredPrograms(prev => {
           const newSet = new Set(prev);
           newSet.add(program.programId);
+          // localStorage에 저장
+          localStorage.setItem('registeredPrograms', JSON.stringify([...newSet]));
           return newSet;
         });
       }
