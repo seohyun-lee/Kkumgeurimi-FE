@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
-import ProgramDetailModal from '../../components/ProgramDetailModal.jsx';
+import { useProgramModal } from '../../contexts/ProgramModalContext.jsx';
 import { getCategoryName } from '../../utils/category.js';
 import showAllIcon from '../../assets/icons/showall.svg';
 import './Home.css';
@@ -11,8 +11,7 @@ import './Home.css';
 const Home = () => {
   const { isAuthenticated } = useAuthStore();
   const [activeGradeTab, setActiveGradeTab] = useState('중1-2');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProgram, setSelectedProgram] = useState(null);
+  const { openModal } = useProgramModal();
 
 
   // 개인화 추천 프로그램 조회 (로그인한 경우만)
@@ -291,13 +290,7 @@ const Home = () => {
   };
 
   const handleProgramClick = (program) => {
-    setSelectedProgram(program);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProgram(null);
+    openModal(program.programId);
   };
 
   const handleLikeProgram = async (program) => {
@@ -549,15 +542,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 프로그램 상세 모달 */}
-      <ProgramDetailModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        program={selectedProgram}
-        onLike={handleLikeProgram}
-        onApply={handleApplyProgram}
-        isLiked={selectedProgram ? likedPrograms.has(selectedProgram.id) : false}
-      />
     </div>
   );
 };

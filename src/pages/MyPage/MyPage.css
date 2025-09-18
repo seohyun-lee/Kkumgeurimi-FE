@@ -1,7 +1,7 @@
 .mypage {
   background: #f8f9fa;
   min-height: 100vh;
-  padding: 0;
+  padding: 0 !important;
 }
 
 /* Section Titles */
@@ -17,7 +17,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
-  padding: 0 16px;
+  padding: 0 20px 0 20px !important;
 }
 
 .mypage__section-more {
@@ -44,7 +44,7 @@
 .mypage__profile-card {
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 20px;
 }
 
 .mypage__avatar {
@@ -98,7 +98,7 @@
 }
 
 .mypage__activity-grid {
-  padding: 0 16px;
+  padding: 0 20px;
 }
 
 .mypage__activity-item {
@@ -175,42 +175,7 @@
   padding: 40px 20px;
   background: #f8f9fa;
   border-radius: 8px;
-  margin: 0 16px;
-}
-
-/* 모바일 앱 전용 스타일 */
-.mypage__header {
-  padding: 16px 12px;
-}
-
-.mypage__title {
-  font-size: 22px;
-}
-
-.mypage__section-title {
-  padding: 0 12px;
-  font-size: 18px;
-}
-
-.mypage__profile-card {
-  padding: 0 12px;
-}
-
-.mypage__activity-grid {
-  padding: 0 12px;
-}
-
-.mypage__programs-grid {
-  padding: 0 12px;
-}
-
-.mypage__program-card {
-  width: 260px;
-}
-
-.mypage__avatar {
-  width: 56px;
-  height: 56px;
+  margin: 0 20px;
 }
 
 /* Animation */

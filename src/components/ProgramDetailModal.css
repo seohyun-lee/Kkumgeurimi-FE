@@ -51,6 +51,47 @@
   border-radius: 8px 8px 0 0;
 }
 
+/* 이미지 오버레이 */
+.modal-image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+  padding: 20px;
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal-overlay-content {
+  color: white;
+}
+
+.modal-overlay-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.modal-overlay-provider {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 8px 0;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.modal-overlay-date {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
 .modal-image-container img {
   width: 100%;
   height: 100%;
@@ -111,7 +152,7 @@
 
 /* 모달 콘텐츠 */
 .modal-content {
-  padding: 0 !important;
+  padding: 16px 16px 0 16px !important;
   flex: 1;
   overflow-y: auto !important;
   overflow-x: hidden !important;
@@ -120,6 +161,7 @@
   background: #fff !important;
   margin: 0 !important;
   border-radius: 0 0 8px 8px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .program-detail-modal__title {
@@ -128,7 +170,7 @@
   color: #111827;
   margin: 0 0 8px 0;
   line-height: 1.4;
-  padding: 20px 20px 0 20px;
+  padding: 0;
 }
 
 .program-detail-modal__provider {
@@ -136,15 +178,16 @@
   color: #6b7280;
   margin: 0 0 8px 0;
   font-weight: 500;
-  padding: 0 20px 0 20px;
+  padding: 0;
 }
 
 .program-detail-modal__date {
   font-size: 14px;
   color: #9ca3af;
-  margin: 0 0 16px 0;
-  padding: 0 20px 0 20px;
+  margin: 0 0 24px 0;
+  padding: 0;
 }
+
 
 /* 태그들 */
 .program-detail-modal__tags {
@@ -167,8 +210,8 @@
 
 /* 상세 정보 섹션들 */
 .program-detail-modal__details {
+  margin-top: 32px;
   margin-bottom: 24px;
-  padding: 0 20px;
 }
 
 .program-detail-modal__section {
@@ -198,16 +241,18 @@
 .program-detail-modal__actions {
   display: flex;
   gap: 12px;
-  padding: 20px;
+  padding: 16px 4px 16px 4px;
   border-top: 1px solid #e5e7eb;
   flex-shrink: 0;
   background: #fff;
   margin-top: auto;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .program-detail-modal__like-btn {
-  width: 64px;
-  height: 56px;
+  width: 30px;
+  height: 50px;
   padding: 0;
   border-radius: 8px;
   cursor: pointer;
@@ -221,27 +266,30 @@
 
 .program-detail-modal__apply-btn {
   flex: 1;
-  padding: 14px 20px;
+  height: 50px;
+  padding: 0 20px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-
-.program-detail-modal__apply-btn {
   background: #278EFF;
   border: 1px solid #278EFF;
   color: white;
 }
 
-.program-detail-modal__apply-btn:hover {
+.program-detail-modal__apply-btn:hover:not(:disabled) {
   background: #1d7bef;
   border-color: #1d7bef;
+}
+
+.program-detail-modal__apply-btn:disabled {
+  background: #9ca3af;
+  border-color: #9ca3af;
+  cursor: not-allowed;
 }
 
 .heart-icon {
@@ -268,33 +316,64 @@
   background: #a8a8a8;
 }
 
-/* 모바일 앱 전용 스타일 */
-.program-detail-modal-backdrop {
-  padding: 10px;
+/* 성공 알림 스타일 */
+.success-notification {
+  position: absolute;
+  bottom: 80px; /* 버튼 높이 + 여백 고려 */
+  left: 16px;
+  right: 16px;
+  z-index: 10;
+  animation: slideUp 0.3s ease-out;
 }
 
-.program-detail-modal {
-  max-height: 70vh;
-}
-
-.modal-content {
-  padding: 0;
-}
-
-.modal-image-container {
-  height: 180px;
-}
-
-.program-detail-modal__actions {
-  flex-direction: row;
+.success-notification__content {
+  background: #FFEDD5;
+  border: 1px solid #FDBA74;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
+  min-width: 280px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.program-detail-modal__like-btn {
-  width: 64px;
-  height: 56px;
+.success-notification__text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #92400e;
+  margin: 0;
 }
 
-.program-detail-modal__apply-btn {
-  flex: 1;
+.success-notification__close {
+  background: none;
+  border: none;
+  color: #92400e;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.success-notification__close:hover {
+  background: rgba(146, 64, 14, 0.1);
+}
+
+/* 애니메이션 */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
