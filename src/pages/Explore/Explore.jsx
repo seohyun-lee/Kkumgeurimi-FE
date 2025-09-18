@@ -70,7 +70,6 @@ function SelectFilter({ label, value, onChange, options }) {
   );
 }
 
-function SelectedFilters({ filters, onClearKey, onReset }) {
 function SelectedFilters({ filters, onClearKey }) {
   const labelByValue = (options, v) =>
     options.find(o => o.value === v)?.label ?? v;
