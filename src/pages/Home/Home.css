@@ -229,28 +229,6 @@
   background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
 }
 
-/* 모바일 앱 전용 스타일 */
-.home__featured-nav--prev {
-  left: 8px;
-}
-
-.home__featured-nav--next {
-  right: 8px;
-}
-
-.home__featured-card {
-  padding: 20px 45px 20px 16px;
-}
-
-/* 터치 인터랙션 (모바일 앱) */
-.home__featured-nav:active {
-  transform: translateY(-50%) scale(0.9);
-  color: rgba(255, 255, 255, 1);
-}
-
-.home__dot:active {
-  transform: scale(0.9);
-}
 
 /* 배경 데코레이션은 그대로 두되, 불투명도만 변수화 가능 */
 .home__main-program::before {
@@ -811,22 +789,6 @@
 
 /* ========= Responsive ========= */
 
-/* 모바일 앱 전용 그리드 레이아웃 */
-.home { 
-  max-width: 100%; 
-}
-
-.popular-programs-grid { 
-  grid-template-columns: 1fr 1fr; 
-}
-
-.recommendations-grid { 
-  grid-template-columns: 1fr 1fr; 
-}
-
-.home__grade-content { 
-  grid-template-columns: 1fr 1fr; 
-}
 
 /* ========= Program Slider ========= */
 
