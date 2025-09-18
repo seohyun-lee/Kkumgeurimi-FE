@@ -14,6 +14,7 @@ const ProgramDetailModal = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [program, setProgram] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const modalContentRef = useRef(null);
   const imageRef = useRef(null);
 
@@ -44,12 +45,32 @@ const ProgramDetailModal = ({
     }
   };
 
-  const handleLikeClick = () => {
-    onLike?.(program);
+  const handleLikeClick = async () => {
+    const result = await onLike?.(program);
+    if (result?.success) {
+      // 프로그램 찜 상태 즉시 업데이트
+      setProgram(prev => ({
+        ...prev,
+        likedByMe: result.isLiked
+      }));
+    }
   };
 
-  const handleApplyClick = () => {
-    onApply?.(program);
+  const handleApplyClick = async () => {
+    const result = await onApply?.(program);
+    if (result?.success && result?.isRegistered) {
+      // 프로그램 상태 즉시 업데이트
+      setProgram(prev => ({
+        ...prev,
+        registeredByMe: true
+      }));
+      
+      setShowSuccessPopup(true);
+      // 3초 후 팝업 자동 닫기
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+      }, 3000);
+    }
   };
 
   // 대상학년 표시 형식 변경 (초, 중, 고 → 초등학생, 중학생, 고등학생)
@@ -271,7 +292,25 @@ useEffect(() => {
             </button>
           </div>
         </div>
+
+        {/* 신청 완료 알림 - floating */}
+        {showSuccessPopup && (
+          <div className="success-notification">
+            <div className="success-notification__content">
+              <span className="success-notification__text">
+                프로그램 신청이 완료되었습니다.
+              </span>
+              <button 
+                className="success-notification__close"
+                onClick={() => setShowSuccessPopup(false)}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
     </div>
   );
 };

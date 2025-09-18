@@ -75,11 +75,10 @@ export const ProgramModalProvider = ({ children }) => {
         });
       }
       
-      // 신청 완료 후 모달 닫기
-      closeModal();
+      return { success: true, isRegistered: !isCurrentlyRegistered };
     } catch (error) {
       console.error('프로그램 신청 실패:', error);
-      // TODO: 사용자에게 에러 메시지 표시
+      return { success: false, error: error.message };
     }
   };
 
