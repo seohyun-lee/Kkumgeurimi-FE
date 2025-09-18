@@ -1,13 +1,13 @@
 export const chatService = {
   async sendMessage({ query, profession = '학생', userId = null }) {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_AI_SERVER_URL}/chat`, {
+      const response = await fetch(`${import.meta.env.VITE_AI_BASE_URL}/chat`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json' 
         },
         body: JSON.stringify({
-          ...(userId && { user_id: userId }),
+          student_id: userId || 1, // 기본값으로 1 사용
           profession,
           query
         }),
@@ -19,7 +19,7 @@ export const chatService = {
 
       const data = await response.json();
       return {
-        answer: data.answer_md,
+        answer: data.answer || data.answer_md || '응답을 받지 못했습니다.',
         topMatches: data.top_matches || [],
         success: true
       };
