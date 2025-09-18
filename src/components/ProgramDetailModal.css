@@ -152,7 +152,7 @@
 
 /* 모달 콘텐츠 */
 .modal-content {
-  padding: 20px 20px 0 20px !important;
+  padding: 16px 16px 0 16px !important;
   flex: 1;
   overflow-y: auto !important;
   overflow-x: hidden !important;
@@ -184,7 +184,7 @@
 .program-detail-modal__date {
   font-size: 14px;
   color: #9ca3af;
-  margin: 0 0 16px 0;
+  margin: 0 0 24px 0;
   padding: 0;
 }
 
@@ -210,8 +210,8 @@
 
 /* 상세 정보 섹션들 */
 .program-detail-modal__details {
+  margin-top: 32px;
   margin-bottom: 24px;
-  padding: 0 20px;
 }
 
 .program-detail-modal__section {
@@ -240,8 +240,8 @@
 /* 액션 버튼들 */
 .program-detail-modal__actions {
   display: flex;
-  gap: 12px;
-  padding: 20px;
+  gap: 8px;
+  padding: 16px 16px 16px 16px;
   border-top: 1px solid #e5e7eb;
   flex-shrink: 0;
   background: #fff;
@@ -249,7 +249,7 @@
 }
 
 .program-detail-modal__like-btn {
-  width: 64px;
+  width: 48px;
   height: 56px;
   padding: 0;
   border-radius: 8px;
@@ -309,63 +309,4 @@
 
 .modal-content::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
-}
-
-/* 모바일 앱 전용 스타일 */
-.program-detail-modal-backdrop {
-  padding: 10px;
-}
-
-.program-detail-modal {
-  max-height: 70vh;
-}
-
-.modal-content {
-  padding: 0;
-}
-
-.modal-image-container {
-  height: 180px;
-}
-
-.modal-image-overlay {
-  padding: 16px;
-}
-
-.modal-overlay-title {
-  font-size: 18px;
-}
-
-.modal-overlay-provider {
-  font-size: 13px;
-}
-
-.modal-overlay-date {
-  font-size: 13px;
-}
-
-.program-detail-modal__title {
-  font-size: 18px;
-}
-
-.program-detail-modal__provider {
-  font-size: 13px;
-}
-
-.program-detail-modal__date {
-  font-size: 13px;
-}
-
-.program-detail-modal__actions {
-  flex-direction: row;
-  gap: 12px;
-}
-
-.program-detail-modal__like-btn {
-  width: 64px;
-  height: 56px;
-}
-
-.program-detail-modal__apply-btn {
-  flex: 1;
 }
