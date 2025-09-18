@@ -240,7 +240,7 @@
 /* 액션 버튼들 */
 .program-detail-modal__actions {
   display: flex;
-  gap: 8px;
+  gap: 20px;
   padding: 16px 16px 16px 16px;
   border-top: 1px solid #e5e7eb;
   flex-shrink: 0;
@@ -249,8 +249,8 @@
 }
 
 .program-detail-modal__like-btn {
-  width: 48px;
-  height: 56px;
+  width: 10px;
+  height: 50px;
   padding: 0;
   border-radius: 8px;
   cursor: pointer;
@@ -264,19 +264,16 @@
 
 .program-detail-modal__apply-btn {
   flex: 1;
-  padding: 14px 20px;
+  height: 50px;
+  padding: 0 20px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-
-.program-detail-modal__apply-btn {
   background: #278EFF;
   border: 1px solid #278EFF;
   color: white;
