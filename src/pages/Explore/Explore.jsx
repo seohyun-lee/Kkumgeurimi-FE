@@ -5,7 +5,7 @@ import { INTEREST_CATEGORIES } from '../../config/constants';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCardBasic from "../../components/ProgramCardBasic.jsx";
-import ProgramDetailModal from "../../components/ProgramDetailModal.jsx";
+import { useProgramModal } from '../../contexts/ProgramModalContext.jsx';
 import './Explore.css';
 
 const PROGRAM_TYPE_OPTIONS = [
@@ -167,7 +167,7 @@ export default function Explore() {
 
   const [page, setPage] = useState(1);
   const [liked, setLiked] = useState(() => new Set());
-  const [modal, setModal] = useState({ open: false, programId: null });
+  const { openModal } = useProgramModal();
 
   const { data: likedProgramsData } = useQuery({
     queryKey: ['liked-programs'],
@@ -260,11 +260,7 @@ export default function Explore() {
   };
 
   const handleProgramClick = (program) => {
-    setModal({ open: true, programId: program.programId });
-  };
-
-  const handleCloseModal = () => {
-    setModal({ open: false, programId: null });
+    openModal(program.programId);
   };
 
   const handleLikeProgram = async (program) => {
@@ -474,13 +470,6 @@ export default function Explore() {
         )}
       </section>
 
-      <ProgramDetailModal
-        isOpen={modal.open}
-        onClose={handleCloseModal}
-        programId={modal.programId}
-        onLike={handleLikeProgram}
-        onApply={handleApplyProgram}
-      />
     </div>
   );
 }

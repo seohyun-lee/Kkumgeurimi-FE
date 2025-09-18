@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProgramCardBasic from "../../components/ProgramCardBasic";
-import ProgramDetailModal from "../../components/ProgramDetailModal.jsx";
+import { useProgramModal } from "../../contexts/ProgramModalContext.jsx";
 import { getCategoryName } from "../../utils/category.js";
 import { useAuthStore } from "../../store/auth.store.js";
 import { meService } from "../../services/my.service.js";
@@ -18,9 +18,8 @@ export default function MyPage() {
   const { user: authUser } = useAuthStore();
   const [joinedPrograms, setJoinedPrograms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProgram, setSelectedProgram] = useState(null);
   const [likedPrograms, setLikedPrograms] = useState(new Set());
+  const { openModal } = useProgramModal();
 
   const user = {
     name: authUser?.name || "성나미",
@@ -116,42 +115,7 @@ export default function MyPage() {
 
   // 모달 관련 함수들
   const handleProgramClick = (program) => {
-    // 프로그램 데이터를 Career/Home과 동일한 구조로 변환
-    const transformedProgram = {
-      programId: program.programId || program.id,
-      programTitle: program.programTitle || program.title,
-      provider: program.provider || program.mentor,
-      objective: program.description || '프로그램 설명이 없습니다.',
-      targetAudience: '중고등학생',
-      programType: 1,
-      startDate: program.startDate,
-      endDate: program.endDate,
-      relatedMajor: program.interestCategoryLabel || program.category || '기타',
-      costType: program.costType || 'FREE',
-      price: null,
-      imageUrl: program.imageUrl || null,
-      eligibleRegion: '전국',
-      venueRegion: program.venueRegion || program.mentor || '미정',
-      operateCycle: '주 1회',
-      interestCategory: 1, // 기본값
-      programDetail: {
-        programDetailId: `detail-${program.programId || program.id}`,
-        description: program.description || '프로그램 상세 설명이 없습니다.',
-        requiredHours: '총 2시간',
-        availHours: '주말 오후',
-        capacity: 20,
-        targetSchoolType: '중학교, 고등학교',
-        levelInfo: '중학생, 고등학생'
-      },
-      tags: [program.programTypeLabel || '체험처', program.costType === 'FREE' ? '무료' : '유료']
-    };
-    setSelectedProgram(transformedProgram);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProgram(null);
+    openModal(program.programId || program.id);
   };
 
   const handleLikeProgram = async (program) => {
@@ -270,14 +234,6 @@ export default function MyPage() {
       </section>
 
       {/* 프로그램 상세 모달 */}
-      <ProgramDetailModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        program={selectedProgram}
-        onLike={handleLikeProgram}
-        onApply={handleApplyProgram}
-        isLiked={selectedProgram ? likedPrograms.has(selectedProgram.programId) : false}
-      />
     </div>
   );
 }

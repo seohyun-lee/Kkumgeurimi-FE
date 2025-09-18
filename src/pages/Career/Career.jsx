@@ -7,7 +7,7 @@ import { getLabelByCode } from '../../config/constants.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import { getCategoryName, getCategoryJobTitle, getCategoryDescription } from '../../utils/category.js';
 import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
-import ProgramDetailModal from '../../components/ProgramDetailModal.jsx';
+import { useProgramModal } from '../../contexts/ProgramModalContext.jsx';
 import showAllIcon from '../../assets/icons/showall.svg';
 import backIcon from '../../assets/icons/back.svg';
 import './Career.css';
@@ -35,9 +35,8 @@ const Career = () => {
     mentors: []
   });
   const [showAllPrograms, setShowAllPrograms] = useState(false);
-  const [selectedProgram, setSelectedProgram] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [likedPrograms, setLikedPrograms] = useState(new Set());
+  const { openModal } = useProgramModal();
   
   const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
@@ -338,13 +337,7 @@ const Career = () => {
 
   // 모달 관련 함수들
   const handleProgramClick = (program) => {
-    setSelectedProgram(program);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProgram(null);
+    openModal(program.programId);
   };
 
   const handleLikeProgram = (program) => {
@@ -582,14 +575,6 @@ const Career = () => {
       )}
 
       {/* 프로그램 상세 모달 */}
-      <ProgramDetailModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        program={selectedProgram}
-        onLike={handleLikeProgram}
-        onApply={handleApplyProgram}
-        isLiked={selectedProgram ? likedPrograms.has(selectedProgram.programId) : false}
-      />
     </div>
   );
 };

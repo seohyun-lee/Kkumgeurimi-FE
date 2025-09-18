@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { router } from './routes/index.jsx';
 import { useAuthStore } from './store/auth.store.js';
+import { ProgramModalProvider } from './contexts/ProgramModalContext.jsx';
 import "./styles/design-tokens.css";
 import "./styles/brand-logo.css";
 
@@ -45,7 +46,9 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <ProgramModalProvider>
+        <RouterProvider router={router} />
+      </ProgramModalProvider>
     </QueryClientProvider>
   );
 }
