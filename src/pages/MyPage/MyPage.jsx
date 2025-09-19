@@ -177,28 +177,36 @@ export default function MyPage() {
               <img src={programIcon} alt="참여 프로그램" />
             </div>
             <div className="mypage__activity-text">참여 프로그램 내역</div>
-            <div className="mypage__activity-arrow">›</div>
+            <div className="mypage__activity-arrow">
+              <img src={showAllIcon} alt="더보기" style={{ width: '16px', height: '16px' }} />
+            </div>
           </Link>
           <div className="mypage__activity-item">
             <div className="mypage__activity-icon">
               <img src={likeIcon} alt="찜한 프로그램" />
             </div>
             <div className="mypage__activity-text">찜한 프로그램 내역</div>
-            <div className="mypage__activity-arrow">›</div>
+            <div className="mypage__activity-arrow">
+              <img src={showAllIcon} alt="더보기" style={{ width: '16px', height: '16px' }} />
+            </div>
           </div>
           <div className="mypage__activity-item">
             <div className="mypage__activity-icon">
               <img src={mypostIcon} alt="나의 꿈터 글" />
             </div>
             <div className="mypage__activity-text">나의 꿈터 글</div>
-            <div className="mypage__activity-arrow">›</div>
+            <div className="mypage__activity-arrow">
+              <img src={showAllIcon} alt="더보기" style={{ width: '16px', height: '16px' }} />
+            </div>
           </div>
           <div className="mypage__activity-item">
             <div className="mypage__activity-icon">
               <img src={thumbupIcon} alt="공감한 꿈터 글" />
             </div>
             <div className="mypage__activity-text">공감한 꿈터 글</div>
-            <div className="mypage__activity-arrow">›</div>
+            <div className="mypage__activity-arrow">
+              <img src={showAllIcon} alt="더보기" style={{ width: '16px', height: '16px' }} />
+            </div>
           </div>
         </div>
       </section>

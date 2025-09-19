@@ -108,6 +108,11 @@
   border-bottom: 1px solid #f1f3f4;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  text-decoration: none;
+}
+
+.mypage__activity-item:hover {
+  text-decoration: none;
 }
 
 .mypage__activity-item:last-child {
