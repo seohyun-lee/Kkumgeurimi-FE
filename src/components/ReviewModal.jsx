@@ -29,21 +29,15 @@ const ReviewModal = ({ isOpen, onClose, program, onSubmit }) => {
     }
 
     setIsSubmitting(true);
-    try {
-      await onSubmit(program.programId, reviewData);
-      onClose();
-      // 폼 초기화
-      setReviewData({
-        score: 5,
-        message: '',
-        experienceDate: new Date().toISOString().split('T')[0]
-      });
-    } catch (error) {
-      console.error('리뷰 작성 실패:', error);
-      alert('리뷰 작성에 실패했습니다. 다시 시도해주세요.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    await onSubmit(program, reviewData);
+    onClose();
+    // 폼 초기화
+    setReviewData({
+      score: 5,
+      message: '',
+      experienceDate: new Date().toISOString().split('T')[0]
+    });
+    setIsSubmitting(false);
   };
 
   if (!isOpen) return null;

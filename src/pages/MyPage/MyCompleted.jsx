@@ -110,19 +110,10 @@ const MyCompleted = () => {
     });
   };
 
-  const handleSubmitReview = async (programId, reviewData) => {
-    try {
-      await meService.createReview(programId, reviewData);
-      
-      // 성공 시 목록 새로고침
-      const updatedData = await meService.getCompletedPrograms();
-      setRegisteredPrograms(updatedData);
-      
-      alert('리뷰가 성공적으로 등록되었습니다!');
-    } catch (error) {
-      console.error('리뷰 작성 실패:', error);
-      throw error; // ReviewModal에서 에러 처리하도록 전달
-    }
+  const handleSubmitReview = async (program, reviewData) => {
+    await meService.createReview(program.programRegistrationId, reviewData);
+    const updatedData = await meService.getCompletedPrograms();
+    setRegisteredPrograms(updatedData);
   };
 
   if (isLoading) {
