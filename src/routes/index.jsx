@@ -13,12 +13,12 @@ import Assistant from '../pages/Assistant/Assistant.jsx';
 import Explore from '../pages/Explore/Explore.jsx';
 import Career from '../pages/Career/Career.jsx';
 import MyPage from '../pages/MyPage/MyPage.jsx';
+import MyCompleted from '../pages/MyPage/MyCompleted.jsx';
 import NotFound from "../pages/NotFound/NotFound.jsx";
 
 // 페이지 컴포넌트들 (임시)
 const ProgramDetail = () => <div>프로그램 상세 페이지</div>;
 const Me = () => <div>내 정보 페이지</div>;
-const MeRegistrations = () => <div>내 신청 페이지</div>;
 const MeLikes = () => <div>내 찜 페이지</div>;
 
 export const ProtectedLayout = () => {
@@ -54,7 +54,7 @@ export const router = createBrowserRouter([
         element: <ProtectedLayout />,
         children: [
           { path: "my/profile", element: <Me /> },
-          { path: "my/registrations", element: <MeRegistrations /> },
+          { path: "my/completed", element: <MyCompleted /> },
           { path: "my/likes", element: <MeLikes /> },
         ],
       },

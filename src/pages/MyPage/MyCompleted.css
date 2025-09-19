@@ -1,0 +1,71 @@
+.my-completed {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+.my-completed__subtitle {
+  font-size: 16px;
+  font-weight: 400;
+  color: #6b7280;
+  margin: 0 0 32px 0;
+  text-align: center;
+}
+
+.my-completed__content {
+  width: 100%;
+}
+
+.my-completed__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.my-completed__loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.my-completed__empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  text-align: center;
+}
+
+.my-completed__empty p {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 8px 0;
+}
+
+.my-completed__empty p:first-child {
+  font-weight: 600;
+  color: #374151;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .my-completed {
+    padding: 16px;
+  }
+  
+  .my-completed__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .my-completed__subtitle {
+    font-size: 14px;
+  }
+}

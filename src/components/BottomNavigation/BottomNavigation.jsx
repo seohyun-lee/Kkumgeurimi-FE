@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate, NavLink } from 'react-router-dom';
-import { NAV_ITEMS } from '../../config/nav.jsx';
+import { BOTTOM_NAV_ITEMS } from '../../config/nav.jsx';
 import './BottomNavigation.css';
 
 const BottomNavigation = ({ onTabChange }) => {
@@ -15,7 +15,7 @@ const BottomNavigation = ({ onTabChange }) => {
   return (
     <nav className="bottom-navigation" role="navigation" aria-label="하단 내비게이션">
       <div className="bottom-navigation__container">
-        {NAV_ITEMS.map((item) => {
+        {BOTTOM_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const active = pathname === item.path || pathname.startsWith(item.path + '/');
           return (

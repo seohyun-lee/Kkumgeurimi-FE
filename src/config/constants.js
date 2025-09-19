@@ -37,7 +37,7 @@ export const ROUTES = {
   COMMUNITY: '/community',
   ASSISTANT: '/assistant',
   ME: '/my',
-  ME_REGISTRATIONS: '/my/registrations',
+  ME_COMPLETED: '/my/completed',
   ME_LIKES: '/my/likes'
 };
 

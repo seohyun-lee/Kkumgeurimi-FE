@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import ProgramCardBasic from "../../components/ProgramCardBasic";
 import { useProgramModal } from "../../contexts/ProgramModalContext.jsx";
 import { getCategoryName } from "../../utils/category.js";
@@ -171,13 +172,13 @@ export default function MyPage() {
           <h2 className="mypage__section-title">나의 활동</h2>
         </div>
         <div className="mypage__activity-grid">
-          <div className="mypage__activity-item">
+          <Link to="/my/completed" className="mypage__activity-item">
             <div className="mypage__activity-icon">
               <img src={programIcon} alt="참여 프로그램" />
             </div>
             <div className="mypage__activity-text">참여 프로그램 내역</div>
             <div className="mypage__activity-arrow">›</div>
-          </div>
+          </Link>
           <div className="mypage__activity-item">
             <div className="mypage__activity-icon">
               <img src={likeIcon} alt="찜한 프로그램" />
