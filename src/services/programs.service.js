@@ -55,6 +55,69 @@ export const programsService = {
     }
   },
 
+  // 이번 주 인기 프로그램 조회
+  async getTrendingPrograms(limit = 4) {
+    try {
+      const response = await http.get('/programs/trending', {
+        params: { limit }
+      });
+      return response.data;
+    } catch (error) {
+      console.warn('트렌딩 프로그램 API 호출 실패, 더미 데이터 사용:', error.message);
+      // API가 없을 때 더미 데이터 반환
+      return [
+        {
+          programId: "trending-1",
+          programTitle: "서비스 기획자 직무 체험",
+          provider: "네이버 커넥트재단",
+          programTypeLabel: "체험처",
+          startDate: "2025-09-19",
+          endDate: "2025-09-19",
+          costType: "FREE",
+          imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center",
+          venueRegion: "서울",
+          interestCategoryLabel: "서비스업"
+        },
+        {
+          programId: "trending-2",
+          programTitle: "마케팅 전략 수립 워크샵",
+          provider: "카카오 임팩트",
+          programTypeLabel: "체험처",
+          startDate: "2025-09-20",
+          endDate: "2025-09-20",
+          costType: "PAID",
+          imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop&crop=center",
+          venueRegion: "경기",
+          interestCategoryLabel: "서비스업"
+        },
+        {
+          programId: "trending-3",
+          programTitle: "UX/UI 기획 온라인 부트캠프",
+          provider: "디자인컴퍼니",
+          programTypeLabel: "온라인",
+          startDate: "2025-09-21",
+          endDate: "2025-09-21",
+          costType: "PAID",
+          imageUrl: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=400&h=300&fit=crop&crop=center",
+          venueRegion: "온라인",
+          interestCategoryLabel: "예술디자인"
+        },
+        {
+          programId: "trending-4",
+          programTitle: "스타트업 창업 기획 체험",
+          provider: "D.CAMP",
+          programTypeLabel: "체험처",
+          startDate: "2025-09-22",
+          endDate: "2025-09-22",
+          costType: "FREE",
+          imageUrl: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=300&fit=crop&crop=center",
+          venueRegion: "서울",
+          interestCategoryLabel: "서비스업"
+        }
+      ].slice(0, limit);
+    }
+  },
+
   // 프로그램 목록/검색
   async getPrograms(params = {}) {
     const {

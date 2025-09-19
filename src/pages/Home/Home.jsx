@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import ProgramCardBasic from '../../components/ProgramCardBasic.jsx';
@@ -12,6 +13,7 @@ const Home = () => {
   const { isAuthenticated } = useAuthStore();
   const [activeGradeTab, setActiveGradeTab] = useState('중1-2');
   const { openModal } = useProgramModal();
+  const navigate = useNavigate();
 
 
   // 개인화 추천 프로그램 조회 (로그인한 경우만)
@@ -20,6 +22,13 @@ const Home = () => {
     queryFn: programsService.getRecommendations,
     enabled: isAuthenticated,
     staleTime: 5 * 60 * 1000, // 5분
+  });
+
+  // 이번 주 인기 프로그램 조회
+  const { data: trendingPrograms, isLoading: isLoadingTrending } = useQuery({
+    queryKey: ['trending-programs'],
+    queryFn: () => programsService.getTrendingPrograms(4),
+    staleTime: 10 * 60 * 1000, // 10분
   });
 
   // 데이터가 배열인지 확인하는 헬퍼 함수
@@ -463,25 +472,49 @@ const Home = () => {
       <section className="home__section">
         <div className="home__section-header">
           <h2 className="home__section-title">이번 주 인기 프로그램</h2>
-          <span className="home__section-more">
+          <span 
+            className="home__section-more"
+            onClick={() => navigate('/explore')}
+            style={{ cursor: 'pointer' }}
+          >
             더보기
             <img src={showAllIcon} alt="더보기" style={{ marginLeft: '4px', width: '10px', height: '10px' }} />
           </span>
         </div>
         
         <div className="popular-programs-grid">
-          {popularPrograms.slice(0, 4).map((program) => (
-            <ProgramCardBasic
-              key={program.programId}
-              title={program.programTitle}
-              organization={program.provider}
-              date={`${program.startDate} ~ ${program.endDate}`}
-              category={getCategoryName(program.interestCategory)}
-              tags={program.tags}
-              imageUrl={program.imageUrl}
-              onClick={() => handleProgramClick(program)}
-            />
-          ))}
+          {isLoadingTrending ? (
+            // 로딩 상태
+            Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="program-card-basic loading">
+                <div className="program-card-basic__image">
+                  <div className="program-card-basic__placeholder loading-skeleton"></div>
+                </div>
+                <div className="program-card-basic__content">
+                  <div className="loading-skeleton" style={{ height: '20px', marginBottom: '8px' }}></div>
+                  <div className="loading-skeleton" style={{ height: '16px', marginBottom: '8px' }}></div>
+                  <div className="loading-skeleton" style={{ height: '14px', marginBottom: '8px' }}></div>
+                </div>
+              </div>
+            ))
+          ) : (
+            // 실제 데이터
+            trendingPrograms?.slice(0, 4).map((program) => (
+              <ProgramCardBasic
+                key={program.programId}
+                title={program.programTitle}
+                organization={program.provider}
+                date={`${program.startDate} ~ ${program.endDate}`}
+                category={program.interestCategoryLabel || getCategoryName(program.interestCategory)}
+                tags={[
+                  program.programTypeLabel,
+                  program.costType === 'FREE' ? '무료' : '유료'
+                ]}
+                imageUrl={program.imageUrl}
+                onClick={() => handleProgramClick(program)}
+              />
+            ))
+          )}
         </div>
       </section>
 
