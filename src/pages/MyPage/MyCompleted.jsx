@@ -104,7 +104,7 @@ const MyCompleted = () => {
   return (
     <div className="my-completed">
       <div className="my-completed__subtitle">
-        총 {registeredPrograms.length}개의 프로그램에 참여했습니다.
+        총 {registeredPrograms.length}개
       </div>
 
       <div className="my-completed__content">

@@ -54,16 +54,17 @@ const ProgramCardLong = ({
       <div className="program-card-long__content">
         <h3 className="program-card-long__title">{programTitle}</h3>
         
-        {/* 기관 정보 */}
-        <div className="program-card-long__provider">
-          <img src={institutionIcon} alt="기관" className="program-card-long__provider-icon" />
-          <span>{provider}</span>
-        </div>
-        
-        {/* 날짜 정보 */}
-        <div className="program-card-long__date">
-          <img src={calendarIcon} alt="날짜" className="program-card-long__date-icon" />
-          <span>{displayDate}</span>
+        {/* 날짜 및 기관 정보 */}
+        <div className="program-card-long__info-row">
+          <div className="program-card-long__date">
+            <img src={calendarIcon} alt="날짜" className="program-card-long__date-icon" />
+            <span>{displayDate}</span>
+          </div>
+          
+          <div className="program-card-long__provider">
+            <img src={institutionIcon} alt="기관" className="program-card-long__provider-icon" />
+            <span>{provider}</span>
+          </div>
         </div>
         
         {/* 리뷰 영역 또는 리뷰 작성하기 버튼 */}
