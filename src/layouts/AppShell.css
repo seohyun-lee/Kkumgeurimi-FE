@@ -56,7 +56,8 @@ body { margin: 0; }
   justify-content: space-between;
 }
 
-.app-shell__page-title {
+/* 상단바 타이틀 */
+.app-shell__page-title { 
   font-size: 24px;
   font-weight: 700;
   color: #1f2937;

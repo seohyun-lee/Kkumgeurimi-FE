@@ -42,10 +42,21 @@ const MyPageIcon = ({ isActive }) => (
   </svg>
 );
 
-export const NAV_ITEMS = [
+// 하단 네비게이션용
+export const BOTTOM_NAV_ITEMS = [
   { id: 'home',      label: '홈',     icon: HomeIcon,      path: ROUTES.HOME },
   { id: 'search',    label: '탐색',   icon: ExploreIcon,   path: ROUTES.EXPLORE },
   { id: 'career',    label: '진로',   icon: CareerIcon,    path: ROUTES.CAREER },
   { id: 'community', label: '꿈터', icon: CommunityIcon, path: ROUTES.COMMUNITY },
   { id: 'mypage',    label: 'MY',     icon: MyPageIcon,    path: ROUTES.ME },
 ];
+
+// 페이지별 설정
+export const PAGE_CONFIGS = {
+  [ROUTES.HOME]: { title: '꿈그리미', showBackButton: false },
+  [ROUTES.EXPLORE]: { title: '탐색', showBackButton: false },
+  [ROUTES.CAREER]: { title: '진로', showBackButton: false },
+  [ROUTES.COMMUNITY]: { title: '꿈터', showBackButton: false },
+  [ROUTES.ME]: { title: 'MY', showBackButton: false },
+  [ROUTES.ME_COMPLETED]: { title: '참여한 프로그램', showBackButton: true, backTo: ROUTES.ME },
+};
