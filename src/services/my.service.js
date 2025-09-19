@@ -32,6 +32,18 @@ export const meService = {
     return response.data;
   },
 
+  // 완료된 프로그램 목록 조회
+  async getCompletedPrograms() {
+    const response = await http.get('/my/completed');
+    return response.data;
+  },
+
+  // 리뷰 작성
+  async createReview(programId, reviewData) {
+    const response = await http.post(`/my/programs/${programId}/review`, reviewData);
+    return response.data;
+  },
+
   // 내 진로 정보 조회
   async getCareer() {
     const response = await http.get('/my/career');

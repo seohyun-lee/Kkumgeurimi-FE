@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import ProgramCardLong from '../../components/ProgramCardLong';
+import ReviewModal from '../../components/ReviewModal';
+import { meService } from '../../services/my.service';
 import './MyCompleted.css';
 
 const MyCompleted = () => {
   const [registeredPrograms, setRegisteredPrograms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [reviewModal, setReviewModal] = useState({
+    isOpen: false,
+    program: null
+  });
 
   // 목업 데이터
   const mockData = [
@@ -67,28 +74,55 @@ const MyCompleted = () => {
   ];
 
   useEffect(() => {
-    // API 호출 시뮬레이션
-    const fetchRegisteredPrograms = async () => {
+    const fetchCompletedPrograms = async () => {
       setIsLoading(true);
+      setError(null);
+      
       try {
-        // 실제 API 호출 대신 목업 데이터 사용
-        setTimeout(() => {
-          setRegisteredPrograms(mockData);
-          setIsLoading(false);
-        }, 1000);
+        const data = await meService.getCompletedPrograms();
+        setRegisteredPrograms(data);
       } catch (error) {
-        console.error('참여 프로그램 조회 실패:', error);
-        setRegisteredPrograms(mockData);
+        console.error('완료된 프로그램 조회 실패:', error);
+        setError('프로그램 목록을 불러오는데 실패했습니다.');
+        // 개발 환경에서는 목업 데이터 사용
+        if (process.env.NODE_ENV === 'development') {
+          setRegisteredPrograms(mockData);
+        }
+      } finally {
         setIsLoading(false);
       }
     };
 
-    fetchRegisteredPrograms();
+    fetchCompletedPrograms();
   }, []);
 
-  const handleReviewClick = (programId) => {
-    console.log('리뷰 작성하기 클릭:', programId);
-    // 리뷰 작성 모달 또는 페이지로 이동
+  const handleReviewClick = (program) => {
+    setReviewModal({
+      isOpen: true,
+      program: program
+    });
+  };
+
+  const handleCloseReviewModal = () => {
+    setReviewModal({
+      isOpen: false,
+      program: null
+    });
+  };
+
+  const handleSubmitReview = async (programId, reviewData) => {
+    try {
+      await meService.createReview(programId, reviewData);
+      
+      // 성공 시 목록 새로고침
+      const updatedData = await meService.getCompletedPrograms();
+      setRegisteredPrograms(updatedData);
+      
+      alert('리뷰가 성공적으로 등록되었습니다!');
+    } catch (error) {
+      console.error('리뷰 작성 실패:', error);
+      throw error; // ReviewModal에서 에러 처리하도록 전달
+    }
   };
 
   if (isLoading) {
@@ -96,6 +130,22 @@ const MyCompleted = () => {
       <div className="my-completed">
         <div className="my-completed__loading">
           <p>프로그램 목록을 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && registeredPrograms.length === 0) {
+    return (
+      <div className="my-completed">
+        <div className="my-completed__error">
+          <p>{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="my-completed__retry-btn"
+          >
+            다시 시도
+          </button>
         </div>
       </div>
     );
@@ -115,6 +165,7 @@ const MyCompleted = () => {
                 key={program.programId}
                 programData={program}
                 onClick={() => console.log('프로그램 클릭:', program.programId)}
+                onReviewClick={() => handleReviewClick(program)}
               />
             ))}
           </div>
@@ -125,6 +176,14 @@ const MyCompleted = () => {
           </div>
         )}
       </div>
+
+      {/* 리뷰 작성 모달 */}
+      <ReviewModal
+        isOpen={reviewModal.isOpen}
+        onClose={handleCloseReviewModal}
+        program={reviewModal.program}
+        onSubmit={handleSubmitReview}
+      />
     </div>
   );
 };

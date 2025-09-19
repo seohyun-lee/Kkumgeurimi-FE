@@ -7,6 +7,7 @@ const ProgramCardLong = ({
   programData,
   className = '',
   onClick,
+  onReviewClick,
   ...props 
 }) => {
   const {
@@ -76,7 +77,13 @@ const ProgramCardLong = ({
             <p className="program-card-long__review-message">{reviewMessage}</p>
           </div>
         ) : (
-          <button className="program-card-long__review-button">
+          <button 
+            className="program-card-long__review-button"
+            onClick={(e) => {
+              e.stopPropagation(); // 카드 클릭 이벤트 방지
+              onReviewClick && onReviewClick();
+            }}
+          >
             리뷰 작성하기
           </button>
         )}

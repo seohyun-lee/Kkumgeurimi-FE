@@ -54,6 +54,38 @@
   color: #374151;
 }
 
+.my-completed__error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  text-align: center;
+  gap: 16px;
+}
+
+.my-completed__error p {
+  font-size: 16px;
+  color: #ef4444;
+  margin: 0;
+}
+
+.my-completed__retry-btn {
+  background: #278EFF;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.my-completed__retry-btn:hover {
+  background: #1d7bef;
+}
+
 /* 모바일 반응형 */
 @media (max-width: 768px) {
   .my-completed {
