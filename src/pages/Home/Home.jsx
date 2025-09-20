@@ -441,31 +441,33 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Progress Section */}
-      <div className="home__progress-section">
-        <div className="home__progress-header">
-          <div className="home__progress-title">나의 진로 탐색 여정</div>
-          <div className="progress-percentage">75%</div>
+      {/* 진로 탐색 여정 - 로그인한 사용자만 표시 */}
+      {isAuthenticated && (
+        <div className="home__progress-section">
+          <div className="home__progress-header">
+            <div className="home__progress-title">나의 진로 탐색 여정</div>
+            <div className="progress-percentage">75%</div>
+          </div>
+          <div className="home__progress-steps">
+            <div className="home__progress-step completed">
+              <div className="home__progress-step-circle active">✓</div>
+              <div className="home__progress-step-text">흥미 탐색</div>
+            </div>
+            <div className="home__progress-step completed">
+              <div className="home__progress-step-circle active">✓</div>
+              <div className="home__progress-step-text">직업 체험</div>
+            </div>
+            <div className="home__progress-step completed">
+              <div className="home__progress-step-circle active">✓</div>
+              <div className="home__progress-step-text">적성 파악</div>
+            </div>
+            <div className="home__progress-step">
+              <div className="home__progress-step-circle">4</div>
+              <div className="home__progress-step-text">진로 설계</div>
+            </div>
+          </div>
         </div>
-        <div className="home__progress-steps">
-          <div className="home__progress-step completed">
-            <div className="home__progress-step-circle active">✓</div>
-            <div className="home__progress-step-text">흥미 탐색</div>
-          </div>
-          <div className="home__progress-step completed">
-            <div className="home__progress-step-circle active">✓</div>
-            <div className="home__progress-step-text">직업 체험</div>
-          </div>
-          <div className="home__progress-step completed">
-            <div className="home__progress-step-circle active">✓</div>
-            <div className="home__progress-step-text">적성 파악</div>
-          </div>
-          <div className="home__progress-step">
-            <div className="home__progress-step-circle">4</div>
-            <div className="home__progress-step-text">진로 설계</div>
-          </div>
-        </div>
-      </div>
+      )}
 
 
       {/* 인기 프로그램 섹션 */}
