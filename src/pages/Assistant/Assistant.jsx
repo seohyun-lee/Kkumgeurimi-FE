@@ -5,6 +5,7 @@ import { chatService } from '../../services/chat.service.js';
 import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import { getMentorsForAssistant } from '../../data/mentors.js';
+import RecommendationModal from '../../components/RecommendationModal.jsx';
 import './Assistant.css';
 
 /** ───────────────────────────────────────────────────────────
@@ -51,6 +52,8 @@ export default function Assistant() {
   const [isTyping, setIsTyping] = useState(false);
   const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [messages, dispatch] = useReducer(messagesReducer, []);
   const listRef = useRef(null);
@@ -172,6 +175,12 @@ export default function Assistant() {
     }
   };
 
+  // 모달 핸들러
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setSelectedProgram(null);
+  };
+
   // 프로그램 추천받기
   const handleGetRecommendations = async () => {
     setIsLoadingRecommendations(true);
@@ -257,6 +266,10 @@ export default function Assistant() {
                 actions={m.actions}
                 topMatches={m.topMatches}
                 onAction={navigateToFeature}
+                onProgramClick={(program) => {
+                  setSelectedProgram(program);
+                  setIsModalOpen(true);
+                }}
               />
             ))}
 
@@ -303,13 +316,19 @@ export default function Assistant() {
           </footer>
         </section>
       )}
+
+      {/* 프로그램 추천 정보 모달 */}
+      <RecommendationModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        program={selectedProgram}
+      />
     </div>
   );
 }
 
 /** 메시지 한 줄 */
-function MessageRow({ type, avatar, content, actions, topMatches, onAction }) {
-  const navigate = useNavigate();
+function MessageRow({ type, avatar, content, actions, topMatches, onAction, onProgramClick }) {
   
   return (
     <div className={`msg msg--${type}`}>
@@ -330,10 +349,10 @@ function MessageRow({ type, avatar, content, actions, topMatches, onAction }) {
             <h4 className="top-matches__title">추천 프로그램</h4>
             <div className="top-matches__list">
               {topMatches.slice(0, 3).map((program, index) => (
-                <div 
-                  key={program.id || index} 
+                <div
+                  key={program.id || index}
                   className="top-matches__item"
-                  onClick={() => navigate(`/programs/${program.id}`)}
+                  onClick={() => onProgramClick?.(program)}
                 >
                   <div className="top-matches__name">{program.title || program.name}</div>
                   <div className="top-matches__desc">{program.description}</div>
