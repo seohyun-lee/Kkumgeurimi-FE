@@ -50,6 +50,7 @@ export default function Assistant() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   const [messages, dispatch] = useReducer(messagesReducer, []);
   const listRef = useRef(null);
@@ -105,7 +106,10 @@ export default function Assistant() {
   /** 메시지 전송 */
   const send = () => {
     const text = input.trim();
-    if (!text) return;
+    if (!text || isSending) return;
+
+    setIsSending(true);
+
     // 사용자 메시지 추가
     dispatch({
       type: 'ADD',
@@ -148,6 +152,7 @@ export default function Assistant() {
       });
 
       setIsTyping(false);
+      setIsSending(false);
     } catch (error) {
       console.error('Chat API error:', error);
 
@@ -163,6 +168,7 @@ export default function Assistant() {
       });
 
       setIsTyping(false);
+      setIsSending(false);
     }
   };
 
@@ -287,7 +293,7 @@ export default function Assistant() {
                 className="chat__send"
                 onClick={send}
                 aria-label="전송"
-                disabled={!input.trim()}
+                disabled={!input.trim() || isSending}
               >
                 <svg className="chat__send-icon" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
