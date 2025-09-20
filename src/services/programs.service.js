@@ -232,6 +232,65 @@ export const programsService = {
     }
   },
 
+  // 프로그램 추천 (챗봇용)
+  async getRecommendationsForChat({ student_id, profession, top_k = 3 }) {
+    try {
+      const response = await http.post('/ai/recommendations', {
+        student_id: String(student_id),
+        profession,
+        top_k
+      });
+      return response.data;
+    } catch (error) {
+      console.warn('프로그램 추천 API 호출 실패:', error.message);
+      // API가 없을 때 더미 데이터 반환
+      return {
+        message: `${profession || '사용자'}님에게 맞는 프로그램을 추천해드릴게요!`,
+        top_matches: [
+          {
+            program_id: "rec-1",
+            program_title: "서비스 기획자 직무 체험",
+            provider: "네이버 커넥트재단",
+            cost_type: "FREE",
+            start_date: "2025-09-20",
+            end_date: "2025-12-31",
+            program_type: "현장직업체험형",
+            target_audience: "중 고",
+            related_major: "서비스기획자",
+            venue_region: "서울",
+            score: 0.8521
+          },
+          {
+            program_id: "rec-2",
+            program_title: "콘텐츠 기획 워크샵",
+            provider: "카카오 임팩트",
+            cost_type: "PAID",
+            start_date: "2025-10-01",
+            end_date: "2025-11-30",
+            program_type: "현장직업체험형",
+            target_audience: "중 고",
+            related_major: "콘텐츠기획자",
+            venue_region: "경기",
+            score: 0.7892
+          },
+          {
+            program_id: "rec-3",
+            program_title: "프로덕트 매니저 실무과정",
+            provider: "라인플러스",
+            cost_type: "FREE",
+            start_date: "2025-09-25",
+            end_date: "2025-12-25",
+            program_type: "현장직업체험형",
+            target_audience: "고",
+            related_major: "프로덕트매니저",
+            venue_region: "서울",
+            score: 0.7345
+          }
+        ]
+      };
+    }
+  },
+
   // 프로그램 검색 (Explore 페이지용)
   async searchPrograms({
     interestCategory,

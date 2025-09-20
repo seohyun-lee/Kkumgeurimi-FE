@@ -12,6 +12,37 @@ import showAllIcon from '../../assets/icons/showall.svg';
 import backIcon from '../../assets/icons/back.svg';
 import './Career.css';
 
+// 키워드별 챗봇 정보 매핑
+const getChatBotInfo = (interestId) => {
+  const chatBotMapping = {
+    'planning': {
+      avatar: '/mock_image_url/korean_woman_1.jpeg',
+      job: '콘텐츠 기획자',
+      name: '한지민',
+      description: '안녕하세요! 콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하고 효과적으로 구성합니다.'
+    },
+    'development': {
+      avatar: '/mock_image_url/korean_man_1.jpeg',
+      job: '풀스택 개발자',
+      name: '김민수',
+      description: '안녕하세요! 풀스택 개발자는 웹 애플리케이션의 프론트엔드부터 백엔드까지 전체 개발을 담당하는 개발자입니다.'
+    },
+    'marketing': {
+      avatar: '/mock_image_url/korean_woman_2.jpeg',
+      job: '디지털 마케터',
+      name: '박소영',
+      description: '안녕하세요! 디지털 마케터는 온라인 플랫폼을 활용해 브랜드와 제품을 고객에게 효과적으로 전달하는 마케팅 전문가입니다.'
+    },
+    'design': {
+      avatar: '/mock_image_url/korean_man_2.jpeg',
+      job: 'UX/UI 디자이너',
+      name: '이현우',
+      description: '안녕하세요! UX/UI 디자이너는 사용자가 제품을 직관적이고 편리하게 사용할 수 있도록 경험과 인터페이스를 설계합니다.'
+    }
+  };
+  return chatBotMapping[interestId] || chatBotMapping['planning'];
+};
+
 // 멘토와 관심사 매핑
 const mapMentorToInterest = (mentorId) => {
   const mapping = {
@@ -511,36 +542,44 @@ const Career = () => {
             <h2 className="career__section-title">현직자봇과 진로상담하기</h2>
           </div>
           <div className="career__chat-card" style={{ backgroundColor: selectedInterest?.color }}>
-            <div className="chat-card__header">
-              <div className="chat-card__avatar">
-                <img src="/mock_image_url/korean_woman_1.jpeg" alt="콘텐츠 기획자" />
-              </div>
-              <div className="chat-card__info">
-                <h3 className="chat-card__title">콘텐츠 기획자</h3>
-                <p className="chat-card__name">한지민</p>
-              </div>
-            </div>
-            <p className="chat-card__description">
-              안녕하세요! 콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하고 효과적으로 구성합니다.
-            </p>
-            <div className="chat-card__footer">
-              <button
-                className="chat-card__button"
-                style={{
-                  backgroundColor: getMinorColor(selectedInterest?.id)
-                }}
-                onClick={() => navigate('/assistant', {
-                  state: {
-                    botName: '한지민',
-                    botJob: '콘텐츠 기획자',
-                    botDescription: '콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하고 효과적으로 구성합니다.',
-                    profession: selectedInterest?.name || '기획자'
-                  }
-                })}
-              >
-                대화하기
-              </button>
-            </div>
+            {(() => {
+              const botInfo = getChatBotInfo(selectedInterest.id);
+              return (
+                <>
+                  <div className="chat-card__header">
+                    <div className="chat-card__avatar">
+                      <img src={botInfo.avatar} alt={botInfo.job} />
+                    </div>
+                    <div className="chat-card__info">
+                      <h3 className="chat-card__title">{botInfo.job}</h3>
+                      <p className="chat-card__name">{botInfo.name}</p>
+                    </div>
+                  </div>
+                  <p className="chat-card__description">
+                    {botInfo.description}
+                  </p>
+                  <div className="chat-card__footer">
+                    <button
+                      className="chat-card__button"
+                      style={{
+                        backgroundColor: getMinorColor(selectedInterest?.id)
+                      }}
+                      onClick={() => navigate('/assistant', {
+                        state: {
+                          botName: botInfo.name,
+                          botJob: botInfo.job,
+                          botDescription: botInfo.description,
+                          botAvatar: botInfo.avatar,
+                          profession: selectedInterest?.name || '기획자'
+                        }
+                      })}
+                    >
+                      대화하기
+                    </button>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </section>
       )}
