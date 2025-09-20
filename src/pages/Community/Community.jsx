@@ -201,8 +201,8 @@ const Community = () => {
       try {
         const categoryMapping = {
           '진로·적성': 'CAREER_PATH',
-          '고민상담': 'CONSULTATION',
-          '체험후기': 'EXPERIENCE',
+          '고민상담': 'COUNSELING',
+          '체험후기': 'EXPERIENCE_REVIEW',
           '자유소통': 'FREE_TALK'
         };
 
