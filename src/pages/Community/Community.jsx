@@ -28,6 +28,7 @@ const Community = () => {
   const [hashtags, setHashtags] = useState([]);
   const [isEditingHashtag, setIsEditingHashtag] = useState(false);
   const [commentInput, setCommentInput] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const fileInputRef = React.useRef(null);
 
   const categories = ['전체', '🔥 인기 추천', '문과', '이과', '예체능'];
@@ -100,6 +101,33 @@ const Community = () => {
       setSelectedPost(updatedPost);
     } catch (error) {
       console.error('댓글 삭제 실패:', error);
+    }
+  };
+
+  // 게시글 삭제
+  const handlePostDelete = async () => {
+    if (!selectedPost) return;
+
+    try {
+      console.log('삭제할 게시글 ID:', selectedPost.id);
+      await communityService.deletePost(selectedPost.id);
+
+      // 게시글 목록 새로고침
+      fetchPosts();
+
+      // 메인 화면으로 이동
+      setCurrentView('main');
+      setSelectedPost(null);
+      setShowDeleteConfirm(false);
+    } catch (error) {
+      console.error('게시글 삭제 실패:', error);
+      console.error('에러 상세:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        url: error.config?.url,
+        method: error.config?.method
+      });
+      alert(`게시글 삭제에 실패했습니다. (${error.response?.status}: ${error.response?.statusText || error.message})`);
     }
   };
 
@@ -456,11 +484,30 @@ const Community = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 12H5m7-7l-7 7 7 7"/>
             </svg>
           </button>
+          <button
+            onClick={() => setShowDeleteConfirm(true)}
+            className="community__delete-button"
+          >
+            <svg className="community__delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
         </div>
 
         {/* Post Content */}
         <div className="community__detail-content">
           <div className="community__detail-post">
+            <span className={`community__category-badge ${
+              selectedPost.category === 'CAREER_PATH' ? 'community__category-badge--blue' :
+              selectedPost.category === 'FREE_TALK' ? 'community__category-badge--green' :
+              selectedPost.category === 'COUNSELING' ? 'community__category-badge--purple' :
+              'community__category-badge--orange'
+            }`}>
+              {selectedPost.category === 'CAREER_PATH' ? '진로·적성' :
+               selectedPost.category === 'FREE_TALK' ? '자유소통' :
+               selectedPost.category === 'COUNSELING' ? '고민상담' :
+               selectedPost.category === 'EXPERIENCE_REVIEW' ? '체험후기' : selectedPost.category}
+            </span>
             <h1 className="community__detail-title">{selectedPost.title}</h1>
             <div className="community__detail-meta">
               <span>{selectedPost.authorNickname}</span>
@@ -548,6 +595,30 @@ const Community = () => {
             </button>
           </div>
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirm && (
+          <div className="community__modal-overlay" onClick={() => setShowDeleteConfirm(false)}>
+            <div className="community__modal-content" onClick={(e) => e.stopPropagation()}>
+              <h3 className="community__modal-title">게시글 삭제</h3>
+              <p className="community__modal-message">정말로 이 게시글을 삭제하시겠습니까?</p>
+              <div className="community__modal-actions">
+                <button
+                  className="community__modal-button community__modal-button--cancel"
+                  onClick={() => setShowDeleteConfirm(false)}
+                >
+                  취소
+                </button>
+                <button
+                  className="community__modal-button community__modal-button--delete"
+                  onClick={handlePostDelete}
+                >
+                  삭제
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

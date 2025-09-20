@@ -774,3 +774,103 @@ body.community-write-view .app-shell__main {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Detail page category badge spacing */
+.community__detail-post .community__category-badge {
+  margin-bottom: 8px;
+}
+
+/* Delete Button */
+.community__delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.community__delete-button:hover {
+  background-color: #fee2e2;
+}
+
+.community__delete-icon {
+  width: 20px;
+  height: 20px;
+  color: #dc2626;
+  stroke-width: 1.5;
+}
+
+/* Modal Styles */
+.community__modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.community__modal-content {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 320px;
+  width: 90%;
+  margin: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.community__modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+.community__modal-message {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.community__modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.community__modal-button {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.community__modal-button--cancel {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.community__modal-button--cancel:hover {
+  background-color: #e5e7eb;
+}
+
+.community__modal-button--delete {
+  background-color: #dc2626;
+  color: white;
+}
+
+.community__modal-button--delete:hover {
+  background-color: #b91c1c;
+}
