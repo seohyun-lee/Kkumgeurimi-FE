@@ -19,25 +19,25 @@ const getChatBotInfo = (interestId) => {
       avatar: '/mock_image_url/korean_woman_1.jpeg',
       job: '콘텐츠 기획자',
       name: '한지민',
-      description: '안녕하세요! 콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하고 효과적으로 구성합니다.'
+      description: '콘텐츠 기획자는 사용자에게 전달할 정보나 이야기를 목적에 맞게 설계하고 효과적으로 구성합니다.'
     },
     'development': {
       avatar: '/mock_image_url/korean_man_1.jpeg',
       job: '풀스택 개발자',
       name: '김민수',
-      description: '안녕하세요! 풀스택 개발자는 웹 애플리케이션의 프론트엔드부터 백엔드까지 전체 개발을 담당하는 개발자입니다.'
+      description: '풀스택 개발자는 웹 애플리케이션의 프론트엔드부터 백엔드까지 전체 개발을 담당하는 개발자입니다.'
     },
     'marketing': {
       avatar: '/mock_image_url/korean_woman_2.jpeg',
       job: '디지털 마케터',
       name: '박소영',
-      description: '안녕하세요! 디지털 마케터는 온라인 플랫폼을 활용해 브랜드와 제품을 고객에게 효과적으로 전달하는 마케팅 전문가입니다.'
+      description: '디지털 마케터는 온라인 플랫폼을 활용해 브랜드와 제품을 고객에게 효과적으로 전달하는 마케팅 전문가입니다.'
     },
     'design': {
       avatar: '/mock_image_url/korean_man_2.jpeg',
       job: 'UX/UI 디자이너',
       name: '이현우',
-      description: '안녕하세요! UX/UI 디자이너는 사용자가 제품을 직관적이고 편리하게 사용할 수 있도록 경험과 인터페이스를 설계합니다.'
+      description: 'UX/UI 디자이너는 사용자가 제품을 직관적이고 편리하게 사용할 수 있도록 경험과 인터페이스를 설계합니다.'
     }
   };
   return chatBotMapping[interestId] || chatBotMapping['planning'];
