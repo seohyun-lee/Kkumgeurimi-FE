@@ -16,7 +16,7 @@ import showAllIcon from "../../assets/icons/showall.svg";
 
 export default function MyPage() {
   // 목업 데이터로 하드코딩
-  const { user: authUser } = useAuthStore();
+  const { user: authUser, fetchUserProfile, isAuthenticated } = useAuthStore();
   const [joinedPrograms, setJoinedPrograms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [likedPrograms, setLikedPrograms] = useState(new Set());
@@ -32,10 +32,18 @@ export default function MyPage() {
     career: authUser?.career || ""
   };
 
+  // 사용자 정보가 로드되기를 기다린 후 프로그램 데이터 가져오기
   useEffect(() => {
-    const fetchJoinedPrograms = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
+        
+        // 인증된 상태이지만 사용자 정보가 없으면 프로필 가져오기
+        if (isAuthenticated && !authUser) {
+          console.log('[MyPage] Fetching user profile...');
+          await fetchUserProfile();
+        }
+        
         // /my/upcoming API를 사용하여 참여 예정 프로그램 조회
         const programs = await meService.getUpcomingPrograms();
         setJoinedPrograms(programs || []);
@@ -48,8 +56,8 @@ export default function MyPage() {
       }
     };
 
-    fetchJoinedPrograms();
-  }, []);
+    fetchData();
+  }, [isAuthenticated, authUser, fetchUserProfile]);
 
   const [likedProgramsData] = useState([
     {
