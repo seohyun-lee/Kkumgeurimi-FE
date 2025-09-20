@@ -36,37 +36,13 @@ export default function MyPage() {
     const fetchJoinedPrograms = async () => {
       try {
         setIsLoading(true);
-        const programs = await programsService.getUpcoming();
+        // /my/upcoming API를 사용하여 참여 예정 프로그램 조회
+        const programs = await meService.getUpcomingPrograms();
         setJoinedPrograms(programs || []);
       } catch (error) {
         console.error('참여 예정 프로그램 조회 실패:', error);
-        // 실패 시 목업 데이터 사용
-        setJoinedPrograms([
-          {
-            programId: 1,
-            programTitle: "프로덕트 매니저 실무 체험",
-            provider: "라인플러스",
-            programTypeLabel: "체험처",
-            startDate: "2024-01-15",
-            endDate: "2024-03-15",
-            costType: "FREE",
-            imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop&crop=center",
-            venueRegion: "서울",
-            interestCategoryLabel: "기획"
-          },
-          {
-            programId: 2,
-            programTitle: "비즈니스 모델 설계 워크샵",
-            provider: "삼성전자",
-            programTypeLabel: "워크샵",
-            startDate: "2024-02-01",
-            endDate: "2024-04-01",
-            costType: "PAID",
-            imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop&crop=center",
-            venueRegion: "서울",
-            interestCategoryLabel: "전략기획"
-          }
-        ]);
+        // 실패 시 빈 배열로 설정 (서비스에서 더미 데이터를 제공하므로)
+        setJoinedPrograms([]);
       } finally {
         setIsLoading(false);
       }
