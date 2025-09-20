@@ -69,5 +69,17 @@ export const meService = {
   async createInterests(interestData) {
     const response = await http.post('/my/interests', interestData);
     return response.data;
+  },
+
+  // 학교급 정보 조회
+  async getSchoolLevel() {
+    try {
+      const response = await http.get('/my/schoollevel');
+      return response.data;
+    } catch (error) {
+      console.error('학교급 조회 실패:', error);
+      // 실패 시 기본값 '고' 반환
+      return '고';
+    }
   }
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import communityService from '../../services/community.service';
+import { meService } from '../../services/my.service';
 import './Community.css';
 
 const Community = () => {
@@ -14,6 +15,7 @@ const Community = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [schoolLevel, setSchoolLevel] = useState('고'); // 기본값: 고등학생
 
   const [newPost, setNewPost] = useState({
     title: '',
@@ -29,6 +31,17 @@ const Community = () => {
   const fileInputRef = React.useRef(null);
 
   const categories = ['전체', '🔥 인기 추천', '문과', '이과', '예체능'];
+
+  // 학교급 정보 조회
+  const fetchSchoolLevel = async () => {
+    try {
+      const level = await meService.getSchoolLevel();
+      setSchoolLevel(level);
+    } catch (error) {
+      console.error('학교급 조회 실패:', error);
+      setSchoolLevel('고'); // 실패 시 기본값 설정
+    }
+  };
 
   // 게시글 목록 조회
   const fetchPosts = async (page = 1, size = 10) => {
@@ -90,8 +103,9 @@ const Community = () => {
     }
   };
 
-  // 컴포넌트 마운트 시 게시글 조회
+  // 컴포넌트 마운트 시 학교급 정보와 게시글 조회
   useEffect(() => {
+    fetchSchoolLevel();
     fetchPosts();
   }, []);
 
@@ -239,13 +253,13 @@ const Community = () => {
           <span className={`community__category-badge ${
             post.category === 'CAREER_PATH' ? 'community__category-badge--blue' :
             post.category === 'FREE_TALK' ? 'community__category-badge--green' :
-            post.category === 'CONSULTATION' ? 'community__category-badge--purple' :
+            post.category === 'COUNSELING' ? 'community__category-badge--purple' :
             'community__category-badge--orange'
           }`}>
             {post.category === 'CAREER_PATH' ? '진로·적성' :
              post.category === 'FREE_TALK' ? '자유소통' :
-             post.category === 'CONSULTATION' ? '고민상담' :
-             post.category === 'EXPERIENCE' ? '체험후기' : post.category}
+             post.category === 'COUNSELING' ? '고민상담' :
+             post.category === 'EXPERIENCE_REVIEW' ? '체험후기' : post.category}
           </span>
           <h3 className="community__post-title">{post.title}</h3>
           <p className="community__post-meta">
@@ -542,7 +556,7 @@ const Community = () => {
     <div className="community__container">
       {/* Header */}
       <div className="community__main-header">
-        <h1 className="community__main-title">고등학생 꿈터</h1>
+        <h1 className="community__main-title">{schoolLevel === '중' ? '중학생' : '고등학생'} 꿈터</h1>
         <svg className="community__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <circle cx="11" cy="11" r="8" strokeWidth="2"/>
           <path d="M21 21L16.65 16.65" strokeWidth="2"/>
