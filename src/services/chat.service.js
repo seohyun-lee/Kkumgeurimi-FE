@@ -1,23 +1,15 @@
+import http from './http.js';
+
 export const chatService = {
   async sendMessage({ query, profession = '학생', userId = null }) {
     try {
-      const response = await fetch(`${import.meta.env.VITE_AI_BASE_URL}/chat`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify({
-          student_id: userId || 1, // 기본값으로 1 사용
-          profession,
-          query
-        }),
+      const response = await http.post('/ai/chat', {
+        student_id: userId || 1, // 기본값으로 1 사용
+        profession,
+        query
       });
 
-      if (!response.ok) {
-        throw new Error(`Chat API failed: ${response.status}`);
-      }
-
-      const data = await response.json();
+      const data = response.data;
       return {
         answer: data.answer || data.answer_md || '응답을 받지 못했습니다.',
         topMatches: data.top_matches || [],

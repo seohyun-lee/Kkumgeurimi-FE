@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../config/constants.js';
 import { chatService } from '../../services/chat.service.js';
+import { programsService } from '../../services/programs.service.js';
 import { useAuthStore } from '../../store/auth.store.js';
 import { getMentorsForAssistant } from '../../data/mentors.js';
 import './Assistant.css';
@@ -48,6 +49,7 @@ export default function Assistant() {
   const [currentBot, setCurrentBot] = useState(null);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false);
 
   const [messages, dispatch] = useReducer(messagesReducer, []);
   const listRef = useRef(null);
@@ -70,7 +72,7 @@ export default function Assistant() {
         name: botInfo.botName,
         job: botInfo.botJob,
         description: botInfo.botDescription,
-        avatar: '/mock_image_url/korean_woman_1.jpeg', // 기본 아바타
+        avatar: botInfo.botAvatar || '/mock_image_url/korean_woman_1.jpeg', // 전달된 아바타 사용
         initial: botInfo.botName.charAt(0),
       };
       setCurrentBot(bot);
@@ -148,7 +150,7 @@ export default function Assistant() {
       setIsTyping(false);
     } catch (error) {
       console.error('Chat API error:', error);
-      
+
       // API 실패 시 폴백 응답
       dispatch({
         type: 'ADD',
@@ -159,8 +161,59 @@ export default function Assistant() {
           createdAt: Date.now(),
         },
       });
-      
+
       setIsTyping(false);
+    }
+  };
+
+  // 프로그램 추천받기
+  const handleGetRecommendations = async () => {
+    setIsLoadingRecommendations(true);
+
+    try {
+      const response = await programsService.getRecommendationsForChat({
+        student_id: user?.id || null,
+        profession: location.state?.profession || currentBot?.job || '기획자',
+        top_k: 3
+      });
+
+      // 추천 결과를 봇 메시지로 추가
+      dispatch({
+        type: 'ADD',
+        payload: {
+          id: msgId(),
+          type: 'bot',
+          content: response.message,
+          topMatches: response.top_matches.map(program => ({
+            id: program.program_id,
+            title: program.program_title,
+            name: program.program_title,
+            description: `${program.provider} | ${program.cost_type} | ${program.venue_region} | ${program.target_audience}`,
+            score: program.score,
+            provider: program.provider,
+            cost_type: program.cost_type,
+            start_date: program.start_date,
+            end_date: program.end_date,
+            program_type: program.program_type,
+            venue_region: program.venue_region
+          })),
+          createdAt: Date.now(),
+        },
+      });
+    } catch (error) {
+      console.error('프로그램 추천 API error:', error);
+
+      dispatch({
+        type: 'ADD',
+        payload: {
+          id: msgId(),
+          type: 'bot',
+          content: '프로그램 추천을 가져오는 중에 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+          createdAt: Date.now(),
+        },
+      });
+    } finally {
+      setIsLoadingRecommendations(false);
     }
   };
 
@@ -208,27 +261,39 @@ export default function Assistant() {
             )}
           </main>
 
-          <footer className="chat__inputbar">
-            <textarea
-              className="chat__input"
-              placeholder="메시지를 입력하세요..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={onKeyDown}
-              rows={1}
-              aria-label="메시지 입력"
-            />
-            <button
-              type="button"
-              className="chat__send"
-              onClick={send}
-              aria-label="전송"
-              disabled={!input.trim()}
-            >
-              <svg className="chat__send-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
-              </svg>
-            </button>
+          <footer className="chat__footer">
+            <div className="chat__recommendation-bar">
+              <button
+                type="button"
+                className="chat__recommendation-button"
+                onClick={handleGetRecommendations}
+                disabled={isLoadingRecommendations}
+              >
+                {isLoadingRecommendations ? '추천 중...' : '프로그램 추천받기'}
+              </button>
+            </div>
+            <div className="chat__inputbar">
+              <textarea
+                className="chat__input"
+                placeholder="메시지를 입력하세요..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={onKeyDown}
+                rows={1}
+                aria-label="메시지 입력"
+              />
+              <button
+                type="button"
+                className="chat__send"
+                onClick={send}
+                aria-label="전송"
+                disabled={!input.trim()}
+              >
+                <svg className="chat__send-icon" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+                </svg>
+              </button>
+            </div>
           </footer>
         </section>
       )}
