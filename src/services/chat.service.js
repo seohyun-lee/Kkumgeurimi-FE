@@ -1,10 +1,11 @@
 import http from './http.js';
 
 export const chatService = {
-  async sendMessage({ query, profession = '학생', userId = null }) {
+  async sendMessage({ query, profession = '학생', userId = null, name = null }) {
     try {
       const response = await http.post('/ai/chat', {
         student_id: userId || 1, // 기본값으로 1 사용
+        name: name || '학생', // 기본값으로 '학생' 사용
         profession,
         query
       });

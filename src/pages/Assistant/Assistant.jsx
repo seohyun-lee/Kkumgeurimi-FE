@@ -139,7 +139,8 @@ export default function Assistant() {
       const response = await chatService.sendMessage({
         query: userText,
         profession: location.state?.profession || currentBot?.name || '학생',
-        userId: user?.id || null
+        userId: user?.id || null,
+        name: user?.name || '학생'
       });
 
       // 봇 응답 메시지 추가
